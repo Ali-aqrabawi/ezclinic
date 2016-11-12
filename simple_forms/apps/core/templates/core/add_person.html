@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load widget_tweaks %}
+<head>
+
+   </head>
+
+{% block content %}
+  <h2>Add person</h2>
+  <form method="post">
+    {% csrf_token %}
+
+
+<div class="row">
+     <div class="col-sm-4 form-group">
+       <label for="name">{% trans "Name" %}</label>
+       {{ form.name|add_class:"form-control" }}
+      </div>
+   <div class="col-sm-4 form-group">
+       <label for="lname">{% trans "Lastname" %}</label>
+       {{ form.last_name|add_class:"form-control" }}
+      </div>
+   </div>
+      <div class="row">
+       <div  class="col-sm-2 form-group">
+       <label for="age">{% trans "Age" %}</label>
+       {{ form.age|add_class:"form-control" }}
+      </div>
+   <div class="col-sm-2 form-group">
+       <label for="martial">{% trans "Martial Status" %}</label>
+       {{ form.martial_status|add_class:"form-control" }}
+      </div>
+       <div class="col-sm-2 form-group">
+       <label for="Sex">{% trans "Sex" %}</label>
+       {{ form.sex|add_class:"form-control" }}
+      </div>
+          <div class="col-sm-2 form-group">
+       <label for="date">{% trans "Appoinment date" %}</label>
+      {{ form.date|add_class:"form-control" }}
+      </div>
+     </div>
+
+
+     <div class="row">
+       <div class="col-sm-4 form-group">
+       <label for="mobile">{% trans "Mobile Number" %}</label>
+       {{ form.mobile|add_class:"form-control" }}
+      </div>
+          <div class="col-sm-2 form-group">
+       <label for="amount paid">{% trans "$ Paid" %}</label>
+       {{ form.amount_paid|add_class:"form-control" }}
+      </div>
+          <div class="col-sm-2 form-group">
+       <label for="amount left">{% trans "$ Left" %}</label>
+       {{ form.amount_left|add_class:"form-control" }}
+      </div>
+      </div>
+      <div class="row">
+       <div class="col-sm-4 form-group">
+       <label for="address">{% trans "Address" %}</label>
+       {{ form.address|add_class:"form-control" }}
+      </div>
+          <div class="col-sm-4 form-group">
+       <label for="note">{% trans "Patient History" %}</label>
+       {{ form.note|add_class:"form-control" }}
+      </div>
+      </div>
+       <div class="row">
+       <div class="col-sm-4 form-group">
+       <label for="pic">{% trans "Picture" %}</label>
+        {{form.picture}}
+      </div>
+           </div>
+
+
+    <div class="form-group">
+      <button type="submit" class="btn btn-info">
+        <span class="glyphicon glyphicon-ok"></span> {% trans "Save" %}
+      </button>
+      <a href="{% url 'home' %}" class="btn btn-default">Cancel</a>
+    </div>
+
+
+  </form>
+{% endblock %}

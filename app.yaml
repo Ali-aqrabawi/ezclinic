@@ -1,0 +1,27 @@
+application: ezclinic16
+runtime: python27
+api_version: 1
+threadsafe: yes
+version: 1
+
+handlers:
+- url: /static
+  static_dir: simple_forms/apps/core/static/
+  
+- url: /_ah/(mapreduce|queue|warmup).*
+  script: YOUR_DJANGO_APP.wsgi.application
+  login: admin
+  
+- url: .*
+  script: simple_forms.wsgi.application
+  
+  
+
+libraries:
+- name: MySQLdb
+  version: 1.2.5
+- name: django
+  version: 1.5
+  
+env_variables:
+  DJANGO_SETTINGS_MODULE: 'simple_forms.settings'

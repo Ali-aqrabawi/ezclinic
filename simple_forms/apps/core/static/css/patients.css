@@ -1,0 +1,53 @@
+.navbar{
+    background-color: lightskyblue;
+    color:white;
+}
+h3{
+    padding-top:-100%;
+    padding-left: 35%;
+}
+.control-label {
+    padding-left: 35%;
+}
+h4{
+    padding-top:-100%;
+    padding-left:28%;
+}
+
+.control-label{
+     padding-top:-100%;
+    padding-left:50%;
+}
+#id_username{
+    margin-left: 10%;
+}
+#id_password{
+     margin-left: 10%;
+}
+#labl_password{
+   margin-left: 40%;
+}
+#username{
+   margin-left: 40%;
+}
+#login{
+    margin-top: -40%;
+}
+#id_email{
+     margin-left: 10%;
+}
+#email{
+   margin-left: 40%;
+}
+#btn_submit{
+   margin-left: 20%;
+}
+h4{
+   margin-left: -4%;
+}
+#errors{
+    margin-left: 40%
+}
+#footer{
+    margin-left: 10%;
+}
