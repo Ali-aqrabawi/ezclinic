@@ -1,6 +1,6 @@
 #coding: utf-8
 
-from django.conf.urls import url
+from django.conf.urls import url ,include
 from django.contrib import admin
 from simple_forms.apps.core import views
 from django.conf import settings
@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^(?P<person_id>\d+)/foto/$', views.foto, name='foto'),
     url(r'^search/$', views.search, name='search'),
     url(r'^date/$', views.date, name='date'),
+	url(r'^_ah/', include('djangae.urls'))
 ]
 
 if settings.DEBUG:

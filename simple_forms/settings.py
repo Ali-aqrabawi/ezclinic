@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
+from djangae.settings_base import *
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -31,11 +32,17 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+		
+	'djangae',
+	'djangae.contrib.security',
     'django.contrib.auth',
-    'django.contrib.contenttypes',
+    'django.contrib.contenttypes',	
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+	
+	
+	'djangae.contrib.contenttypes',
 
     'widget_tweaks',
     'django.contrib.admin',
@@ -44,6 +51,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
+	'djangae.contrib.security.middleware.AppEngineSecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -51,6 +59,8 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+	'djangae.contrib.security.middleware.AppEngineSecurityMiddleware',
+	
 ]
 
 ROOT_URLCONF = 'simple_forms.urls'
@@ -80,23 +90,10 @@ WSGI_APPLICATION = 'simple_forms.wsgi.application'
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
 import os
-if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine'):
-    # Running on production App Engine, so use a Google Cloud SQL database.
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'HOST': '/cloudsql/<your-project-id>:<your-cloud-sql-instance>',
-            'NAME': '<your-database-name>',
-            'USER': 'root',
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-		}
-    }
+DATABASES = {
+    'default': {
+        'ENGINE': 'djangae.db.backends.appengine'
+    }}
 
 
 # Password validation

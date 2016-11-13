@@ -9,7 +9,7 @@ handlers:
   static_dir: simple_forms/apps/core/static/
   
 - url: /_ah/(mapreduce|queue|warmup).*
-  script: YOUR_DJANGO_APP.wsgi.application
+  script: simple_forms.wsgi.application
   login: admin
   
 - url: .*

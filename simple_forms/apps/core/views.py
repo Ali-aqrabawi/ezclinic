@@ -51,8 +51,10 @@ def add_person(request):
 
 def home(request):
     if not request.user.is_authenticated():
+	
         return render(request, 'core/login.html')
     else:
+		logging.info(request.user)
         persons = Person.objects.filter(user=request.user)
         page = request.GET.get('page', 1)
         paginator = Paginator(persons, 2)
