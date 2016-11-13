@@ -34,8 +34,9 @@ def home(request):
 def add_person(request):
     if not request.user.is_authenticated():
         return render(request, 'core/login.html')
-    else:
-        form = PersonForm(request.POST or None,request.FILES )
+    else: 
+        form = PersonForm(request.POST or None,instance=Person() )
+		#form = PersonForm(request.POST or None,request.FILES )
         if form.is_valid():
             persons = form.save()
             persons.user = request.user
@@ -54,7 +55,7 @@ def home(request):
 	
         return render(request, 'core/login.html')
     else:
-		logging.info(request.user)
+		
         persons = Person.objects.filter(user=request.user)
         page = request.GET.get('page', 1)
         paginator = Paginator(persons, 2)
