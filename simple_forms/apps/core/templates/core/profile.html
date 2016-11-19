@@ -5,14 +5,12 @@
 <html>
   <head>
     <meta charset="UTF-8">
-
+	
     <link rel="stylesheet" href="../stylesheets/calendarview.css">
       <link href="{% static "javascripts/calendarview.js" %}" rel="stylesheet">
      <link href="{% static "stylesheets/calendarview.css" %}" rel="stylesheet">
     <style>
-      body {
-        font-family: Trebuchet MS;
-      }
+
       div.calendar {
         max-width: 240px;
         margin-left: auto;
@@ -31,19 +29,20 @@
         margin-left: auto;
         margin-right: auto;
         text-align: center;
+		font-family: Trebuchet MS;
       }
       div#popupDateField:hover {
         background-color: #cde;
         cursor: pointer;
       }
-	          input[type="text"] {
+	          .dateField {
              display: block;
              margin : 0 auto;
 			 margin-left: auto; 
 			 margin-right: auto; 
 			 max-width: 190px; 
 			 width:100%;
-			 text-align: center;
+			 font-family: Trebuchet MS;
 			 
         }
 		
@@ -53,10 +52,11 @@
 			 margin-left: auto; 
 			 margin-right: auto; 
 			 max-width: 190px; 
+			 font-family: Trebuchet MS;
 			 
         }
 
-}
+
 
 
 
@@ -104,7 +104,7 @@
 		<div id="embeddedExample" style="">
              <form role="search" method="get" action="{% url 'date' %}">
                 
-                    <input type="text" id="embeddedDateField"  name="q1" value="{{ request.GET.q1 }}"><br>
+                    <input type="text" id="embeddedDateField" class="dateField" style="text-align: center;" name="q1" value="{{ request.GET.q1 }}"><br>
                 
                 <button type="submit"  id="btn" class="btn btn-info">Check Appointment</button>
             </form>
