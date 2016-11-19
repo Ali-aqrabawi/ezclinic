@@ -36,13 +36,30 @@
         background-color: #cde;
         cursor: pointer;
       }
-        .dateField{
-      margin-left: 40%;
-}
-        #btn{
-            margin-left: 35%;
-            margin-top: 2%;
+	          input[type="text"] {
+             display: block;
+             margin : 0 auto;
+			 margin-left: auto; 
+			 margin-right: auto; 
+			 max-width: 190px; 
+			 width:100%;
+			 text-align: center;
+			 
         }
+		
+		        #btn{
+             display: block;
+             margin : 0 auto;
+			 margin-left: auto; 
+			 margin-right: auto; 
+			 max-width: 190px; 
+			 
+        }
+
+}
+
+
+
     </style>
       <script src="{% static "javascripts/prototype.js" %}"></script>
       <script src="{% static "javascripts/calendarview.js" %}"></script>
@@ -81,16 +98,20 @@
         <div id="embeddedExample" style="">
           <div id="embeddedCalendar" style="margin-left: auto; margin-right: auto">
           </div>
-          <br />
-
-             <form class="navbar-form navbar-left" role="search" method="get" action="{% url 'date' %}">
-                <div class="form-group">
-                    <input type="text" id="embeddedDateField" class="dateField" name="q1" value="{{ request.GET.q1 }}">
-                </div>
-                <button type="submit" id="btn" class="btn btn-info">Check Appointment</button>
+		  </div>
+		  <br>
+          
+		<div id="embeddedExample" style="">
+             <form role="search" method="get" action="{% url 'date' %}">
+                
+                    <input type="text" id="embeddedDateField"  name="q1" value="{{ request.GET.q1 }}"><br>
+                
+                <button type="submit"  id="btn" class="btn btn-info">Check Appointment</button>
             </form>
+			
           <br />
-        </div>
+		  </div>
+        
       </div>
     </div>
 
