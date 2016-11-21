@@ -29,6 +29,9 @@
       </tr>
     </thead>
     <tbody>
+	
+
+	
       {% for person in persons %}
         <tr>
           <td>{{ person.name }}</td>
@@ -54,7 +57,7 @@
         <td><a href="{% url 'edit' person.id %}"><i class="glyphicon glyphicon-list-alt"></i></a></td>
 
         </tr>
-      {% empty %}
+	  {% empty %}
         <tr>
           <td colspan="6" class="text-center">No result</td>
         </tr>

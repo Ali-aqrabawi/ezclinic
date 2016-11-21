@@ -119,7 +119,7 @@
 		<div id="embeddedExample" style="">
              <form role="search" method="get" name="Form" onsubmit="return validateForm()" action="{% url 'date' %}">
                 
-                    <input type="text" id="embeddedDateField" class="dateField" style="text-align: center;" name="q1" value="{{ request.GET.q1 }}"><br>
+                    <input type="text" id="embeddedDateField" class="dateField" style="text-align: center;" name="appointement" value="{{ request.GET.appointement }}"><br>
                 
                 <button type="submit"  id="btn" class="btn btn-info">Check Appointment</button>
             </form>

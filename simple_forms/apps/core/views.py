@@ -64,19 +64,33 @@ def home(request):
         return render(request, 'core/login.html')
     else:
 		
+        
         persons = Person.objects.filter(user=request.user)
-        page = request.GET.get('page', 1)
-        paginator = Paginator(persons, 6)
+            
+        
+        
 
+			
+        page = request.GET.get('page', 1)
+        
+        paginator = Paginator(persons, 6)
+        #to avoid unsppuorted query by datastore
+        if not persons :
+            return render(request, 'core/home.html', {'persons': persons})
+			
         try:
             persons = paginator.page(page)
         except PageNotAnInteger:
+            
             persons= paginator.page(1)
         except EmptyPage:
+            
             persons = paginator.page(paginator.num_pages)
 
-
+    
+        
     return render(request, 'core/home.html', {'persons': persons})
+
 """
 def add_person(request):
     if request.method == 'POST':
@@ -120,6 +134,7 @@ def login_user(request):
         user = authenticate(username=username, password=password)
         if user is not None:
             if user.is_active:
+                
                 login(request, user)
                 albums = Person.objects.filter(user=request.user)
                 return render(request, 'core/home.html', {'persons': albums})
@@ -219,10 +234,10 @@ def date(request):
 	
         return render(request, 'core/login.html')
 
-    if ('q1' in request.GET) and request.GET['q1'].strip():
-        date = request.GET['q1']
+    if ('appointement' in request.GET) and request.GET['appointement'].strip():
+        date = request.GET['appointement']
 
-        persons = Person.objects.filter(date=date)
+        persons = Person.objects.filter(Q(date=date) & Q(user=request.user))
 
     return render(request, 'core/home1.html', {'persons':persons})
 
