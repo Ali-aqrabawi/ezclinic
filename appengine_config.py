@@ -14,5 +14,9 @@
 
 # [START vendor]
 from google.appengine.ext import vendor
+import os
 vendor.add('lib')
 # [END vendor]
+on_appengine = os.environ.get('SERVER_SOFTWARE','').startswith('Development')
+if on_appengine and os.name == 'nt':
+    os.name = None

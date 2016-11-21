@@ -5,6 +5,8 @@ from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 from django.shortcuts import render, redirect
+import logging
+from django.http import HttpResponse
 
 from simple_forms.apps.core.models import Person,PersonForm,UserForm,User
 
@@ -38,8 +40,13 @@ def add_person(request):
         form = PersonForm(request.POST or None,instance=Person() )
 		#form = PersonForm(request.POST or None,request.FILES )
         if form.is_valid():
+            	
             persons = form.save()
+            
             persons.user = request.user
+			#to captilized the first litter so we have consistancy when quering , this is a workarround since __iexact is not working
+            persons.name=persons.name.title()
+            persons.last_name=persons.last_name.title()
           
             persons.save()
 
@@ -51,6 +58,7 @@ def add_person(request):
 
 
 def home(request):
+    
     if not request.user.is_authenticated():
 	
         return render(request, 'core/login.html')
@@ -58,7 +66,7 @@ def home(request):
 		
         persons = Person.objects.filter(user=request.user)
         page = request.GET.get('page', 1)
-        paginator = Paginator(persons, 2)
+        paginator = Paginator(persons, 6)
 
         try:
             persons = paginator.page(page)
@@ -82,6 +90,9 @@ def add_person(request):
 """
 #===========delete a prson==================
 def delete_person(request, person_id):
+    if not request.user.is_authenticated():
+	
+        return render(request, 'core/login.html')
 
     if request.method == "POST":
 
@@ -140,6 +151,10 @@ def register(request):
 
 #======================edit the patient details
 def edit(request, person_id):
+
+    if not request.user.is_authenticated():	
+        return render(request, 'core/login.html')
+		
     i = get_object_or_404(Person, pk=person_id)
 
 
@@ -167,25 +182,48 @@ def foto(request, person_id):
 
 
 def doctor(request):
-
-    return render(request,'core/profile.html')
+	if not request.user.is_authenticated():
+		
+		return render(request, 'core/login.html')
+		
+	else :
+		return render(request,'core/profile.html')
 
 ##search by name or last name
 def search(request):
-    q = request.GET.get("q", None)
 
-    q1 = request.GET.get("q1", None)
+    if not request.user.is_authenticated():
+	
+        return render(request, 'core/login.html')
 
-    persons = Person.objects.filter(Q(name=q) & Q(last_name=q1))
+    q = request.GET.get("q", None).title()
+
+    q1 = request.GET.get("q1", None).title()
+    if not q and not q1 :
+        return redirect("home")
+    if q and q1 :
+        persons = Person.objects.filter(Q(name=q) & Q(last_name=q1))	
+    elif q :
+        persons = Person.objects.filter(Q(name=q))
+    elif q1 :
+        persons = Person.objects.filter(Q(last_name=q1))
+	
+	
+	
     return render(request, 'core/home.html', {'persons':persons})
 
 
 def date(request):
 
+    if not request.user.is_authenticated():
+	
+        return render(request, 'core/login.html')
+
     if ('q1' in request.GET) and request.GET['q1'].strip():
         date = request.GET['q1']
 
         persons = Person.objects.filter(date=date)
+
     return render(request, 'core/home1.html', {'persons':persons})
 
 

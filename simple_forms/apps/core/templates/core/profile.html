@@ -86,11 +86,26 @@
       }
 
       Event.observe(window, 'load', function() { setupCalendars() })
+	  
+	  function validateForm()
+	  {
+	    var a=document.forms['Form']['embeddedDateField'].value;
+		if (a==='')
+		{
+		  alert('Please Choose a date from the calendar');
+		  return false;
+		}
+	
+	  }
+	  
     </script>
+	
+	 
+	
   </head>
   <body>
 
-    <div style="float: left; width: 80% ;padding-left: 30%">
+    <div style="float: left; width: 80% ;padding-left: 21%">
       <div style="height: 400px; background-color: #efefef; padding: 10px; -webkit-border-radius: 12px; -moz-border-radius: 12px; margin-right: 10px">
         <h3 style="text-align: center; background-color: white; -webkit-border-radius: 10px; -moz-border-radius: 10px; margin-top: 0px; margin-bottom: 20px; padding: 8px">
         Appointement calendar
@@ -102,7 +117,7 @@
 		  <br>
           
 		<div id="embeddedExample" style="">
-             <form role="search" method="get" action="{% url 'date' %}">
+             <form role="search" method="get" name="Form" onsubmit="return validateForm()" action="{% url 'date' %}">
                 
                     <input type="text" id="embeddedDateField" class="dateField" style="text-align: center;" name="q1" value="{{ request.GET.q1 }}"><br>
                 

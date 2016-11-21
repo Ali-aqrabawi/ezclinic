@@ -21,7 +21,7 @@
           <th>$Left</th>
           <th>Appointment Date</th>
            <th>Delete</th>
-          <th>Edit</th>
+          <th>View</th>
 
       </tr>
     </thead>
@@ -44,7 +44,7 @@
         {% csrf_token %}
 		<button type='submit' class='btn btn-xs btn-link icon'><i class='glyphicon glyphicon-remove'></i></button>
 	</form></td>
-        <td><a href="{% url 'edit' person.id %}"><i class="glyphicon glyphicon-pencil"></i></a></td>
+        <td><a href="{% url 'edit' person.id %}"><i class="glyphicon glyphicon-list-alt"></i></a></td>
 
         </tr>
       {% empty %}
