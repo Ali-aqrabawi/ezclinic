@@ -89,14 +89,23 @@
 	  
 	  function validateForm()
 	  {
-	    var a=document.forms['Form']['embeddedDateField'].value;
-		if (a==='')
+	    var dateValue=document.forms['Form']['embeddedDateField'].value;
+		if (dateValue==='')
 		{
 		  alert('Please Choose a date from the calendar');
 		  return false;
+		} else {
+		    var regEx = /^\d{4}-\d{2}-\d{2}$/;
+			if (!(dateValue.match(regEx) != null)) {
+			alert('format should be yyyy-mm-dd , please choose a day in the calender');
+			return false;
 		}
+		
+		
 	
 	  }
+	  }
+
 	  
     </script>
 	

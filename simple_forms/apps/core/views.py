@@ -236,8 +236,9 @@ def date(request):
 
     if ('appointement' in request.GET) and request.GET['appointement'].strip():
         date = request.GET['appointement']
-
+        
         persons = Person.objects.filter(Q(date=date) & Q(user=request.user))
+
 
     return render(request, 'core/home1.html', {'persons':persons})
 
