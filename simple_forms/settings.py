@@ -28,6 +28,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = 'core.User'
+
 GENERATE_SPECIAL_INDEXES_DURING_TESTING = True
 
 # Application definition

@@ -1,9 +1,10 @@
 from __future__ import unicode_literals
-from django.contrib.auth.models import Permission, User
+#from django.contrib.auth.models import Permission, User
+from django.contrib.auth.models import Permission
 from django.db import models
 from django import forms
 from datetime import date
-
+from django.contrib.auth.models import AbstractUser
 
 STATUS_CHOICES = (
     ("Unmarried", ("Unmarried")),
@@ -14,6 +15,11 @@ SEX_CHOICES = (
     ("Male", ("Male")),
     ("Female", ("Female")),
 )
+
+class User(AbstractUser):
+    
+    country = models.CharField(max_length=30, blank=True)
+
 class Person(models.Model):
     user = models.ForeignKey(User, default=1)
     name = models.CharField(max_length=250,null=True)
@@ -60,12 +66,15 @@ class PersonForm(forms.ModelForm):
 
 
 
+    
+		
+
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password']
+        fields = ['username', 'email', 'password', 'country','last_name' , 'first_name']
 
 
 
