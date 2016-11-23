@@ -19,25 +19,50 @@ h4{
     padding-left:50%;
 }
 #id_username{
-    margin-left: 10%;
+    margin-left: 20%;
 }
+
+#first_name{
+    margin-left: 20%;
+	
+}
+
+#last_name{
+    margin-left: 20%;
+}
+
+#country{
+    margin-left: 20%;
+}
+
 #id_password{
-     margin-left: 10%;
+     margin-left: 20%;
 }
 #labl_password{
-   margin-left: 40%;
+   margin-left: 50%;
 }
+
+#labl_last{
+   margin-left: 50%;
+}
+#labl_name{
+   margin-left: 50%;
+}
+#labl_country{
+   margin-left: 50%;
+}
+
 #username{
-   margin-left: 40%;
+   margin-left: 50%;
 }
 #login{
     margin-top: -40%;
 }
 #id_email{
-     margin-left: 10%;
+     margin-left: 20%;
 }
 #email{
-   margin-left: 40%;
+   margin-left: 50%;
 }
 #btn_submit{
    margin-left: 20%;
