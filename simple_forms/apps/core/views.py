@@ -147,22 +147,36 @@ def login_user(request):
 #=================regetser a doctor======================
 def register(request):
     form = UserForm(request.POST or None)
+    context = {
+        "form": form,
+    }
+    	
     if form.is_valid():
+        logging.info("AAAA")
         user = form.save(commit=False)
-        username = form.cleaned_data['username']
+        username = form.cleaned_data['username']       
+        
         password = form.cleaned_data['password']
         user.set_password(password)
         user.save()
+        
         user = authenticate(username=username, password=password)
         if user is not None:
             if user.is_active:
                 login(request, user)
                 albums = Person.objects.filter(user=request.user)
                 return render(request, 'core/home.html', {'albums': albums})
-    context = {
-        "form": form,
-    }
-    return render(request, 'core/register.html', context)
+				
+    else :
+        error = str(form.errors.as_data())
+        if error :
+            
+            if 'is already in use' in error and 'Username' in error:
+                erro = "Username is already in use"
+                logging.info('here')
+                return render(request, 'core/register.html', {'error_message':erro})
+    
+    return render(request, 'core/register.html', context )
 
 #======================edit the patient details
 def edit(request, person_id):
