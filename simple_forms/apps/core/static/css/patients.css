@@ -21,6 +21,15 @@ h4{
 #id_username{
     margin-left: 30%;
 }
+
+#id_city{
+    margin-left: 30%;
+}
+
+#id_c_name{
+    margin-left: 30%;
+}
+
 #id_username_login{
     margin-left: 20%;
 }
@@ -80,6 +89,15 @@ h4{
 #email{
    margin-left: 50%;
 }
+
+#c_name{
+   margin-left: 50%;
+}
+
+#city{
+   margin-left: 50%;
+}
+
 #btn_submit{
    margin-left: 30%;
 }

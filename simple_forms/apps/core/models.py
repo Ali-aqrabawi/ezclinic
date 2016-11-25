@@ -19,6 +19,8 @@ SEX_CHOICES = (
 class User(AbstractUser):
     
     country = models.CharField(max_length=30, blank=True)
+    city = models.CharField(max_length=30, blank=True)
+    clinic = models.CharField(max_length=30, blank=True)
 
 class Person(models.Model):
     user = models.ForeignKey(User, default=1)
@@ -74,13 +76,8 @@ class UserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'country','last_name' , 'first_name']
+        fields = ['username', 'email', 'password', 'country','last_name' , 'first_name','city','clinic']
 		
-    def clean_username(self):
-        username = self.cleaned_data['username']
-        if User.objects.exclude(pk=self.instance.pk).filter(username=username).exists():
-            raise forms.ValidationError(u'Username "%s" is already in use.' % username)
-        return username
 
 
 
