@@ -196,13 +196,13 @@ def foto(request, person_id):
     return render(request, 'core/home3.html', {'persons':persons})
 
 
-def doctor(request):
+def calender(request):
 	if not request.user.is_authenticated():
 		
 		return render(request, 'core/login.html')
 		
 	else :
-		return render(request,'core/profile.html')
+		return render(request,'core/calender.html')
 
 ##search by name or last name
 def search(request):
