@@ -31,10 +31,13 @@ class Person(models.Model):
     sex = models.CharField(max_length=20, choices=SEX_CHOICES, default=("Male"))
     mobile=models.CharField(max_length=26,default=0011)
     amount_paid=models.CharField(max_length=256,null=True)
-    amount_left = models.CharField(max_length=256, null=True)
-    note=models.CharField(max_length=256,null=True)
-    address=models.CharField(max_length=256,null=True)
-    date = models.DateField(("Date"), default=date.today)
+    amount_left = models.CharField(max_length=256, null=True,blank=True)
+    note=models.CharField(max_length=256,null=True,blank=True)
+    address=models.CharField(max_length=256,null=True,blank=True)
+    date = models.DateField(("Date"), default=date.today,blank=True)
+    chief_complain = models.CharField(max_length=256,null=True,blank=True)
+    treatment_plan=models.CharField(max_length=256,null=True,blank=True)
+    treatment_done=models.CharField(max_length=256,null=True,blank=True)
     picture = models.ImageField(null=True,blank=True)
 
     def __str__(self):
@@ -44,7 +47,8 @@ class PersonForm(forms.ModelForm):
 
     class Meta:
         model = Person
-        fields = ['name', 'last_name', 'age', 'martial_status', 'mobile', 'sex','amount_paid','amount_left','note', 'address','date','picture']
+        fields = ['name', 'last_name', 'age', 'martial_status', 'mobile', 'sex',
+                  'amount_paid','amount_left','note', 'address','date','picture','treatment_done','treatment_plan','chief_complain']
         widgets = {
             'name': forms.TextInput(attrs={'required': True, 'class': 'form-control',
                                              'placeholder': 'name'}),
@@ -56,10 +60,16 @@ class PersonForm(forms.ModelForm):
                                            'placeholder': 'amount paid'}),
             'amount_left': forms.TextInput(attrs={'required': True, 'class': 'form-control',
                                            'placeholder': 'amount left'}),
-            'note': forms.TextInput(attrs={'required': True, 'class': 'form-control',
+            'note': forms.TextInput(attrs={'required': False, 'class': 'form-control',
                                            'placeholder': 'Patient History'}),
-            'address': forms.TextInput(attrs={'required': True, 'class': 'form-control',
+            'address': forms.TextInput(attrs={'required': False, 'class': 'form-control',
                                            'placeholder': 'Current address'}),
+            'chief_complain': forms.TextInput(attrs={'required': False, 'class': 'form-control',
+                                           'placeholder': 'chief complain'}),
+            'treatment_plan': forms.Textarea(attrs={'required': False, 'class': 'form-control',
+                                           'placeholder': 'treatment plan','rows':'3'}),
+            'treatment_done': forms.Textarea(attrs={'required': False, 'class': 'form-control',
+                                           'placeholder': 'treatment done','rows':'3'}),
 
 
 

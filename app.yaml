@@ -2,7 +2,7 @@ application: ezclinic16
 runtime: python27
 api_version: 1
 threadsafe: yes
-version: 2
+version: 3
 
 handlers:
 - url: /favicon\.ico
