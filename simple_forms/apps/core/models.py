@@ -18,9 +18,10 @@ SEX_CHOICES = (
 
 class User(AbstractUser):
     
-    country = models.CharField(max_length=30, blank=True)
-    city = models.CharField(max_length=30, blank=True)
-    clinic = models.CharField(max_length=30, blank=True)
+    
+    country = models.CharField(max_length=30)
+    city = models.CharField(max_length=30)
+    clinic = models.CharField(max_length=30)
 
 class Person(models.Model):
     user = models.ForeignKey(User, default=1)
@@ -87,7 +88,9 @@ class UserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password', 'country','last_name' , 'first_name','city','clinic']
+        	        
 		
+      
 
 
 
