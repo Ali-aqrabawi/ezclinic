@@ -30,6 +30,8 @@ ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'core.User'
 
+BUCKET_KEY = 'ezclinic16.appspot.com'
+
 GENERATE_SPECIAL_INDEXES_DURING_TESTING = True
 
 # Application definition
