@@ -18,7 +18,7 @@ SEX_CHOICES = (
     ("Female", ("Female")),
 )
 
-public_storage = storage.CloudStorage(google_acl='private')
+public_storage = storage.CloudStorage(google_acl='public-read')
 
 
 class User(AbstractUser):
