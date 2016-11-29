@@ -37,16 +37,17 @@ def add_person(request):
     if not request.user.is_authenticated():
         return render(request, 'core/login.html')
     else: 
-        form = PersonForm(request.POST or None,instance=Person() )
+        form = PersonForm(request.POST or None,request.FILES or None,instance=Person())
 		#form = PersonForm(request.POST or None,request.FILES )
         if form.is_valid():
-            	
+            
             persons = form.save()
             
             persons.user = request.user
 			#to captilized the first litter so we have consistancy when quering , this is a workarround since __iexact is not working
             persons.name=persons.name.title()
             persons.last_name=persons.last_name.title()
+            
           
             persons.save()
 

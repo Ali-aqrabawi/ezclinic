@@ -133,6 +133,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+BUCKET_KEY='ezclinic16.appspot.com'
 
 
 
@@ -142,6 +143,6 @@ STATIC_URL = '/static/'
 
 
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
+#MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = 'ezclinic16.appspot.com/media/'
 MEDIA_URL = '/media/'

@@ -45,7 +45,7 @@ class Person(models.Model):
     treatment_plan=models.CharField(max_length=256,null=True,blank=True)
     treatment_done=models.CharField(max_length=256,null=True,blank=True)
     #picture = models.ImageField(blank=True)
-    picture = models.ImageField(upload_to='/image/', storage=public_storage,blank=True)
+    picture = models.FileField(upload_to='image', storage=public_storage,blank=True)
     def __str__(self):
         return self.name
 
@@ -76,6 +76,7 @@ class PersonForm(forms.ModelForm):
                                            'placeholder': 'treatment plan','rows':'3'}),
             'treatment_done': forms.Textarea(attrs={'required': False, 'class': 'form-control',
                                            'placeholder': 'treatment done','rows':'3'}),
+            'picture': forms.FileInput(attrs={'required': False,'enctype': 'multipart/form-data'}),
 
 
 
