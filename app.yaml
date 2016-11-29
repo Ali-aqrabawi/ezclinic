@@ -26,6 +26,8 @@ libraries:
   version: 1.2.5
 - name: django
   version: 1.5
+
+  
   
 env_variables:
   DJANGO_SETTINGS_MODULE: 'simple_forms.settings'

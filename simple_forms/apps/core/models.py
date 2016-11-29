@@ -7,7 +7,7 @@ from datetime import date
 from django.contrib.auth.models import AbstractUser
 
 from djangae import fields, storage
-
+import logging
 STATUS_CHOICES = (
     ("Unmarried", ("Unmarried")),
     ("Married", ("Married")),
@@ -18,7 +18,8 @@ SEX_CHOICES = (
     ("Female", ("Female")),
 )
 
-public_storage = storage.CloudStorage(google_acl='public-read-write')
+public_storage = storage.CloudStorage(google_acl='private')
+
 
 class User(AbstractUser):
     
@@ -43,8 +44,8 @@ class Person(models.Model):
     chief_complain = models.CharField(max_length=256,null=True,blank=True)
     treatment_plan=models.CharField(max_length=256,null=True,blank=True)
     treatment_done=models.CharField(max_length=256,null=True,blank=True)
+    #picture = models.ImageField(blank=True)
     picture = models.ImageField(upload_to='/image/', storage=public_storage,blank=True)
-
     def __str__(self):
         return self.name
 

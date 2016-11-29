@@ -107,7 +107,15 @@ def delete_person(request, person_id):
     if not request.user.is_authenticated():
 	
         return render(request, 'core/login.html')
-
+		
+    if request.method == "GET":
+        
+        c = get_object_or_404(Person, pk=person_id)
+        c.delete()
+        return redirect('home')
+    else :
+        return redirect('home')
+'''
     if request.method == "POST":
 
         c = get_object_or_404(Person, pk=person_id)
@@ -116,7 +124,7 @@ def delete_person(request, person_id):
         return redirect('home')
     else:
         return redirect('home')
-
+'''
 
 def logout_user(request):
     logout(request)
