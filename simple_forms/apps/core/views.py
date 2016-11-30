@@ -55,6 +55,7 @@ def add_person(request):
         context = {
             "form": form,
         }
+        
         return render(request, 'core/add_person.html', context)
 
 
@@ -161,7 +162,7 @@ def register(request):
     }
     	
     if form.is_valid():
-        logging.info("AAAA")
+        
         user = form.save(commit=False)
         username = form.cleaned_data['username']       
         
@@ -197,7 +198,7 @@ def edit(request, person_id):
 
 
     if request.method == "POST":
-        form = PersonForm(request.POST, instance=i)
+        form = PersonForm(request.POST, request.FILES or None,instance=i)
 
         if form.is_valid():
           # update main BL

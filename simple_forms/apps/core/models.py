@@ -5,6 +5,8 @@ from django.db import models
 from django import forms
 from datetime import date
 from django.contrib.auth.models import AbstractUser
+import logging
+
 
 from djangae import fields, storage
 import logging
@@ -18,7 +20,7 @@ SEX_CHOICES = (
     ("Female", ("Female")),
 )
 
-public_storage = storage.CloudStorage(google_acl='public-read')
+public_storage = storage.CloudStorage(bucket='ezclinic16.appspot.com',google_acl='public-read')
 
 
 class User(AbstractUser):
@@ -44,8 +46,13 @@ class Person(models.Model):
     chief_complain = models.CharField(max_length=256,null=True,blank=True)
     treatment_plan=models.CharField(max_length=256,null=True,blank=True)
     treatment_done=models.CharField(max_length=256,null=True,blank=True)
-    #picture = models.ImageField(blank=True)
+    
     picture = models.FileField(upload_to='image', storage=public_storage,blank=True)
+	
+    def filename(self):
+        
+        return self.picture.name
+	
     def __str__(self):
         return self.name
 
@@ -76,7 +83,7 @@ class PersonForm(forms.ModelForm):
                                            'placeholder': 'treatment plan','rows':'3'}),
             'treatment_done': forms.Textarea(attrs={'required': False, 'class': 'form-control',
                                            'placeholder': 'treatment done','rows':'3'}),
-            'picture': forms.FileInput(attrs={'required': False,'enctype': 'multipart/form-data'}),
+            'picture': forms.FileInput(attrs={'required': False,'class': 'form-control','enctype': 'multipart/form-data'}),
 
 
 

@@ -36,6 +36,7 @@ $("form#form1").submit(function(e) {
           <th style="width:6%"><i class="fa fa-money"></i> Paid</th>
           <th style="width:6%"><i class="fa fa-money" style='text-align:center;'></i> Left</th>
           <th>Medical History</th>
+		  <th>picture</th>
           <th>Address</th>
             
            <th>Delete</th>
@@ -58,7 +59,10 @@ $("form#form1").submit(function(e) {
             <td>{{ person.amount_paid }}</td>
           <td>{{ person.amount_left}}</td>
             <td>{{ person.note}}</td>
-          <td>{{ person.address }}
+			<td>  {% if person.picture %} 
+			<a href="{% url 'foto' person.id %}">{{person.filename}}</a>
+			{% endif %}</td>
+          <td>{{ person.address }}</td>
           
 
 
