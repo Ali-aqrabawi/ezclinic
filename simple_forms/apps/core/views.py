@@ -147,7 +147,8 @@ def login_user(request):
                 
                 login(request, user)
                 albums = Person.objects.filter(user=request.user)
-                return render(request, 'core/home.html', {'persons': albums})
+                #return render(request, 'core/home.html', {'persons': albums})
+                return redirect("home")
             else:
                 return render(request, 'core/login.html', {'error_message': 'Your account has been disabled'})
         else:
