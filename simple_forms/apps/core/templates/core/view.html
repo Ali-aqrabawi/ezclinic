@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load widget_tweaks %}
+<head>
+
+   </head>
+
+{% block content %}
+  <h2>Patient details </h2>
+  
+    {% csrf_token %}
+
+
+<div class="row">
+     <div class="col-sm-4 form-group">
+       <label for="name" >{% trans "Name" %}</label>
+	   <input class="form-control" value={{ person.name|default:"."  }} readonly>
+       
+      </div>
+   <div class="col-sm-4 form-group">
+       <label for="lname">{% trans "Lastname" %}</label>
+       <input class="form-control" value={{ person.last_name|default:"."  }} readonly>
+      </div>
+   </div>
+      <div class="row">
+       <div  class="col-sm-2 form-group">
+       <label for="age">{% trans "Age" %}</label>
+       <input class="form-control"  value={{ person.age|default:"."  }} readonly>
+      </div>
+   <div class="col-sm-2 form-group">
+       <label for="martial">{% trans "Martial Status" %}</label>
+       <input class="form-control"  value={{ person.martial_status|default:"."  }} readonly>
+      </div>
+       <div class="col-sm-2 form-group">
+       <label for="Sex">{% trans "Sex" %}</label>
+       <input class="form-control"  value={{ person.sex|default:"."  }} readonly>
+      </div>
+          <div class="col-sm-2 form-group">
+       <label for="date">{% trans "Next Appoinment" %}</label>
+      <input class="form-control"  value={{ person.date|default:"."  }} readonly>
+      </div>
+     </div>
+
+
+	 <div class="row">
+     <div class="col-sm-4 form-group">
+       <label for="chief_complain" >{% trans "Chief Complain" %}</label>
+       <input class="form-control"  value={{ person.chief_complain|default:"." }} readonly>
+      </div>
+   <div class="col-sm-4 form-group">
+       <label for="note">{% trans "Medical History" %}</label>
+       <input class="form-control"  value={{ person.note|default:"."  }} readonly>
+      </div>
+   </div>
+	 
+	 <div class="row">
+     <div class="col-sm-4 form-group">
+       <label for="treatment_plan" >{% trans "Treatment Plan" %}</label>
+       <textarea rows="3" class="form-control"  value={{ person.treatment_plan|default:"."  }} readonly></textarea>
+      </div>
+   <div class="col-sm-4 form-group">
+       <label for="treatment_done">{% trans "Treatment Done" %}</label>
+       <textarea rows="3" class="form-control"  value={{ person.treatment_done|default:"."  }} readonly></textarea>
+      </div>
+   </div>
+	 
+     <div class="row">
+       <div class="col-sm-4 form-group">
+       <label for="mobile">{% trans "Mobile Number" %}</label>
+       <input class="form-control"  value={{ person.mobile|default:"."  }} readonly>
+      </div>
+          <div class="col-sm-2 form-group">
+       <label for="amount paid">{% trans "$ Paid" %}</label>
+       <input class="form-control"  value={{ person.amount_paid|default:"."  }} readonly>
+      </div>
+          <div class="col-sm-2 form-group">
+       <label for="amount left">{% trans "$ Left" %}</label>
+       <input class="form-control"  value={{ person.amount_left|default:"."  }} readonly>
+      </div>
+      </div>
+      <div class="row">
+       <div class="col-sm-4 form-group">
+       <label for="address">{% trans "Address" %}</label>
+       <input class="form-control"  value={{ person.address|default:"."  }} readonly>
+      </div>
+          <div class="col-sm-4 form-group">
+       <label for="pic">{% trans "Picture" %}</label>
+        <input class="form-control"  value={{ person.address|default:"."  }} readonly>
+      </div>
+	  
+      </div>
+       
+       
+         
+		
+          
+      
+
+
+    <div class="form-group">
+	
+      <a href="{% url 'edit' person.id %}"  class="btn btn-info">
+        <i class="glyphicon glyphicon-pencil" ></i></span> {% trans "Edit" %}</span>
+      
+	  </a>
+      <a href="{% url 'home' %}" class="btn btn-default">Back</a>
+    </div>
+
+
+
+  
+  
+{% endblock %}

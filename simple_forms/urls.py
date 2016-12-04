@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^logout_user/$', views.logout_user, name='logout_user'),
     url(r'^(?P<person_id>\d+)/delete/$', views.delete_person, name='delete_person'),
     url(r'^(?P<person_id>\d+)/edit/$', views.edit, name='edit'),
+	url(r'^(?P<person_id>\d+)/view/$', views.view, name='view'),
     url(r'^(?P<person_id>\d+)/foto/$', views.foto, name='foto'),
     url(r'^search/$', views.search, name='search'),
     url(r'^date/$', views.date, name='date'),

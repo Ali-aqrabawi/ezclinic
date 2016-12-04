@@ -37,8 +37,7 @@ $("form#form1").submit(function(e) {
           <th style="width:6%"><i class="fa fa-money" style='text-align:center;'></i> Left</th>
           <th>Medical History</th>
 		  <th>picture</th>
-          <th>Address</th>
-            
+          <th>Address</th>            
            <th>Delete</th>
           <th>View</th>
 
@@ -73,7 +72,7 @@ $("form#form1").submit(function(e) {
         {% csrf_token %}
 		<button type='submit'  id='form1'  class='btn btn-xs btn-link icon'><i  class='glyphicon glyphicon-remove'></i></button>
 	</form></td>
-        <td><a  href="{% url 'edit' person.id %}"><i  class="glyphicon glyphicon-list-alt"></i></a></td>
+        <td><a  href="{% url 'view' person.id %}"><i  class="glyphicon glyphicon-list-alt"></i></a></td>
 
         </tr>
 	  {% empty %}

@@ -214,6 +214,24 @@ def edit(request, person_id):
 
     return render(request, 'core/add_person.html', {'i': i, 'form': form, 'mode': 'edit'})
 #=======================
+
+
+
+#======================= view
+
+def view(request, person_id):
+
+    if not request.user.is_authenticated():	
+        return render(request, 'core/login.html')
+		
+    person = get_object_or_404(Person, pk=person_id)
+
+
+    
+    return render(request, 'core/view.html', {'person': person})
+	
+	#====================================
+
 def foto(request, person_id):
     persons= get_object_or_404(Person, pk=person_id)
 
