@@ -189,7 +189,7 @@ def register(request):
     
     return render(request, 'core/register.html', context )
 
-#======================edit the patient details
+#======================edit the patient details 
 def edit(request, person_id):
 
     if not request.user.is_authenticated():	
