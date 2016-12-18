@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^login_user/$', views.login_user, name='login_user'),
     url(r'^logout_user/$', views.logout_user, name='logout_user'),
     url(r'^(?P<person_id>\d+)/delete/$', views.delete_person, name='delete_person'),
+    url(r'^(?P<person_id>\d+)/image/(?P<image_id>\d+)/delete/$', views.delete_person_image, name='delete_person_image'),
     url(r'^(?P<person_id>\d+)/edit/$', views.edit, name='edit'),
 	url(r'^(?P<person_id>\d+)/view/$', views.view, name='view'),
     url(r'^(?P<person_id>\d+)/foto/$', views.foto, name='foto'),

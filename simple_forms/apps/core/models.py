@@ -46,22 +46,28 @@ class Person(models.Model):
     chief_complain = models.CharField(max_length=256,null=True,blank=True)
     treatment_plan=models.CharField(max_length=256,null=True,blank=True)
     treatment_done=models.CharField(max_length=256,null=True,blank=True)
-    
-    picture = models.FileField(upload_to='image', storage=public_storage,blank=True)
-	
-    def filename(self):
-        
-        return self.picture.name
 	
     def __str__(self):
         return self.name
 
-class PersonForm(forms.ModelForm):
+class Picture(models.Model):
+    picture = models.FileField(upload_to='image', storage=public_storage,blank=True)
+    person = models.ForeignKey(Person, related_name='pictures')
 
+    def filename(self):
+        
+        return self.picture.name.split('/')[-1].split('.')[0]
+    
+    def __unicode__(self):
+        return self.picture.url
+
+
+class PersonForm(forms.ModelForm):
+    pictures = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True, 'class': 'form-control', 'required':False}))
     class Meta:
         model = Person
         fields = ['name', 'last_name', 'age', 'martial_status', 'mobile', 'sex',
-                  'amount_paid','amount_left','note', 'address','date','picture','treatment_done','treatment_plan','chief_complain']
+                  'amount_paid','amount_left','note', 'address','date','treatment_done','treatment_plan','chief_complain']
         widgets = {
             'name': forms.TextInput(attrs={'required': True, 'class': 'form-control',
                                              'placeholder': 'name'}),
@@ -83,9 +89,6 @@ class PersonForm(forms.ModelForm):
                                            'placeholder': 'treatment plan','rows':'3'}),
             'treatment_done': forms.Textarea(attrs={'required': False, 'class': 'form-control',
                                            'placeholder': 'treatment done','rows':'3'}),
-            'picture': forms.FileInput(attrs={'required': False,'class': 'form-control','enctype': 'multipart/form-data'}),
-
-
 
 
         }

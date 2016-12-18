@@ -5,13 +5,15 @@ from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 from django.shortcuts import render, redirect
+from django.core.urlresolvers import reverse
 import logging
 from django.http import HttpResponse
 
-from simple_forms.apps.core.models import Person,PersonForm,UserForm,User
+from simple_forms.apps.core.models import Person, Picture, PersonForm,UserForm,User
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
+
 """
 def home(request):
     persons = Person.objects.all()
@@ -39,8 +41,9 @@ def add_person(request):
     else: 
         form = PersonForm(request.POST or None,request.FILES or None,instance=Person())
 		#form = PersonForm(request.POST or None,request.FILES )
+
         if form.is_valid():
-            
+            print 'valid'
             persons = form.save()
             
             persons.user = request.user
@@ -50,6 +53,10 @@ def add_person(request):
             
           
             persons.save()
+            files = request.FILES.getlist('pictures')
+            if files:
+                for f in files:
+                    Picture.objects.create(person=persons, picture=f)
 
             return redirect('home')
         context = {
@@ -127,6 +134,19 @@ def delete_person(request, person_id):
     else:
         return redirect('home')
 '''
+
+def delete_person_image(request, person_id, image_id):
+    if not request.user.is_authenticated():
+
+        return render(request, 'core/login.html')
+        
+    if request.method == "GET":
+        image = get_object_or_404(Picture, pk=image_id)
+        image.delete()
+        return redirect(reverse('view', args=(person_id,)))
+    else :
+        return redirect(reverse('view', args=(person_id,)))
+
 
 def logout_user(request):
     logout(request)
@@ -207,6 +227,10 @@ def edit(request, person_id):
 
 
             i.save()
+            files = request.FILES.getlist('pictures')
+            if files:
+                for f in files:
+                    Picture.objects.create(person=i, picture=f)
 
         return redirect("home")
     else:
@@ -225,10 +249,20 @@ def view(request, person_id):
         return render(request, 'core/login.html')
 		
     person = get_object_or_404(Person, pk=person_id)
+    pictures = person.pictures.all()
+    pictures_length = len(pictures)
+    if pictures_length%2 == 0:
+        it = iter(pictures)
+        pictures_tuple = zip(it, it)
+        last_picture = None
+    else:
+        it = iter(pictures)
+        pictures_tuple = zip(it, it)
+        last_picture = pictures.last()
 
-
+    print pictures_tuple, last_picture
     
-    return render(request, 'core/view.html', {'person': person})
+    return render(request, 'core/view.html', {'person': person,'pictures_tuple':pictures_tuple, 'last_picture':last_picture })
 	
 	#====================================
 

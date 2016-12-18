@@ -1,14 +1,56 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load staticfiles %}
 {% block content %}
 
 
-{% if persons.picture %}
-    <img src="{{ persons.picture.url }}">
+{% if persons.pictures %}
+	{% for picture in persons.pictures.all %}
+    <div style="margin-top: 50px;" class="col-md-4">
+        <div class="thumbnail">
+            
+                
+                    <a class="fancybox" rel="group" href="{{ picture.picture.url }}">
+                    <img src="{{ picture.picture.url }}" style="min-height:50px;height:250px;width:100%" alt="" />
+                    </a>
+        </div>
+    </div>
+	{% endfor %}
 {% endif %}
 
 
+<script src="{% static 'fancybox/source/jquery.fancybox.pack.js' %}" ></script>
+   <script type="text/javascript">
+       $(document).ready(function() {
+            $(".fancybox")
+                .attr('rel', 'group')
+                .fancybox({
+                    padding: 0,
+                    closeBtn : false,
+                    fitToView: false, // avoids scaling the image to fit in the viewport
+                    nextSpeed : 0, 
 
+                    prevSpeed : 0,
+                    beforeShow: function () {
+                        // set size to (fancybox) img
+                        // $(".fancybox-image").css({
+                        //     "width": 800,
+                        //     "height": 600
+                        // });
+                        // set size for parent container
+                        this.width = 700;
+                        this.height = 500; 
+                    },
+                    helpers: {
+                        overlay: {
+                          locked: false
+                        }
+                    }
+                });
+
+
+        });
+  </script>
 
 
 

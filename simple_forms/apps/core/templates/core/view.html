@@ -1,9 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% load widget_tweaks %}
-<head>
-
-   </head>
+{% load staticfiles %}
 
 {% block content %}
   <h2>Patient details </h2>
@@ -81,11 +79,170 @@
       <div class="row">
        <div class="col-sm-4 form-group">
        <label for="address">{% trans "Address" %}</label>
-       <input class="form-control"  value={{ person.address|default:"."  }} readonly>
+       <input class="form-control"  value={{ person.address|default:"."  }} style="height: 200px;" readonly>
       </div>
           <div class="col-sm-4 form-group">
        <label for="pic">{% trans "Picture" %}</label>
-        <input class="form-control"  value={{ person.address|default:"."  }} readonly>
+       <div>
+        {% if  person.pictures.count == 0  %}
+          <input class="form-control"  value="No files for this patient" style="height: 200px;text-align:center;" readonly>
+
+        {% else %} 
+            <div class="well">
+     
+              <div id="myCarousel" class="carousel slide">    
+                <!-- Carousel items -->
+                <div class="carousel-inner">
+                  {% for first, second in pictures_tuple %}
+
+                    {% if forloop.counter == 1 %} 
+                      <div class="item active">
+                        <div class="row-fluid">
+                          
+                            
+                                <div class="col-md-6">
+                                    <div class="thumbnail">
+                                        
+                                            
+                                                <a class="fancybox" rel="group" href="{{ first.picture.url }}">
+                                                <img src="{{ first.picture.url }}" style="height:100px;width:100%" alt="" />
+                                                </a>
+
+
+                                    </div>
+                                    <div style="margin-top: -10px;word-wrap: break-word;text-align: center;">
+                                        {{ first.filename }}
+                                    </div>
+                                    <div style="text-align: center;">
+                                      <form id='form1'  name='delete'  action="{% url 'delete_person_image' person.id first.id %}"
+                                          method='POST'>
+                                            {% csrf_token %}
+                                        <button type='submit'  id='form1'  class='btn btn-xs btn-link icon' title="Delete"><i  class='glyphicon glyphicon-remove'></i></button>
+                                      </form>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="thumbnail">
+                                        
+                                            
+                                                <a class="fancybox" rel="group" href="{{ second.picture.url }}">
+                                                <img src="{{ second.picture.url }}" style="height:100px;width:100%" alt="" />
+                                                </a>
+
+
+                                    </div>
+                                    <div style="margin-top: -10px;word-wrap: break-word;text-align: center;">
+                                        {{ second.filename }}
+                                    </div>
+                                    <div style="text-align: center;">
+                                      <form id='form1'  name='delete'  action="{% url 'delete_person_image' person.id second.id %}"
+                                          method='POST'>
+                                            {% csrf_token %}
+                                        <button type='submit'  id='form1'  class='btn btn-xs btn-link icon' title="Delete"><i  class='glyphicon glyphicon-remove'></i></button>
+                                      </form>
+                                    </div>
+                                </div>
+                        
+                        </div>
+                      </div>           
+                    {% else %} 
+                      <div class="item">
+                        <div class="row-fluid">
+                          
+                            
+                                <div class="col-md-6">
+                                    <div class="thumbnail">
+                                        
+                                            
+                                                <a class="fancybox" rel="group" href="{{ first.picture.url }}">
+                                                <img src="{{ first.picture.url }}" style="height:100px;width:100%" alt="" />
+                                                </a>
+
+
+                                    </div>
+                                    <div style="margin-top: -10px;word-wrap: break-word;text-align: center;">
+                                        {{ first.filename }}
+                                    </div>
+                                    <div style="text-align: center;">
+                                      <form id='form1'  name='delete'  action="{% url 'delete_person_image' person.id first.id %}"
+                                          method='POST'>
+                                            {% csrf_token %}
+                                        <button type='submit'  id='form1'  class='btn btn-xs btn-link icon' title="Delete"><i  class='glyphicon glyphicon-remove'></i></button>
+                                      </form>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="thumbnail">
+                                        
+                                            
+                                                <a class="fancybox" rel="group" href="{{ second.picture.url }}">
+                                                <img src="{{ second.picture.url }}" style="height:100px;width:100%" alt="" />
+                                                </a>
+
+
+                                    </div>
+                                    <div style="margin-top: -10px;word-wrap: break-word;text-align: center;">
+                                        {{ second.filename }}
+                                    </div>
+                                    <div style="text-align: center;">
+                                      <form id='form1'  name='delete'  action="{% url 'delete_person_image' person.id second.id %}"
+                                          method='POST'>
+                                            {% csrf_token %}
+                                        <button type='submit'  id='form1'  class='btn btn-xs btn-link icon' title="Delete"><i  class='glyphicon glyphicon-remove'></i></button>
+                                      </form>
+                                    </div>
+                                </div>
+                        
+                        </div>
+                      </div> 
+                    {% endif %}   
+                             
+                  {% endfor %}
+                  {% if last_picture %}
+                    <div class="item">
+                        <div class="row-fluid">
+                          
+                            
+                                <div class="col-md-6">
+                                    <div class="thumbnail">
+                                        
+                                            
+                                                <a class="fancybox" rel="group" href="{{ last_picture.picture.url }}">
+                                                <img src="{{ last_picture.picture.url }}" style="height:100px;width:100%" alt="" />
+                                                </a>
+
+
+                                    </div>
+                                    <div style="margin-top: -10px;word-wrap: break-word;text-align: center;">
+                                        {{ last_picture.filename }}
+                                    </div>
+                                    <div style="text-align: center;">
+                                      <form id='form1'  name='delete'  action="{% url 'delete_person_image' person.id last_picture.id %}"
+                                          method='POST'>
+                                            {% csrf_token %}
+                                        <button type='submit'  id='form1'  class='btn btn-xs btn-link icon' title="Delete"><i  class='glyphicon glyphicon-remove'></i></button>
+                                      </form>
+                                    </div>
+                                </div>
+                                
+                        
+                        </div>
+                      </div> 
+                  {% endif %}
+
+                </div><!--/carousel-inner-->
+     
+            <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+            <span class="icon-prev fa-stack fa-lg"></span>
+            </a>
+            <a class="right carousel-control" href="#myCarousel" data-slide="next">
+               <span class="icon-next fa-stack fa-lg"></span>
+            </a>
+          </div><!--/myCarousel-->
+     
+        </div><!--/well-->
+            {% endif %}
+        </div>
       </div>
 	  
       </div>
@@ -109,5 +266,55 @@
 
 
   
-  
+    <script src="{% static 'fancybox/source/jquery.fancybox.pack.js' %}" ></script>
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+   <script type="text/javascript">
+      $(document).ready(function() {
+            $(".fancybox")
+                .attr('rel', 'group')
+                .fancybox({
+                    padding: 0,
+                    closeBtn : false,
+                    fitToView: false, // avoids scaling the image to fit in the viewport
+                    nextSpeed : 0, 
+
+                    prevSpeed : 0,
+                    beforeShow: function () {
+                        // set size to (fancybox) img
+                        // $(".fancybox-image").css({
+                        //     "width": 800,
+                        //     "height": 600
+                        // });
+                        // set size for parent container
+                        this.width = 700;
+                        this.height = 500; 
+                    },
+                    helpers: {
+                        overlay: {
+                          locked: false
+                        }
+                    }
+                });
+        });
+
+      $(document).ready(function(){
+        $("form#form1").submit(function(e) {
+            e.preventDefault();
+            var lHref = $(this).attr('action');
+            bootbox.confirm("Are you sure you want to delete a Pateint?", function(confirmed) {
+                if(confirmed) {
+                    window.location.href = lHref;
+                }
+            });
+        });
+      })
+      $(document).ready(function() {
+        $('#myCarousel').carousel({
+        interval: 10000
+        })
+      });
+  </script>
 {% endblock %}
+
+
+ 

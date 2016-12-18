@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load staticfiles %}
 {% block content %}
 
 
@@ -36,7 +37,7 @@ $("form#form1").submit(function(e) {
           <th style="width:6%"><i class="fa fa-money"></i> Paid</th>
           <th style="width:6%"><i class="fa fa-money" style='text-align:center;'></i> Left</th>
           <th>Medical History</th>
-		  <th>picture</th>
+		  <th class="col-md-4" style="text-align: center;">picture</th>
           <th>Address</th>            
            <th>Delete</th>
           <th>View</th>
@@ -58,9 +59,21 @@ $("form#form1").submit(function(e) {
             <td>{{ person.amount_paid }}</td>
           <td>{{ person.amount_left}}</td>
             <td>{{ person.note}}</td>
-			<td>  {% if person.picture %} 
-			<a href="{% url 'foto' person.id %}">{{person.filename}}</a>
-			{% endif %}</td>
+			   <td class="col-md-4">  {% if person.pictures %} 
+
+            			{% for picture in person.pictures.all %}
+                    <div class="col-md-2">
+                        <div class="thumbnail">
+                            
+                                
+                                    <a class="fancybox" rel="group" href="{{ picture.picture.url }}">
+                                    <img src="{{ picture.picture.url }}" style="height:30px;width:100%" alt="" />
+                                    </a>
+                        </div>
+                    </div>
+                  {% endfor %}
+      			{% endif %}
+          </td>
           <td>{{ person.address }}</td>
           
 
@@ -103,5 +116,37 @@ $("form#form1").submit(function(e) {
     {% endif %}
   </ul>
 {% endif %}
+  <script src="{% static 'fancybox/source/jquery.fancybox.pack.js' %}" ></script>
+   <script type="text/javascript">
+       $(document).ready(function() {
+            $(".fancybox")
+                .attr('rel', 'group')
+                .fancybox({
+                    padding: 0,
+                    closeBtn : false,
+                    fitToView: false, // avoids scaling the image to fit in the viewport
+                    nextSpeed : 0, 
+
+                    prevSpeed : 0,
+                    beforeShow: function () {
+                        // set size to (fancybox) img
+                        // $(".fancybox-image").css({
+                        //     "width": 800,
+                        //     "height": 600
+                        // });
+                        // set size for parent container
+                        this.width = 700;
+                        this.height = 500; 
+                    },
+                    helpers: {
+                        overlay: {
+                          locked: false
+                        }
+                    }
+                });
+
+
+        });
+  </script>
 
 {% endblock %}
