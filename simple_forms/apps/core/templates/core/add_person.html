@@ -6,36 +6,36 @@
    </head>
 
 {% block content %}
-  <h2>Add person</h2>
+  <h2>Add Patient</h2>
   <form enctype="multipart/form-data" method="post">
     {% csrf_token %}
 
 
 <div class="row">
      <div class="col-sm-4 form-group">
-       <label for="name" >{% trans "Name" %}</label>
+       <label for="name" >{% trans "Name:" %}</label>
        {{ form.name|add_class:"form-control" }}
       </div>
    <div class="col-sm-4 form-group">
-       <label for="lname">{% trans "Lastname" %}</label>
+       <label for="lname">{% trans "Lastname:" %}</label>
        {{ form.last_name|add_class:"form-control" }}
       </div>
    </div>
       <div class="row">
        <div  class="col-sm-2 form-group">
-       <label for="age">{% trans "Age" %}</label>
+       <label for="age">{% trans "Age:" %}</label>
        {{ form.age|add_class:"form-control" }}
       </div>
    <div class="col-sm-2 form-group">
-       <label for="martial">{% trans "Martial Status" %}</label>
+       <label for="martial">{% trans "Martial Status:" %}</label>
        {{ form.martial_status|add_class:"form-control" }}
       </div>
        <div class="col-sm-2 form-group">
-       <label for="Sex">{% trans "Sex" %}</label>
+       <label for="Sex">{% trans "Sex:" %}</label>
        {{ form.sex|add_class:"form-control" }}
       </div>
           <div class="col-sm-2 form-group">
-       <label for="date">{% trans "Next Appoinment" %}</label>
+       <label for="date">{% trans "Next Appoinment:" %}</label>
       {{ form.date|add_class:"form-control" }}
       </div>
      </div>
@@ -43,47 +43,47 @@
 
 	 <div class="row">
      <div class="col-sm-4 form-group">
-       <label for="chief_complain" >{% trans "Chief Complain" %}</label>
+       <label for="chief_complain" >{% trans "Chief Complain:" %}</label>
        {{ form.chief_complain|add_class:"form-control" }}
       </div>
    <div class="col-sm-4 form-group">
-       <label for="note">{% trans "Medical History" %}</label>
+       <label for="note">{% trans "Medical History:" %}</label>
        {{ form.note|add_class:"form-control" }}
       </div>
    </div>
 	 
 	 <div class="row">
      <div class="col-sm-4 form-group">
-       <label for="treatment_plan" >{% trans "Treatment Plan" %}</label>
+       <label for="treatment_plan" >{% trans "Treatment Plan:" %}</label>
        {{ form.treatment_plan|add_class:"form-control" }}
       </div>
    <div class="col-sm-4 form-group">
-       <label for="treatment_done">{% trans "Treatment Done" %}</label>
+       <label for="treatment_done">{% trans "Treatment Done:" %}</label>
        {{ form.treatment_done|add_class:"form-control" }}
       </div>
    </div>
 	 
      <div class="row">
        <div class="col-sm-4 form-group">
-       <label for="mobile">{% trans "Mobile Number" %}</label>
+       <label for="mobile">{% trans "Mobile Number:" %}</label>
        {{ form.mobile|add_class:"form-control" }}
       </div>
           <div class="col-sm-2 form-group">
-       <label for="amount paid">{% trans "$ Paid" %}</label>
+       <label for="amount paid">{% trans "Money Paid:" %}</label>
        {{ form.amount_paid|add_class:"form-control" }}
       </div>
           <div class="col-sm-2 form-group">
-       <label for="amount left">{% trans "$ Left" %}</label>
+       <label for="amount left">{% trans "Money Left:" %}</label>
        {{ form.amount_left|add_class:"form-control" }}
       </div>
       </div>
       <div class="row">
        <div class="col-sm-4 form-group">
-       <label for="address">{% trans "Address" %}</label>
+       <label for="address">{% trans "Address:" %}</label>
        {{ form.address|add_class:"form-control" }}
       </div>
           <div class="col-sm-4 form-group">
-       <label for="pic">{% trans "Picture" %}</label>
+       <label for="pic">{% trans "Upload Files:" %}</label>
         {{form.pictures}}
       </div>
 	  

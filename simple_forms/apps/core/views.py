@@ -236,7 +236,7 @@ def edit(request, person_id):
     else:
         form = PersonForm(instance=i)
 
-    return render(request, 'core/add_person.html', {'i': i, 'form': form, 'mode': 'edit'})
+    return render(request, 'core/edit.html', {'i': i, 'form': form, 'mode': 'edit'})
 #=======================
 
 
