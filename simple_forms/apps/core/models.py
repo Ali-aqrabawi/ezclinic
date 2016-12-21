@@ -20,6 +20,8 @@ SEX_CHOICES = (
     ("Female", ("Female")),
 )
 
+
+
 public_storage = storage.CloudStorage(bucket='ezclinic16.appspot.com',google_acl='public-read')
 
 

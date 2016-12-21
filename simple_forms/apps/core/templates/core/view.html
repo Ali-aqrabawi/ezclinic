@@ -54,11 +54,11 @@
 	 <div class="row">
      <div class="col-sm-4 form-group">
        <label for="treatment_plan" >{% trans "Treatment Plan:" %}</label>
-       <textarea rows="3" class="form-control"  value={{ person.treatment_plan|default:"."  }} readonly></textarea>
+       <textarea rows="3" class="form-control"   readonly>{{ person.treatment_plan|default:"."  }}</textarea>
       </div>
    <div class="col-sm-4 form-group">
        <label for="treatment_done">{% trans "Treatment Done:" %}</label>
-       <textarea rows="3" class="form-control"  value={{ person.treatment_done|default:"."  }} readonly></textarea>
+       <textarea rows="3" class="form-control"  readonly>{{ person.treatment_done|default:"."  }} </textarea>
       </div>
    </div>
 	 
