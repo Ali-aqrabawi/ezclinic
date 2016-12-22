@@ -9,7 +9,7 @@ from django.core.urlresolvers import reverse
 import logging
 from django.http import HttpResponse
 
-from simple_forms.apps.core.models import Person, Picture, PersonForm,UserForm,User
+from simple_forms.apps.core.models import Person, Picture, Diagcode, PersonForm,UserForm,User
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
@@ -41,7 +41,7 @@ def add_person(request):
     else: 
         form = PersonForm(request.POST or None,request.FILES or None,instance=Person())
 		#form = PersonForm(request.POST or None,request.FILES )
-
+        print 'invalid'
         if form.is_valid():
             print 'valid'
             persons = form.save()
@@ -57,6 +57,11 @@ def add_person(request):
             if files:
                 for f in files:
                     Picture.objects.create(person=persons, picture=f)
+
+            diagcodes = request.POST.getlist('diagcode')
+            if diagcodes:
+                for diagcode in diagcodes:
+                    Diagcode.objects.create(person=persons, diagcode=diagcode)
 
             return redirect('home')
         context = {
@@ -148,6 +153,19 @@ def delete_person_image(request, person_id, image_id):
         return redirect(reverse('view', args=(person_id,)))
 
 
+def delete_person_diagcode(request, person_id, diagcode_id):
+    if not request.user.is_authenticated():
+
+        return render(request, 'core/login.html')
+        
+    if request.method == "GET":
+        diagcode = get_object_or_404(Diagcode, pk=diagcode_id)
+        diagcode.delete()
+        return redirect(reverse('view', args=(person_id,)))
+    else :
+        return redirect(reverse('view', args=(person_id,)))
+
+
 def logout_user(request):
     logout(request)
     form = UserForm(request.POST or None)
@@ -232,11 +250,19 @@ def edit(request, person_id):
                 for f in files:
                     Picture.objects.create(person=i, picture=f)
 
+            diagcodes = request.POST.getlist('diagcode')
+            if diagcodes:
+                for diagcode in diagcodes:
+                    if not Diagcode.objects.filter(person=i,diagcode=diagcode):
+                        Diagcode.objects.create(person=i, diagcode=diagcode)
+                    else:
+                        pass
+
         return redirect("home")
     else:
         form = PersonForm(instance=i)
 
-    return render(request, 'core/edit.html', {'i': i, 'form': form, 'mode': 'edit'})
+    return render(request, 'core/edit.html', {'i': i, 'form': form, 'mode': 'edit','person':i})
 #=======================
 
 

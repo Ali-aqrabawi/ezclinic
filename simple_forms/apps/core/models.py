@@ -63,9 +63,19 @@ class Picture(models.Model):
     def __unicode__(self):
         return self.picture.url
 
+class Diagcode(models.Model):
+    diagcode = models.CharField(max_length=256)
+    person = models.ForeignKey(Person, related_name='diagcodes')
+
+    class Meta:
+        unique_together = ('person', 'diagcode')
+    
+    def __unicode__(self):
+        return self.diagcode
+
 
 class PersonForm(forms.ModelForm):
-    pictures = forms.FileField(widget=forms.ClearableFileInput(attrs={'multiple': True, 'class': 'form-control', 'required':False}))
+    pictures = forms.FileField(widget=forms.ClearableFileInput(attrs={'required':False,'multiple': True, 'class': 'form-control'}), required=False)
     class Meta:
         model = Person
         fields = ['name', 'last_name', 'age', 'martial_status', 'mobile', 'sex',

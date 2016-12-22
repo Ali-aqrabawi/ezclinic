@@ -62,26 +62,61 @@
        {{ form.treatment_done|add_class:"form-control" }}
       </div>
    </div>
-	 
-     <div class="row">
+	 <div class="row">
+      <div class="col-sm-4">
+        <div class="form-group">
+        <label for="diagcode">{% trans "Diagnostic Code:" %}</label>
+          <select id="diagcode" name="diagcode" class="selectpicker form-control" data-live-search="true" multiple>
+            <optgroup label="Disorders of tooth development & eruption">
+              <option value="Anodontia">Anodontia</option>
+              <option value="Supernumerary teeth">Supernumerary teeth</option>
+              <option value="Abnormalities of size and form">Abnormalities of size and form</option>
+              <option value="Mottled teeth">Mottled teeth</option>
+              <option value="Disturbances of tooth formation">Disturbances of tooth formation</option>
+              <option value="Hereditary disturbances in tooth structure ">Hereditary disturbances in tooth structure </option>
+              <option value="Disturbances in tooth eruption">Disturbances in tooth eruption</option>
+            </optgroup>
+            <optgroup label="Diseases of hard tissues of teeth">
+              <option value="Dental caries, unspecified">Dental caries, unspecified</option>
+              <option value="Dental caries limited to enamel">Dental caries limited to enamel</option>
+              <option value="Dental caries extending into dentine">Dental caries extending into dentine</option>
+              <option value="Excessive attrition (occlusal wear)">Excessive attrition (occlusal wear)</option>
+              <option value="Excessive attrition, limited to ename">Excessive attrition, limited to ename</option>
+              <option value="Excessive attrition, extending into dentine">Excessive attrition, extending into dentine</option>
+              <option value="Abrasion, unspecified">Abrasion, unspecified</option>
+              <option value="Abrasion, limited to ename">Abrasion, limited to ename</option>
+              <option value="Abrasion, extending into dentine">Abrasion, extending into dentine</option>
+              <option value="Erosion, unspecified">Erosion, unspecified</option>
+              <option value="Erosion, limited to enamel">Erosion, limited to enamel</option>
+              <option value="Erosion, extending into dentine">Erosion, extending into dentine</option>
+              <option value="Pathological resorption">Pathological resorption</option>
+              <option value="Pathological resorption, internal">Pathological resorption, internal</option>
+              <option value="Pathological resorption, external">Pathological resorption, external</option>
+            </optgroup>
+          </select>
+          </div>
+      </div>
+      <div class="col-sm-2 form-group">
+       <label for="amount paid">{% trans "Money Paid:" %}</label>
+       {{ form.amount_paid|add_class:"form-control" }}
+      </div>
+        <div class="col-sm-2 form-group">
+       <label for="amount left">{% trans "Money Left:" %}</label>
+       {{ form.amount_left|add_class:"form-control" }}
+      </div>
+   </div>
+    <div class="row">
        <div class="col-sm-4 form-group">
        <label for="mobile">{% trans "Mobile Number:" %}</label>
        {{ form.mobile|add_class:"form-control" }}
       </div>
-          <div class="col-sm-2 form-group">
-       <label for="amount paid">{% trans "Money Paid:" %}</label>
-       {{ form.amount_paid|add_class:"form-control" }}
-      </div>
-          <div class="col-sm-2 form-group">
-       <label for="amount left">{% trans "Money Left:" %}</label>
-       {{ form.amount_left|add_class:"form-control" }}
-      </div>
-      </div>
-      <div class="row">
-       <div class="col-sm-4 form-group">
+      <div class="col-sm-4 form-group">
        <label for="address">{% trans "Address:" %}</label>
        {{ form.address|add_class:"form-control" }}
       </div>
+        
+      </div>
+      <div class="row">
           <div class="col-sm-4 form-group">
        <label for="pic">{% trans "Upload Files:" %}</label>
         {{form.pictures}}
@@ -105,6 +140,5 @@
 
 
   </form>
-  
   
 {% endblock %}
