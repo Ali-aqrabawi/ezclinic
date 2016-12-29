@@ -1,144 +1,148 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% load widget_tweaks %}
-<head>
-
-   </head>
 
 {% block content %}
-  <h2>Add Patient</h2>
-  <form enctype="multipart/form-data" method="post">
-    {% csrf_token %}
+    <h2>Add Patient</h2>
+    <form enctype="multipart/form-data" method="post">
+        {% csrf_token %}
 
+        <div> 
+            <ul class="nav nav-tabs">
+              <li class="active"><a href="#tab1" data-toggle="tab">Personal Info</a></li>
+              <li><a href="#tab2" data-toggle="tab">Medical Details</a></li>
+              <li><a href="#tab3" data-toggle="tab">Files</a></li>
+              <li><a href="#tab4" data-toggle="tab">Dental Chart</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab1">
+                    <div class="row">
+                        <div class="col-sm-2 form-group">
+                            <label for="name" >{% trans "Name:" %}</label>
+                                {{ form.name|add_class:"form-control" }}
+                        </div>
+                        <div class="col-sm-2 form-group">
+                            <label for="lname">{% trans "Lastname:" %}</label>
+                                {{ form.last_name|add_class:"form-control" }}
+                        </div>
+                        <div class="col-sm-2 form-group">
+                           <label for="Sex">{% trans "Sex:" %}</label>
+                           {{ form.sex|add_class:"form-control" }}
+                        </div>
+                        <div class="col-sm-2 form-group">
+                           <label for="date">{% trans "Next Appoinment:" %}</label>
+                          {{ form.date|add_class:"form-control" }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div  class="col-sm-2 form-group">
+                            <label for="age">{% trans "Age:" %}</label>
+                                {{ form.age|add_class:"form-control" }}
+                        </div>
+                        <div class="col-sm-2 form-group">
+                            <label for="martial">{% trans "Martial Status:" %}</label>
+                           {{ form.martial_status|add_class:"form-control" }}
+                        </div>
+                        <div class="col-sm-2 form-group">
+                            <label for="amount paid">{% trans "Money Paid:" %}</label>
+                               {{ form.amount_paid|add_class:"form-control" }}
+                        </div>
+                        <div class="col-sm-2 form-group">
+                               <label for="amount left">{% trans "Money Left:" %}</label>
+                               {{ form.amount_left|add_class:"form-control" }}
+                        </div>
+                        
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 form-group">
+                           <label for="mobile">{% trans "Mobile Number:" %}</label>
+                           {{ form.mobile|add_class:"form-control" }}
+                        </div>
+                        <div class="col-sm-4 form-group">
+                            <label for="address">{% trans "Address:" %}</label>
+                                {{ form.address|add_class:"form-control" }}
+                        </div>
+                        
+                    </div>                    
+                </div>
+                <div class="tab-pane" id="tab2">
+                    <div class="row">
+                        <div class="col-sm-4 form-group">
+                            <label for="chief_complain" >{% trans "Chief Complain:" %}</label>
+                                {{ form.chief_complain|add_class:"form-control" }}
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="diagcode">{% trans "Diagnostic Code:" %}</label>
+                                <select id="diagcode" name="diagcode" class="selectpicker form-control" data-live-search="true" multiple>
+                                    <optgroup label="Disorders of tooth development & eruption">
+                                        <option value="Anodontia">Anodontia</option>
+                                        <option value="Supernumerary teeth">Supernumerary teeth</option>
+                                        <option value="Abnormalities of size and form">Abnormalities of size and form</option>
+                                        <option value="Mottled teeth">Mottled teeth</option>
+                                        <option value="Disturbances of tooth formation">Disturbances of tooth formation</option>
+                                        <option value="Hereditary disturbances in tooth structure ">Hereditary disturbances in tooth structure </option>
+                                        <option value="Disturbances in tooth eruption">Disturbances in tooth eruption</option>
+                                    </optgroup>
+                                    <optgroup label="Diseases of hard tissues of teeth">
+                                        <option value="Dental caries, unspecified">Dental caries, unspecified</option>
+                                        <option value="Dental caries limited to enamel">Dental caries limited to enamel</option>
+                                        <option value="Dental caries extending into dentine">Dental caries extending into dentine</option>
+                                        <option value="Excessive attrition (occlusal wear)">Excessive attrition (occlusal wear)</option>
+                                        <option value="Excessive attrition, limited to ename">Excessive attrition, limited to ename</option>
+                                        <option value="Excessive attrition, extending into dentine">Excessive attrition, extending into dentine</option>
+                                        <option value="Abrasion, unspecified">Abrasion, unspecified</option>
+                                        <option value="Abrasion, limited to ename">Abrasion, limited to ename</option>
+                                        <option value="Abrasion, extending into dentine">Abrasion, extending into dentine</option>
+                                        <option value="Erosion, unspecified">Erosion, unspecified</option>
+                                        <option value="Erosion, limited to enamel">Erosion, limited to enamel</option>
+                                        <option value="Erosion, extending into dentine">Erosion, extending into dentine</option>
+                                        <option value="Pathological resorption">Pathological resorption</option>
+                                        <option value="Pathological resorption, internal">Pathological resorption, internal</option>
+                                        <option value="Pathological resorption, external">Pathological resorption, external</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 form-group">
+                            <label for="treatment_plan" >{% trans "Treatment Plan:" %}</label>
+                                {{ form.treatment_plan|add_class:"form-control" }}
+                        </div>
+                        <div class="col-sm-4 form-group">
+                            <label for="treatment_done">{% trans "Treatment Done:" %}</label>
+                                {{ form.treatment_done|add_class:"form-control" }}
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-4 form-group">
+                            <label for="note">{% trans "Medical History:" %}</label>
+                                {{ form.note|add_class:"form-control" }}
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="tab3">
+                    <div class="row">
+                        <div class="col-sm-4 form-group">
+                            <label for="pic">{% trans "Upload Files:" %}</label>
+                                {{form.pictures}}
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="tab4">
+                    Dental Chart
+                </div>
+            </div>
+        </div>         
 
-<div class="row">
-     <div class="col-sm-4 form-group">
-       <label for="name" >{% trans "Name:" %}</label>
-       {{ form.name|add_class:"form-control" }}
-      </div>
-   <div class="col-sm-4 form-group">
-       <label for="lname">{% trans "Lastname:" %}</label>
-       {{ form.last_name|add_class:"form-control" }}
-      </div>
-   </div>
-      <div class="row">
-       <div  class="col-sm-2 form-group">
-       <label for="age">{% trans "Age:" %}</label>
-       {{ form.age|add_class:"form-control" }}
-      </div>
-   <div class="col-sm-2 form-group">
-       <label for="martial">{% trans "Martial Status:" %}</label>
-       {{ form.martial_status|add_class:"form-control" }}
-      </div>
-       <div class="col-sm-2 form-group">
-       <label for="Sex">{% trans "Sex:" %}</label>
-       {{ form.sex|add_class:"form-control" }}
-      </div>
-          <div class="col-sm-2 form-group">
-       <label for="date">{% trans "Next Appoinment:" %}</label>
-      {{ form.date|add_class:"form-control" }}
-      </div>
-     </div>
-
-
-	 <div class="row">
-     <div class="col-sm-4 form-group">
-       <label for="chief_complain" >{% trans "Chief Complain:" %}</label>
-       {{ form.chief_complain|add_class:"form-control" }}
-      </div>
-   <div class="col-sm-4 form-group">
-       <label for="note">{% trans "Medical History:" %}</label>
-       {{ form.note|add_class:"form-control" }}
-      </div>
-   </div>
-	 
-	 <div class="row">
-     <div class="col-sm-4 form-group">
-       <label for="treatment_plan" >{% trans "Treatment Plan:" %}</label>
-       {{ form.treatment_plan|add_class:"form-control" }}
-      </div>
-   <div class="col-sm-4 form-group">
-       <label for="treatment_done">{% trans "Treatment Done:" %}</label>
-       {{ form.treatment_done|add_class:"form-control" }}
-      </div>
-   </div>
-	 <div class="row">
-      <div class="col-sm-4">
         <div class="form-group">
-        <label for="diagcode">{% trans "Diagnostic Code:" %}</label>
-          <select id="diagcode" name="diagcode" class="selectpicker form-control" data-live-search="true" multiple>
-            <optgroup label="Disorders of tooth development & eruption">
-              <option value="Anodontia">Anodontia</option>
-              <option value="Supernumerary teeth">Supernumerary teeth</option>
-              <option value="Abnormalities of size and form">Abnormalities of size and form</option>
-              <option value="Mottled teeth">Mottled teeth</option>
-              <option value="Disturbances of tooth formation">Disturbances of tooth formation</option>
-              <option value="Hereditary disturbances in tooth structure ">Hereditary disturbances in tooth structure </option>
-              <option value="Disturbances in tooth eruption">Disturbances in tooth eruption</option>
-            </optgroup>
-            <optgroup label="Diseases of hard tissues of teeth">
-              <option value="Dental caries, unspecified">Dental caries, unspecified</option>
-              <option value="Dental caries limited to enamel">Dental caries limited to enamel</option>
-              <option value="Dental caries extending into dentine">Dental caries extending into dentine</option>
-              <option value="Excessive attrition (occlusal wear)">Excessive attrition (occlusal wear)</option>
-              <option value="Excessive attrition, limited to ename">Excessive attrition, limited to ename</option>
-              <option value="Excessive attrition, extending into dentine">Excessive attrition, extending into dentine</option>
-              <option value="Abrasion, unspecified">Abrasion, unspecified</option>
-              <option value="Abrasion, limited to ename">Abrasion, limited to ename</option>
-              <option value="Abrasion, extending into dentine">Abrasion, extending into dentine</option>
-              <option value="Erosion, unspecified">Erosion, unspecified</option>
-              <option value="Erosion, limited to enamel">Erosion, limited to enamel</option>
-              <option value="Erosion, extending into dentine">Erosion, extending into dentine</option>
-              <option value="Pathological resorption">Pathological resorption</option>
-              <option value="Pathological resorption, internal">Pathological resorption, internal</option>
-              <option value="Pathological resorption, external">Pathological resorption, external</option>
-            </optgroup>
-          </select>
-          </div>
-      </div>
-      <div class="col-sm-2 form-group">
-       <label for="amount paid">{% trans "Money Paid:" %}</label>
-       {{ form.amount_paid|add_class:"form-control" }}
-      </div>
-        <div class="col-sm-2 form-group">
-       <label for="amount left">{% trans "Money Left:" %}</label>
-       {{ form.amount_left|add_class:"form-control" }}
-      </div>
-   </div>
-    <div class="row">
-       <div class="col-sm-4 form-group">
-       <label for="mobile">{% trans "Mobile Number:" %}</label>
-       {{ form.mobile|add_class:"form-control" }}
-      </div>
-      <div class="col-sm-4 form-group">
-       <label for="address">{% trans "Address:" %}</label>
-       {{ form.address|add_class:"form-control" }}
-      </div>
-        
-      </div>
-      <div class="row">
-          <div class="col-sm-4 form-group">
-       <label for="pic">{% trans "Upload Files:" %}</label>
-        {{form.pictures}}
-      </div>
-	  
-      </div>
-       
-       
-         
-		
-          
-      
+            <button type="submit" class="btn btn-info">
+                <span class="glyphicon glyphicon-ok"></span> {% trans "Save" %}
+            </button>
+            <a href="{% url 'home' %}" class="btn btn-default">Cancel</a>
+        </div>
+    </form>
 
-
-    <div class="form-group">
-      <button type="submit" class="btn btn-info">
-        <span class="glyphicon glyphicon-ok"></span> {% trans "Save" %}
-      </button>
-      <a href="{% url 'home' %}" class="btn btn-default">Cancel</a>
-    </div>
-
-
-  </form>
   
 {% endblock %}
