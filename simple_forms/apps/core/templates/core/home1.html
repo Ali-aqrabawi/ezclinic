@@ -35,7 +35,7 @@
             <td>{{ person.sex }}</td>
             <td>{{ person.amount_paid }}</td>
           <td>{{ person.amount_left}}</td>
-            <td>{{ person.date}}</td>
+            <td>{{ person.date | safe }}</td>
 
         <td><form id=''  name='delete' action="{% url 'delete_person' person.id %}"
               method='POST'>

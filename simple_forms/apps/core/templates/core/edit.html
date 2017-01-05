@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load staticfiles %}
 {% load widget_tweaks %}
 
 {% block content %}
@@ -32,7 +33,7 @@
                         </div>
                         <div class="col-sm-2 form-group">
                            <label for="date">{% trans "Next Appoinment:" %}</label>
-                          {{ form.date|add_class:"form-control" }}
+                          {{ form.date|attr:"data-provide:datepicker"|add_class:"form-control datepicker" }}
                         </div>
                     </div>
                     <div class="row">
@@ -102,7 +103,46 @@
                                         <option value="Pathological resorption">Pathological resorption</option>
                                         <option value="Pathological resorption, internal">Pathological resorption, internal</option>
                                         <option value="Pathological resorption, external">Pathological resorption, external</option>
+										<option value="Dental examination and cleaning">Dental examination and cleaning</option>
                                     </optgroup>
+									<optgroup label="Diseases of pulp and periapical tissues">
+										<option value="Pulpitis">Pulpitis</option>
+										<option value="Necrosis of the pulp">Necrosis of the pulp</option>
+										<option value="Pulp degeneration">Pulp degeneration</option>
+										<option value="Abnormal hard tissue formation in pulp">Abnormal hard tissue formation in pulp</option>
+										<option value="Acute apical periodontitis of pulpal origin">Acute apical periodontitis of pulpal origin</option>
+										<option value="Periapical abscess without sinus">Periapical abscess without sinus</option>
+									</optgroup>
+									<optgroup label="Gingival and periodontal diseases">
+										<option value="Acute gingivitis, plaque induced">Acute gingivitis, plaque induced</option>
+										<option value="Chronic gingivitis, plaque induced">Chronic gingivitis, plaque induced</option>
+										<option value="Gingival recession, unspecified">Gingival recession, unspecified</option>
+										<option value="Aggressive periodontitis, unspecified">Aggressive periodontitis, unspecified</option>
+										<option value="Chronic periodontitis, unspecified">Chronic periodontitis, unspecified</option>
+										<option value="Periodontosis">Periodontosis</option>
+										<option value="Accretions on teeth">Accretions on teeth</option>
+										<option value="Other specified periodontal diseases">Other specified periodontal diseases</option>
+									</optgroup>
+									<optgroup label="Dentofacial anomalies, incl. malocclusion">
+										<option value="Maxillary hyperplasia">Maxillary hyperplasia</option>
+										<option value="Mandibular hyperplasia">Mandibular hyperplasia</option>
+										<option value="Maxillary hypoplasia">Maxillary hypoplasia</option>
+										<option value="Mandibular hypoplasia">Mandibular hypoplasia</option>
+										<option value="Orthodontic devices, fitting and adjustment">Orthodontic devices, fitting and adjustment</option>
+										<option value="Orthodontics aftercare">Orthodontics aftercare</option>
+									</optgroup>
+									<optgroup label="Other diseases & conditions of the teeth">
+										<option value="Acquired absence of teeth, unspecified">Acquired absence of teeth, unspecified</option>
+										<option value="Loss of teeth due to trauma">Loss of teeth due to trauma</option>
+										<option value="Loss of teeth due to periodontal disease">Loss of teeth due to periodontal disease</option>
+										<option value="Loss of teeth due to caries">Loss of teeth due to caries</option>
+										
+									</optgroup>
+									<optgroup label="Diseases of the jaws">
+										<option value="Fissural cyst of jaw">Fissural cyst of jaw</option>
+										<option value="Perforation of root canal space">Perforation of root canal space</option>
+										<option value="Endodontic overfill">Endodontic overfill</option>
+									</optgroup>
                                 </select>
                             </div>
                         </div>
@@ -142,13 +182,18 @@
             <button type="submit" class="btn btn-info">
                 <span class="glyphicon glyphicon-ok"></span> {% trans "Save" %}
             </button>
-            <a href="{% url 'home' %}" class="btn btn-default">Cancel</a>
+            <a href="{% url 'view' person.id %}" class="btn btn-default">Cancel</a>
         </div>
 
 
     </form>
 
-  
+    <script type="text/javascript" src='{% static "js1/bootstrap-datepicker.min.js" %}'></script>
+    <script type="text/javascript">
+        $('.datepicker').datepicker({
+            format: "yyyy-mm-dd",
+        });
+    </script>
     <script type="text/javascript">
         $(document).ready(function(){
             $("form#form1").submit(function(e) {

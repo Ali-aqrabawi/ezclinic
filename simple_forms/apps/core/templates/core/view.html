@@ -20,38 +20,38 @@
                 <div class="row">
                     <div class="col-sm-2 form-group">
                         <label for="name" >{% trans "Name:" %}</label>
-                        <input class="form-control" value={{ person.name|default:"."  }} readonly>
+                        <input class="form-control" value='{{ person.name|default:"."  }}' readonly>
 
                     </div>
                     <div class="col-sm-2 form-group">
                         <label for="lname">{% trans "Lastname:" %}</label>
-                        <input class="form-control" value={{ person.last_name|default:"."  }} readonly>
+                        <input class="form-control" value='{{ person.last_name|default:"."  }}' readonly>
                     </div>
                     <div class="col-sm-2 form-group">
                         <label for="Sex">{% trans "Sex:" %}</label>
-                        <input class="form-control"  value={{ person.sex|default:"."  }} readonly>
+                        <input class="form-control"  value='{{ person.sex|default:"."  }}' readonly>
                     </div>
                     <div class="col-sm-2 form-group">
                         <label for="date">{% trans "Next Appoinment:" %}</label>
-                        <input class="form-control"  value={{ person.date|default:"."  }} readonly>
+                        <input class="form-control" value='{{ person.date|default:"." | safe}}' readonly>
                     </div>
                 </div>
                 <div class="row">
                     <div  class="col-sm-2 form-group">
                         <label for="age">{% trans "Age:" %}</label>
-                        <input class="form-control"  value={{ person.age|default:"."  }} readonly>
+                        <input class="form-control"  value='{{ person.age|default:"."  }}' readonly>
                     </div>
                     <div class="col-sm-2 form-group">
                         <label for="martial">{% trans "Martial Status:" %}</label>
-                        <input class="form-control"  value={{ person.martial_status|default:"."  }} readonly>
+                        <input class="form-control"  value='{{ person.martial_status|default:"."  }}' readonly>
                     </div>
                     <div class="col-sm-2 form-group">
                         <label for="amount paid">{% trans "money Paid:" %}</label>
-                        <input class="form-control"  value={{ person.amount_paid|default:"."  }} readonly>
+                        <input class="form-control"  value='{{ person.amount_paid|default:"."  }}' readonly>
                     </div>
                     <div class="col-sm-2 form-group">
                         <label for="amount left">{% trans "money left:" %}</label>
-                        <input class="form-control"  value={{ person.amount_left|default:"."  }} readonly>
+                        <input class="form-control"  value='{{ person.amount_left|default:"."  }}' readonly>
                     </div>
                     
                 </div>
@@ -59,11 +59,11 @@
                 <div class="row">
                     <div class="col-sm-4 form-group">
                         <label for="mobile">{% trans "Mobile Number:" %}</label>
-                        <input class="form-control"  value={{ person.mobile|default:"."  }}     readonly>
+                        <input class="form-control"  value='{{ person.mobile|default:"."  }}'     readonly>
                     </div>
                     <div class="col-sm-4 form-group">
                         <label for="address">{% trans "Address:" %}</label>
-                        <input class="form-control"  value={{ person.address|default:"."  }} readonly>
+                        <input class="form-control"  value='{{ person.address|default:"."  }}' readonly>
                     </div>
                     
                 </div>
@@ -73,7 +73,7 @@
                     <div class="col-sm-4" style="padding: 0;">
                         <div class="col-sm-12 form-group">
                             <label for="chief_complain" >{% trans "Chief Complain:" %}</label>
-                            <input class="form-control"  value={{ person.chief_complain|default:"." }} readonly>
+                            <input class="form-control"  value='{{ person.chief_complain|default:"." }}' readonly>
                         </div>
                         <div class="col-sm-12 form-group">
                             <label for="treatment_plan" >{% trans "Treatment Plan:" %}</label>
@@ -81,7 +81,7 @@
                         </div>
                          <div class="col-sm-12 form-group">
                             <label for="note">{% trans "Medical History:" %}</label>
-                            <input class="form-control"  value={{ person.note|default:"."  }} readonly>
+                            <input class="form-control"  value='{{ person.note|default:"."  }}' readonly>
                         </div>
                     </div>
                     <div class="col-sm-4" style="padding: 0;">

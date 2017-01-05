@@ -64,7 +64,7 @@ def add_person(request):
                 for diagcode in diagcodes:
                     Diagcode.objects.create(person=persons, diagcode=diagcode)
 
-            return redirect('home')
+            return redirect(reverse('view', args=(persons.id,)))
         context = {
             "form": form,
         }
@@ -259,7 +259,7 @@ def edit(request, person_id):
                     else:
                         pass
 
-        return redirect("home")
+        return redirect(reverse('view', args=(i.id,)))
     else:
         form = PersonForm(instance=i)
 
@@ -275,6 +275,7 @@ def view(request, person_id):
         return render(request, 'core/login.html')
 
     person = get_object_or_404(Person, pk=person_id)
+    print person.date
     pictures = person.pictures.all()
     pictures_length = len(pictures)
     if pictures_length % 2 == 0:
