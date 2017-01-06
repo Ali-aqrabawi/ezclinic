@@ -145,7 +145,7 @@ def delete_person_image(request, person_id, image_id):
     if request.method == "GET":
         image = get_object_or_404(Picture, pk=image_id)
         image.delete()
-        return redirect(reverse('view', args=(person_id,)))
+        return redirect("%s?tab=tab3" % reverse('view', args=(person_id,)))
     else:
         return redirect(reverse('view', args=(person_id,)))
 
@@ -158,7 +158,7 @@ def delete_person_diagcode(request, person_id, diagcode_id):
     if request.method == "GET":
         diagcode = get_object_or_404(Diagcode, pk=diagcode_id)
         diagcode.delete()
-        return redirect(reverse('view', args=(person_id,)))
+        return redirect("%s?tab=tab2" % reverse('view', args=(person_id,)))
     else:
         return redirect(reverse('view', args=(person_id,)))
 
@@ -237,6 +237,7 @@ def edit(request, person_id):
         return render(request, 'core/login.html')
 
     i = get_object_or_404(Person, pk=person_id)
+    tab = request.GET.get('tab')
 
     if request.method == "POST":
         form = PersonForm(request.POST, request.FILES or None, instance=i)
@@ -263,7 +264,7 @@ def edit(request, person_id):
     else:
         form = PersonForm(instance=i)
 
-    return render(request, 'core/edit.html', {'i': i, 'form': form, 'mode': 'edit', 'person': i})
+    return render(request, 'core/edit.html', {'i': i, 'form': form, 'mode': 'edit', 'person': i, 'tab': tab})
 #=======================
 
 
@@ -275,7 +276,7 @@ def view(request, person_id):
         return render(request, 'core/login.html')
 
     person = get_object_or_404(Person, pk=person_id)
-    print person.date
+    tab = request.GET.get('tab')
     pictures = person.pictures.all()
     pictures_length = len(pictures)
     if pictures_length % 2 == 0:
@@ -289,7 +290,8 @@ def view(request, person_id):
 
     print pictures_tuple, last_picture
 
-    return render(request, 'core/view.html', {'person': person, 'pictures_tuple': pictures_tuple, 'last_picture': last_picture})
+    return render(request, 'core/view.html', {'person': person, 'pictures_tuple': pictures_tuple,
+                                              'last_picture': last_picture, 'tab': tab})
 
     #====================================
 
