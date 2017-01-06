@@ -219,11 +219,16 @@ def register(request):
 
     else:
         error = str(form.errors.as_data())
+        logging.info('here')
+        logging.info(error)
         if error:
 
-            if 'is already in use' in error and 'Username' in error:
+            if 'username already exists' in error:
                 erro = "Username is already in use"
-                logging.info('here')
+                
+                return render(request, 'core/register.html', {'error_message': erro})
+            if 'Enter a valid email address' in error:
+                erro = "Enter a valid email address"
                 return render(request, 'core/register.html', {'error_message': erro})
 
     return render(request, 'core/register.html', context)
