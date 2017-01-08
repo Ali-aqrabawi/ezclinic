@@ -1,0 +1,17 @@
+{% load staticfiles %}
+<div class="dental-chart {{ allow_edit|yesno:"dental-chart__editable," }}">
+  <object  type="image/svg+xml" class="dental-chart--image" data="{% static 'dental_chart/dental_chart.svg' %}">
+  </object>
+  <div class="dental-chart--menu list-group">
+    <button type="button" class="dental-chart--menu-variant list-group-item" data-action="red"><span class="glyphicon glyphicon-ok-circle dental-chart--menu-variant__red" aria-hidden="true"></span> Red</button>
+    <button type="button" class="dental-chart--menu-variant list-group-item" data-action="yellow"><span class="glyphicon glyphicon-ok-circle dental-chart--menu-variant__yellow" aria-hidden="true"></span> Yellow</button>
+    <button type="button" class="dental-chart--menu-variant list-group-item" data-action="green"><span class="glyphicon glyphicon-ok-circle dental-chart--menu-variant__green" aria-hidden="true"></span> Green</button>
+    <button type="button" class="dental-chart--menu-variant list-group-item" data-action="x"><span class="glyphicon glyphicon-remove-circle dental-chart--menu-variant__x" aria-hidden="true"></span> Absent</button>
+  </div>
+</div>
+<script>
+  {
+    const svg = document.querySelector(".dental-chart--image");
+    svg.addEventListener("load", function() {initDentalChart('{{ init_state }}', {{ allow_edit|yesno:"true,false" }});}, false);
+  }
+</script>

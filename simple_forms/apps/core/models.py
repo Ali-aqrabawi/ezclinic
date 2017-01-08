@@ -50,6 +50,7 @@ class Person(models.Model):
     chief_complain = models.CharField(max_length=256, null=True, blank=True)
     treatment_plan = models.CharField(max_length=256, null=True, blank=True)
     treatment_done = models.CharField(max_length=256, null=True, blank=True)
+    dental_chart = models.CharField(max_length=1024, null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -78,6 +79,9 @@ class Diagcode(models.Model):
     def __unicode__(self):
         return self.diagcode
 
+class DentalChart(models.Model):
+    person = models.ForeignKey(Person, related_name='dental_charts')
+
 
 class PersonForm(forms.ModelForm):
     pictures = forms.FileField(widget=forms.ClearableFileInput(
@@ -86,7 +90,8 @@ class PersonForm(forms.ModelForm):
     class Meta:
         model = Person
         fields = ['name', 'last_name', 'age', 'martial_status', 'mobile', 'sex',
-                  'amount_paid', 'amount_left', 'note', 'address', 'date', 'treatment_done', 'treatment_plan', 'chief_complain']
+                  'amount_paid', 'amount_left', 'note', 'address', 'date', 'treatment_done', 'treatment_plan', 'chief_complain',
+                  'dental_chart']
         widgets = {
             'name': forms.TextInput(attrs={'required': True, 'class': 'form-control',
                                            'placeholder': 'name'}),
@@ -108,6 +113,7 @@ class PersonForm(forms.ModelForm):
                                                     'placeholder': 'treatment plan', 'rows': '3'}),
             'treatment_done': forms.Textarea(attrs={'required': False, 'class': 'form-control',
                                                     'placeholder': 'treatment done', 'rows': '3'}),
+            'dental_chart': forms.HiddenInput(),
 
 
         }
@@ -120,3 +126,4 @@ class UserForm(forms.ModelForm):
         model = User
         fields = ['username', 'email', 'password', 'country',
                   'last_name', 'first_name', 'city', 'clinic']
+

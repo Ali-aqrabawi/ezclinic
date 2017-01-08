@@ -93,7 +93,7 @@
                                         <option value="Mottled teeth">Mottled teeth</option>
                                         <option value="Disturbances of tooth formation">Disturbances of tooth formation</option>
                                         <option value="Hereditary disturbances in tooth structure ">Hereditary disturbances in tooth structure </option>
-                                        <option value="Disturbances in tooth eruption">Disturbances in tooth eruption</option>
+                                        <option value="Disturbances in tooth eruption">Disturbances
                                     </optgroup>
                                     <optgroup label="Diseases of hard tissues of teeth">
                                         <option value="Dental caries, unspecified">Dental caries, unspecified</option>
@@ -181,7 +181,8 @@
                         </div>
                     </div>
                     <div class="tab-pane {% if tab == 'tab4' %}active{% endif %}"  id="tab4">
-                        Dental Chart
+                        {{ form.dental_chart }}
+                        {% include "core/dental_chart.html" with form=form allow_edit=True init_state=form.dental_chart.value|safe|default:"" %}
                     </div>
                 {% else %}
                     <div class="tab-pane active" id="tab1">
@@ -301,7 +302,8 @@
                         </div>
                     </div>
                     <div class="tab-pane" id="tab4">
-                        Dental Chart
+                        {{ form.dental_chart}}
+                        {% include "core/dental_chart.html" with allow_edit=True init_state=form.dental_chart.value|safe|default:"" %}
                     </div>
                 {% endif %}
             </div>
