@@ -1,6 +1,6 @@
 {% load staticfiles %}
 <div class="dental-chart {{ allow_edit|yesno:"dental-chart__editable," }}">
-  <object  type="image/svg+xml" class="dental-chart--image" data="{% static 'dental_chart/dental_chart.svg' %}">
+  <object  type="image/svg+xml" class="dental-chart--image" data="{% static 'dental_chart/deciduous.svg' %}">
   </object>
   <div class="dental-chart--menu list-group">
     <button type="button" class="dental-chart--menu-variant list-group-item" data-action="red"><span class="glyphicon glyphicon-ok-circle dental-chart--menu-variant__red" aria-hidden="true"></span> Red</button>

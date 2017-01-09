@@ -41,6 +41,7 @@ $real-colors: (red: $red, yellow: $yellow, green: $green);
 
 .tooth {
   pointer-events: all;
+  cursor: default;
 
   &-shape {
     stroke: black;

@@ -88,7 +88,7 @@ function initDentalChart (init_json, allow_edit) {
         element.querySelector("path").classList.add("tooth-shape")
         element.querySelector("text").classList.add("tooth-x")
         element.classList.add(element.id, "tooth");
-        element.dataset.tooth = Number.parseInt(element.id.replace(/tooth-/, ''))
+        element.dataset.tooth = element.id.replace(/tooth-/, '');
     });
 
     document.querySelectorAll(".dental-chart--menu-variant").forEach(function(element) {

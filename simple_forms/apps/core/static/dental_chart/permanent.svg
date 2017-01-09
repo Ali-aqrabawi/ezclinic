@@ -1,7 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="350" height="500" viewBox="0 0 350 500">
-  <g id="Dental-cheme" fill="none" fill-rule="evenodd">
-    <g id="Dental-scheme">
-      <g id="Lower-right-numbers" fill="#000000" transform="translate(22 276)" font-size="12" font-family="Helvetica">
+<svg xmlns="http://www.w3.org/2000/svg" width="307" height="425" viewBox="0 0 307 425">
+  <g id="Dental-chart" fill="none" fill-rule="evenodd">
+    <g id="Permanent-teeth">
+      <g id="Lower-right-numbers" fill="#000000" transform="translate(0 238)" font-size="12" font-family="Helvetica">
         <text id="27">
           <tspan x="78" y="168">27</tspan>
         </text>
@@ -27,7 +27,7 @@
           <tspan x="108" y="180">26</tspan>
         </text>
       </g>
-      <g id="Lower-left-numbers" fill="#000000" transform="translate(183 276)" font-size="12" font-family="Helvetica">
+      <g id="Lower-left-numbers" fill="#000000" transform="translate(161 238)" font-size="12" font-family="Helvetica">
         <text id="17">
           <tspan x="132" y="11">17</tspan>
         </text>
@@ -53,7 +53,7 @@
           <tspan x="0" y="184">24</tspan>
         </text>
       </g>
-      <g id="Upper-left-numbers" fill="#000000" transform="translate(190 38)" font-size="12" font-family="Helvetica">
+      <g id="Upper-left-numbers" fill="#000000" transform="translate(168)" font-size="12" font-family="Helvetica">
         <text id="10">
           <tspan x="29" y="25">10</tspan>
         </text>
@@ -79,7 +79,7 @@
           <tspan x="125" y="195">16</tspan>
         </text>
       </g>
-      <g id="Upper-left-numbers" fill="#000000" transform="translate(22 38)" font-size="12" font-family="Helvetica">
+      <g id="Upper-left-numbers" fill="#000000" font-size="12" font-family="Helvetica">
         <text id="8">
           <tspan x="132" y="11">8</tspan>
         </text>
@@ -105,7 +105,7 @@
           <tspan x="0" y="195">1</tspan>
         </text>
       </g>
-      <g id="Lower-right" transform="matrix(1 0 0 -1 49 439)">
+      <g id="Lower-right" transform="matrix(1 0 0 -1 27 401)">
         <g id="tooth-32" transform="translate(0 142)">
           <path id="Upper-third-molar" fill="#FEFBF4" stroke="#000000" d="M3.62109375,2.50683594 C-1.87792969,9.52441406 0.72265625,25.4863281 0.72265625,30.7929687 C0.72265625,36.0996094 10.203125,36.0644531 17.84375,36.0644531 C31.9804688,36.0644531 32.6660156,10.6337891 27.9746094,5.34570312 C27.9746094,2.50683594 7.32251074,-2.21672693 3.62109375,2.50683594 Z"/>
           <text id="tooth-32-x" fill="#000000" fill-opacity="0" font-family="Helvetica" font-size="24">
@@ -155,7 +155,7 @@
           </text>
         </g>
       </g>
-      <g id="Lower-left" transform="rotate(180 150 220)">
+      <g id="Lower-left" transform="rotate(180 139 201)">
         <g id="tooth-17" transform="translate(0 142)">
           <path id="Upper-third-molar" fill="#FEFBF4" stroke="#000000" d="M3.62109375,2.50683594 C-1.87792969,9.52441406 0.72265625,25.4863281 0.72265625,30.7929687 C0.72265625,36.0996094 10.203125,36.0644531 17.84375,36.0644531 C31.9804688,36.0644531 32.6660156,10.6337891 27.9746094,5.34570312 C27.9746094,2.50683594 7.32251074,-2.21672693 3.62109375,2.50683594 Z"/>
           <text id="tooth-17-x" fill="#000000" fill-opacity="0" font-family="Helvetica" font-size="24">
@@ -205,7 +205,7 @@
           </text>
         </g>
       </g>
-      <g id="Upper-left" transform="matrix(-1 0 0 1 300 64)">
+      <g id="Upper-left" transform="matrix(-1 0 0 1 278 26)">
         <g id="tooth-16" transform="translate(0 145)">
           <path id="Upper-third-molar" fill="#FEFBF4" stroke="#000000" d="M3.62109375,2.50683594 C-1.87792969,9.52441406 0.72265625,25.4863281 0.72265625,30.7929687 C0.72265625,36.0996094 10.203125,36.0644531 17.84375,36.0644531 C31.9804688,36.0644531 32.6660156,10.6337891 27.9746094,5.34570312 C27.9746094,2.50683594 7.32251074,-2.21672693 3.62109375,2.50683594 Z"/>
           <text id="tooth-16-x" fill="#000000" fill-opacity="0" font-family="Helvetica" font-size="24">
@@ -255,7 +255,7 @@
           </text>
         </g>
       </g>
-      <g id="Upper-right" transform="translate(49 64)">
+      <g id="Upper-right" transform="translate(27 26)">
         <g id="tooth-1" transform="translate(0 145)">
           <path id="Upper-third-molar" fill="#FEFBF4" stroke="#000000" d="M3.62109375,2.50683594 C-1.87792969,9.52441406 0.72265625,25.4863281 0.72265625,30.7929687 C0.72265625,36.0996094 10.203125,36.0644531 17.84375,36.0644531 C31.9804688,36.0644531 32.6660156,10.6337891 27.9746094,5.34570312 C27.9746094,2.50683594 7.32251074,-2.21672693 3.62109375,2.50683594 Z"/>
           <text id="tooth-1-x" fill="#000000" fill-opacity="0" font-family="Helvetica" font-size="24">
