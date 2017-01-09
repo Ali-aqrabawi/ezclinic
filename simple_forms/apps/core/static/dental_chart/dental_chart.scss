@@ -1,0 +1,75 @@
+$red: #E00000;
+$yellow: #FF8400;
+$green:  #C0FFE0;
+$real-colors: (red: $red, yellow: $yellow, green: $green);
+
+
+.dental-chart {
+  width: 90%;
+
+  &--menu {
+    display: none;
+    position: absolute;
+    background: rgba(255, 255, 255, 255);
+    margin: 0;
+    padding: 0;
+    z-index: 100;
+
+    &__visible {
+      display: block;
+    }
+
+    &-variant {
+      list-style: none;
+      margin: 0;
+      padding: 0.5em;
+      cursor: pointer; 
+    }
+
+    @each $color, $real-color in $real-colors {
+      &-variant__#{$color}:before {
+        color: $real-color;
+      }
+    }
+
+  }
+
+  &--image {
+    width: 100%;
+  }
+}
+
+.tooth {
+  pointer-events: all;
+
+  &-shape {
+    stroke: black;
+  }
+
+  &__editable {
+    cursor: pointer;
+  }
+
+  &:hover &-shape {
+    stroke: red;
+    stroke-width: 2px;
+  }
+
+  @each $color, $real-color in $real-colors {
+    &__#{$color} {
+      fill: $real-color;
+    }
+  }
+
+  &-x {
+      fill-opacity: 0;
+  }
+
+  &__x {
+      fill: black;
+      fill-opacity: 1;
+  }
+}
+
+text[id^="tooth-"] {
+}
