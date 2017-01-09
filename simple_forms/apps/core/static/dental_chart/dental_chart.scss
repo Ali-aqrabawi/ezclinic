@@ -5,7 +5,10 @@ $real-colors: (red: $red, yellow: $yellow, green: $green);
 
 
 .dental-chart {
-  width: 90%;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   &--menu {
     display: none;
@@ -35,7 +38,7 @@ $real-colors: (red: $red, yellow: $yellow, green: $green);
   }
 
   &--image {
-    width: 100%;
+    height: 60vh;
   }
 }
 
@@ -51,7 +54,7 @@ $real-colors: (red: $red, yellow: $yellow, green: $green);
     cursor: pointer;
   }
 
-  &:hover &-shape {
+  &__editable:hover &-shape {
     stroke: red;
     stroke-width: 2px;
   }

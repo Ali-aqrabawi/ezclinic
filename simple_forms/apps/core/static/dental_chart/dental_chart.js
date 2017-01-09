@@ -40,6 +40,9 @@ function updateDentalChart () {
 function showToothMenu(e) {
     const element = e.target;
     const menu = document.querySelector(".dental-chart--menu");
+    const embeded = document.querySelector(".dental-chart--image");
+    const svg_node = embeded.contentDocument.firstChild;
+    const point = svg_node.createSVGPoint();
 
     for (let e = element; e ; e = e.parentNode) {
         if (e.dataset.tooth) {
@@ -47,10 +50,11 @@ function showToothMenu(e) {
             break;
         }
     }
-    console.log(state.current_tooth);
-
-    menu.style.left = e.clientX + "px";
-    menu.style.top = e.clientY + "px";
+    point.x = e.clientX;
+    point.y = e.clientY;
+    let loc = point.matrixTransform(svg_node.getScreenCTM().inverse());
+    menu.style.left = embeded.offsetLeft + loc.x + "px";
+    menu.style.top = embeded.offsetTop + loc.y+ "px";
     menu.classList.add("dental-chart--menu__visible");
 }
 
