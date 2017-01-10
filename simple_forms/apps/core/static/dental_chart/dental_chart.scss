@@ -5,11 +5,10 @@ $real-colors: (red: $red, yellow: $yellow, green: $green);
 
 
 .dental-chart {
-  margin: auto;
+  margin: 2em auto;
   display: flex;
   align-items: center;
   justify-content: center;
-
   &--menu {
     display: none;
     position: absolute;
@@ -35,6 +34,25 @@ $real-colors: (red: $red, yellow: $yellow, green: $green);
       }
     }
 
+
+  }
+
+  &--info {
+    margin: 2em auto;
+  }
+
+  &--info-color {
+      display: inline-block;
+      height: 1em;
+      width: 1em;
+      margin-right: 0.5em;
+      vertical-align: middle;
+  }
+
+  @each $color, $real-color in $real-colors {
+      &--info-color__#{$color} {
+          background-color: $real-color;
+      }
   }
 
   &--image {

@@ -120,6 +120,7 @@ class PersonForm(forms.ModelForm):
                                                     'placeholder': 'treatment plan', 'rows': '3'}),
             'treatment_done': forms.Textarea(attrs={'required': False, 'class': 'form-control',
                                                     'placeholder': 'treatment done', 'rows': '3'}),
+            'dental_chart_type': forms.RadioSelect(),
             'dental_chart': forms.HiddenInput(),
 
 

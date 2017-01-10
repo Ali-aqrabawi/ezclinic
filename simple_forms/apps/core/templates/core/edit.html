@@ -184,8 +184,18 @@
                         </div>
                     </div>
                     <div class="tab-pane {% if tab == 'tab4' %}active{% endif %}"  id="tab4">
+                        <div class="row">
+                            <div class="btn-group" data-toggle="buttons">
+                                {% for radio in form.dental_chart_type %}
+                                <label for="{{ radio.id_for_label }}" class="dental-chart-type btn btn-primary{% if radio.value == radio.choice_value %} active{% endif %}" >
+                                    {{ radio.tag }}
+                                    {{ radio.choice_label }}
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
                         {{ form.dental_chart}}
-                        {% include "core/dental_chart.html" with type=form.dental_chart_type.value allow_edit=True init_state=form.dental_chart.value|safe|default:"" %}
+                        {% include "core/dental_chart.html" with type=form.dental_chart_type allow_edit=True init_state=form.dental_chart.value|safe|default:"" %}
                     </div>
                 {% else %}
                     <div class="tab-pane active" id="tab1">
@@ -234,12 +244,6 @@
                             <div class="col-sm-4 form-group">
                                 <label for="address">{% trans "Address:" %}</label>
                                     {{ form.address|add_class:"form-control" }}
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-4 form-group">
-                               <label for="mobile">{% trans "Dental chart type:" %}</label>
-                               {{ form.dental_chart_type|add_class:"form-control" }}
                             </div>
                         </div>
                     </div>
@@ -309,8 +313,20 @@
                         </div>
                     </div>
                     <div class="tab-pane" id="tab4">
+                        <div class="row">
+                            <div class="btn-group" data-toggle="buttons">
+                                {% for radio in form.dental_chart_type %}
+                                <label for="{{ radio.id_for_label }}" class="dental-chart-type btn btn-primary{% if radio.value == radio.choice_value %} active{% endif %}" >
+                                    {{ radio.tag }}
+                                    {{ radio.choice_label }}
+                                </label>
+                                {% endfor %}
+                            </div>
+                        </div>
                         {{ form.dental_chart}}
-                        {% include "core/dental_chart.html" with type=form.dental_chart_type allow_edit=True init_state=form.dental_chart.value|safe|default:"" %}
+                        <div class="col-sm-4">
+                            {% include "core/dental_chart.html" with type=form.dental_chart_type allow_edit=True init_state=form.dental_chart.value|safe|default:"" %}
+                        </div>
                     </div>
                 {% endif %}
             </div>

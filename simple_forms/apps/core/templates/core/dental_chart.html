@@ -1,27 +1,37 @@
 {% load staticfiles %}
-<div class="dental-chart {{ allow_edit|yesno:"dental-chart__editable," }}">
-  <object  type="image/svg+xml" class="dental-chart--image" data="{% if type == "Deciduous" %}{% static 'dental_chart/deciduous.svg' %}{% else %}{% static 'dental_chart/permanent.svg' %}{% endif %}"></object>
-  <div class="dental-chart--menu list-group">
-    <button type="button" class="dental-chart--menu-variant list-group-item" data-action="red"><span class="glyphicon glyphicon-ok-circle dental-chart--menu-variant__red" aria-hidden="true"></span> Red</button>
-    <button type="button" class="dental-chart--menu-variant list-group-item" data-action="yellow"><span class="glyphicon glyphicon-ok-circle dental-chart--menu-variant__yellow" aria-hidden="true"></span> Yellow</button>
-    <button type="button" class="dental-chart--menu-variant list-group-item" data-action="green"><span class="glyphicon glyphicon-ok-circle dental-chart--menu-variant__green" aria-hidden="true"></span> Green</button>
-    <button type="button" class="dental-chart--menu-variant list-group-item" data-action="x"><span class="glyphicon glyphicon-remove-circle dental-chart--menu-variant__x" aria-hidden="true"></span> Absent</button>
-  </div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="dental-chart {{ allow_edit|yesno:"dental-chart__editable," }}">
+            <object  type="image/svg+xml" class="dental-chart--image" data="{% if type == "Deciduous" %}{% static 'dental_chart/deciduous.svg' %}{% else %}{% static 'dental_chart/permanent.svg' %}{% endif %}"></object>
+            <div class="dental-chart--menu list-group">
+                <button type="button" class="dental-chart--menu-variant list-group-item" data-action="red"><span class="glyphicon glyphicon-ok-circle dental-chart--menu-variant__red" aria-hidden="true"></span> Red</button>
+                <button type="button" class="dental-chart--menu-variant list-group-item" data-action="yellow"><span class="glyphicon glyphicon-ok-circle dental-chart--menu-variant__yellow" aria-hidden="true"></span> Yellow</button>
+                <button type="button" class="dental-chart--menu-variant list-group-item" data-action="green"><span class="glyphicon glyphicon-ok-circle dental-chart--menu-variant__green" aria-hidden="true"></span> Green</button>
+                <button type="button" class="dental-chart--menu-variant list-group-item" data-action="x"><span class="glyphicon glyphicon-remove-circle dental-chart--menu-variant__x" aria-hidden="true"></span> Absent</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <ul class="list-unstyled dental-chart--info">
+            <li><span class="dental-chart--info-color dental-chart--info-color__red"></span>Red</li>
+            <li><span class="dental-chart--info-color dental-chart--info-color__yellow"></span>Yellow</li>
+            <li><span class="dental-chart--info-color dental-chart--info-color__green"></span>Green</li>
+            <li><span class="dental-chart--info-color dental-chart--info-color__x">×</span>X</li>
+        </ul>
+    </div>
 </div>
 <script>
   {
     document.querySelector(".dental-chart--image").addEventListener("load", function() {initDentalChart('{{ init_state }}', {{ allow_edit|yesno:"true,false" }});}, false);
     if (document.getElementById("id_dental_chart_type")) {
-        document.getElementById("id_dental_chart_type").addEventListener("change", function(e) {
-            console.log(e.target.value);
-            if (e.target.value === "Deciduous") {
+        // As we dealing with Bootrap jQuery buttons, let’s use jQuery
+        $(".dental-chart-type").click(function(event) {
+            if (event.target.querySelector("input").value === "Deciduous") {
                 document.querySelector(".dental-chart--image").data = "{% static 'dental_chart/deciduous.svg' %}";
-                console.log(document.querySelector(".dental-chart--image").data );
             } else {
                 document.querySelector(".dental-chart--image").data = "{% static 'dental_chart/permanent.svg' %}";
-                console.log(document.querySelector(".dental-chart--image").data );
             }
-        }, false);
+        });
     }
   }
 </script>

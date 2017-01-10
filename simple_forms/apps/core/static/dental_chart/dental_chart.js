@@ -66,8 +66,8 @@ function hideToothMenu() {
     state.current_tooth = null;
 }
 
-function setToothState(e) {
-    const element = e.target;
+function setToothState(event) {
+    const element = event.target;
     const tooth_type = element.dataset.action;
     state.teeth[state.current_tooth] = tooth_type;
     hideToothMenu();
