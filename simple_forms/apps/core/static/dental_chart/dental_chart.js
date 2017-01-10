@@ -44,22 +44,19 @@ function updateDentalChart () {
 
 function showToothMenu(event) {
     const element = event.target;
-    const menu = document.querySelector(".dental-chart--menu");
     const embeded = document.querySelector(".dental-chart--image");
     const svg_node = embeded.contentDocument.firstChild;
-    const point = svg_node.createSVGPoint();
+    let menu = document.querySelector(".dental-chart--menu");
 
     for (let e = element; e ; e = e.parentNode) {
-        if (e.dataset.tooth) {
+        // Firefox does not support dataset on SVGElement yet
+        if (e.dataset && e.dataset.tooth) {
             state.current_tooth = e.dataset.tooth;
             break;
         }
     }
-    point.x = e.clientX;
-    point.y = e.clientY;
-    let loc = point.matrixTransform(svg_node.getScreenCTM().inverse());
-    menu.style.left = embeded.offsetLeft + loc.x + "px";
-    menu.style.top = embeded.offsetTop + loc.y+ "px";
+    menu.style.left = embeded.offsetLeft + event.clientX + "px";
+    menu.style.top = embeded.offsetTop + event.clientY + "px";
     menu.classList.add("dental-chart--menu__visible");
 }
 
@@ -97,6 +94,10 @@ function initDentalChart (init_json, allow_edit) {
         element.querySelector("path").classList.add("tooth-shape")
         element.querySelector("text").classList.add("tooth-x")
         element.classList.add(element.id, "tooth");
+        // Firefox lacks of dataset support in SVGElement
+        if (!("dataset" in element)) {
+            element.dataset = {};
+        }
         element.dataset.tooth = element.id.replace(/tooth-/, '');
     });
 
