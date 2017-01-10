@@ -20,6 +20,11 @@ SEX_CHOICES = (
     ("Female", ("Female")),
 )
 
+DENTAL_CHART_CHOICES = (
+    ("Deciduous", ("Deciduous")),
+    ("Permanent", ("Permanent")),
+)
+
 
 public_storage = storage.CloudStorage(
     bucket='ezclinic16.appspot.com', google_acl='public-read')
@@ -50,6 +55,8 @@ class Person(models.Model):
     chief_complain = models.CharField(max_length=256, null=True, blank=True)
     treatment_plan = models.CharField(max_length=256, null=True, blank=True)
     treatment_done = models.CharField(max_length=256, null=True, blank=True)
+    dental_chart_type = models.CharField(
+            max_length=20, choices=DENTAL_CHART_CHOICES, default=("Permanent"))
     dental_chart = models.CharField(max_length=1024, null=True, blank=True)
 
     def __str__(self):
@@ -89,7 +96,7 @@ class PersonForm(forms.ModelForm):
 
     class Meta:
         model = Person
-        fields = ['name', 'last_name', 'age', 'martial_status', 'mobile', 'sex',
+        fields = ['name', 'last_name', 'age', 'martial_status', 'mobile', 'sex', 'dental_chart_type',
                   'amount_paid', 'amount_left', 'note', 'address', 'date', 'treatment_done', 'treatment_plan', 'chief_complain',
                   'dental_chart']
         widgets = {

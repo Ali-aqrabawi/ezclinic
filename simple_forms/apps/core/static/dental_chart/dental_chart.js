@@ -22,6 +22,11 @@ function updateDentalChart () {
     for (let tooth in state.teeth) {
         const action = state.teeth[tooth];
         const element = svg.querySelector(`#tooth-${tooth} .tooth-shape`);
+        // If we changed dental chart from deciduous to permanent,
+        // ignore old state
+        if (! element) {
+            continue
+        }
         const x = svg.querySelector(`#tooth-${tooth}-x`);
 
         element.classList.remove("tooth__red");
@@ -37,8 +42,8 @@ function updateDentalChart () {
     }
 }
 
-function showToothMenu(e) {
-    const element = e.target;
+function showToothMenu(event) {
+    const element = event.target;
     const menu = document.querySelector(".dental-chart--menu");
     const embeded = document.querySelector(".dental-chart--image");
     const svg_node = embeded.contentDocument.firstChild;

@@ -1,7 +1,6 @@
 {% load staticfiles %}
 <div class="dental-chart {{ allow_edit|yesno:"dental-chart__editable," }}">
-  <object  type="image/svg+xml" class="dental-chart--image" data="{% static 'dental_chart/deciduous.svg' %}">
-  </object>
+  <object  type="image/svg+xml" class="dental-chart--image" data="{% if type == "Deciduous" %}{% static 'dental_chart/deciduous.svg' %}{% else %}{% static 'dental_chart/permanent.svg' %}{% endif %}"></object>
   <div class="dental-chart--menu list-group">
     <button type="button" class="dental-chart--menu-variant list-group-item" data-action="red"><span class="glyphicon glyphicon-ok-circle dental-chart--menu-variant__red" aria-hidden="true"></span> Red</button>
     <button type="button" class="dental-chart--menu-variant list-group-item" data-action="yellow"><span class="glyphicon glyphicon-ok-circle dental-chart--menu-variant__yellow" aria-hidden="true"></span> Yellow</button>
@@ -11,7 +10,18 @@
 </div>
 <script>
   {
-    const svg = document.querySelector(".dental-chart--image");
-    svg.addEventListener("load", function() {initDentalChart('{{ init_state }}', {{ allow_edit|yesno:"true,false" }});}, false);
+    document.querySelector(".dental-chart--image").addEventListener("load", function() {initDentalChart('{{ init_state }}', {{ allow_edit|yesno:"true,false" }});}, false);
+    if (document.getElementById("id_dental_chart_type")) {
+        document.getElementById("id_dental_chart_type").addEventListener("change", function(e) {
+            console.log(e.target.value);
+            if (e.target.value === "Deciduous") {
+                document.querySelector(".dental-chart--image").data = "{% static 'dental_chart/deciduous.svg' %}";
+                console.log(document.querySelector(".dental-chart--image").data );
+            } else {
+                document.querySelector(".dental-chart--image").data = "{% static 'dental_chart/permanent.svg' %}";
+                console.log(document.querySelector(".dental-chart--image").data );
+            }
+        }, false);
+    }
   }
 </script>

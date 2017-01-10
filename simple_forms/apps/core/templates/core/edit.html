@@ -72,9 +72,13 @@
                                 <label for="address">{% trans "Address:" %}</label>
                                     {{ form.address|add_class:"form-control" }}
                             </div>
-                            
                         </div>
-                        
+                        <div class="row">
+                            <div class="col-sm-4 form-group">
+                               <label for="mobile">{% trans "Dental chart type:" %}</label>
+                               {{ form.dental_chart_type|add_class:"form-control" }}
+                            </div>
+                        </div>
                     </div>
                     <div class="tab-pane {% if tab == 'tab2' %}active{% endif %}" id="tab2">
                         <div class="row">
@@ -109,8 +113,7 @@
                                         <option value="Erosion, limited to enamel">Erosion, limited to enamel</option>
                                         <option value="Erosion, extending into dentine">Erosion, extending into dentine</option>
                                         <option value="Pathological resorption">Pathological resorption</option>
-                                        <option value="Pathological resorption, internal">Pathological resorption, internal</option>
-                                        <option value="Pathological resorption, external">Pathological resorption, external</option>
+                                        <option value="Pathological resorption, internal">Pathological resorption, internal</option> <option value="Pathological resorption, external">Pathological resorption, external</option>
 										<option value="Dental examination and cleaning">Dental examination and cleaning</option>
                                     </optgroup>
 									<optgroup label="Diseases of pulp and periapical tissues">
@@ -181,8 +184,8 @@
                         </div>
                     </div>
                     <div class="tab-pane {% if tab == 'tab4' %}active{% endif %}"  id="tab4">
-                        {{ form.dental_chart }}
-                        {% include "core/dental_chart.html" with form=form allow_edit=True init_state=form.dental_chart.value|default:""|safe %}
+                        {{ form.dental_chart}}
+                        {% include "core/dental_chart.html" with type=form.dental_chart_type.value allow_edit=True init_state=form.dental_chart.value|safe|default:"" %}
                     </div>
                 {% else %}
                     <div class="tab-pane active" id="tab1">
@@ -232,9 +235,13 @@
                                 <label for="address">{% trans "Address:" %}</label>
                                     {{ form.address|add_class:"form-control" }}
                             </div>
-                            
                         </div>
-                        
+                        <div class="row">
+                            <div class="col-sm-4 form-group">
+                               <label for="mobile">{% trans "Dental chart type:" %}</label>
+                               {{ form.dental_chart_type|add_class:"form-control" }}
+                            </div>
+                        </div>
                     </div>
                     <div class="tab-pane" id="tab2">
                         <div class="row">
@@ -303,7 +310,7 @@
                     </div>
                     <div class="tab-pane" id="tab4">
                         {{ form.dental_chart}}
-                        {% include "core/dental_chart.html" with allow_edit=True init_state=form.dental_chart.value|safe|default:"" %}
+                        {% include "core/dental_chart.html" with type=form.dental_chart_type allow_edit=True init_state=form.dental_chart.value|safe|default:"" %}
                     </div>
                 {% endif %}
             </div>
