@@ -13,6 +13,7 @@ function saveStateField() {
     field.value = JSON.stringify(state.teeth);
 }
 
+// Redraw colors for state change
 function updateDentalChart () {
     const svg = document.querySelector(".dental-chart--image").contentDocument;
     const chart = document.querySelector(".dental-chart");
@@ -31,9 +32,12 @@ function updateDentalChart () {
         element.className.baseVal.replace(/tooth__yellow/, '');
         element.className.baseVal.replace(/tooth__green/, '');
 
+        // In case of absent tooth (or tooth to remove) we make
+        // absensce sign — &times; — visible
         if (action === "x") {
             x.className.baseVal += " tooth__x";
         } else {
+        // In other cases make tooth colored
             element.className.baseVal += ` tooth__${action}`;
             x.className.baseVal.replace(/tooth__x/, '');
         }
