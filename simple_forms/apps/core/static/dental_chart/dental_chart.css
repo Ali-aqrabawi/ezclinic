@@ -1,0 +1,63 @@
+.dental-chart {
+  margin: 2em auto;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+  .dental-chart--menu {
+    display: none;
+    position: absolute;
+    background: white;
+    margin: 0;
+    padding: 0;
+    z-index: 100; }
+    .dental-chart--menu__visible {
+      display: block; }
+    .dental-chart--menu-variant {
+      list-style: none;
+      margin: 0;
+      padding: 0.5em;
+      cursor: pointer; }
+    .dental-chart--menu-variant__red:before {
+      color: #E00000; }
+    .dental-chart--menu-variant__yellow:before {
+      color: #FF8400; }
+    .dental-chart--menu-variant__green:before {
+      color: #C0FFE0; }
+  .dental-chart--info {
+    margin: 2em auto; }
+  .dental-chart--info-color {
+    display: inline-block;
+    height: 1em;
+    width: 1em;
+    margin-right: 0.5em;
+    vertical-align: middle; }
+  .dental-chart--info-color__red {
+    background-color: #E00000; }
+  .dental-chart--info-color__yellow {
+    background-color: #FF8400; }
+  .dental-chart--info-color__green {
+    background-color: #C0FFE0; }
+  .dental-chart--image {
+    height: 60vh; }
+
+.tooth {
+  pointer-events: all;
+  cursor: default; }
+  .tooth-shape {
+    stroke: black; }
+  .tooth__editable {
+    cursor: pointer; }
+  .tooth__editable:hover .tooth-shape {
+    stroke: red;
+    stroke-width: 2px; }
+  .tooth__red {
+    fill: #E00000; }
+  .tooth__yellow {
+    fill: #FF8400; }
+  .tooth__green {
+    fill: #C0FFE0; }
+  .tooth-x {
+    fill-opacity: 0; }
+  .tooth__x {
+    fill: black;
+    fill-opacity: 1; }

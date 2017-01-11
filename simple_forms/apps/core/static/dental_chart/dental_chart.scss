@@ -1,0 +1,97 @@
+$red: #E00000;
+$yellow: #FF8400;
+$green:  #C0FFE0;
+$real-colors: (red: $red, yellow: $yellow, green: $green);
+
+
+.dental-chart {
+  margin: 2em auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &--menu {
+    display: none;
+    position: absolute;
+    background: rgba(255, 255, 255, 255);
+    margin: 0;
+    padding: 0;
+    z-index: 100;
+
+    &__visible {
+      display: block;
+    }
+
+    &-variant {
+      list-style: none;
+      margin: 0;
+      padding: 0.5em;
+      cursor: pointer; 
+    }
+
+    @each $color, $real-color in $real-colors {
+      &-variant__#{$color}:before {
+        color: $real-color;
+      }
+    }
+
+
+  }
+
+  &--info {
+    margin: 2em auto;
+  }
+
+  &--info-color {
+      display: inline-block;
+      height: 1em;
+      width: 1em;
+      margin-right: 0.5em;
+      vertical-align: middle;
+  }
+
+  @each $color, $real-color in $real-colors {
+      &--info-color__#{$color} {
+          background-color: $real-color;
+      }
+  }
+
+  &--image {
+    height: 60vh;
+  }
+}
+
+.tooth {
+  pointer-events: all;
+  cursor: default;
+
+  &-shape {
+    stroke: black;
+  }
+
+  &__editable {
+    cursor: pointer;
+  }
+
+  &__editable:hover &-shape {
+    stroke: red;
+    stroke-width: 2px;
+  }
+
+  @each $color, $real-color in $real-colors {
+    &__#{$color} {
+      fill: $real-color;
+    }
+  }
+
+  &-x {
+      fill-opacity: 0;
+  }
+
+  &__x {
+      fill: black;
+      fill-opacity: 1;
+  }
+}
+
+text[id^="tooth-"] {
+}

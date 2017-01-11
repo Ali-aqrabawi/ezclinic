@@ -317,7 +317,7 @@
                 </div>
             </div>
             <div class="tab-pane {% if tab == 'tab4' %}active{% endif %}" id="tab4">
-            Dental Chart
+                {% include "core/dental_chart.html" with type=person.dental_chart_type allow_edit=False init_state=person.dental_chart|default:""|safe %}
             </div>
           {% else %}
             <div class="tab-pane active" id="tab1">
@@ -613,7 +613,7 @@
                 </div>
             </div>
             <div class="tab-pane" id="tab4">
-            Dental Chart
+                {% include "core/dental_chart.html" with type=person.dental_chart_type allow_edit=False init_state=person.dental_chart|default:""|safe %}
             </div>
           {% endif %}
         </div>
