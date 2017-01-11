@@ -47,7 +47,7 @@ class Person(models.Model):
     sex = models.CharField(
         max_length=20, choices=SEX_CHOICES, default=("Male"))
     mobile = models.CharField(max_length=26, default=0011)
-    amount_paid = models.CharField(max_length=256, null=True)
+    amount_paid = models.CharField(max_length=256, null=True,blank=True)
     amount_left = models.CharField(max_length=256, null=True, blank=True)
     note = models.CharField(max_length=256, null=True, blank=True)
     address = models.CharField(max_length=256, null=True, blank=True)
@@ -104,11 +104,11 @@ class PersonForm(forms.ModelForm):
                                            'placeholder': 'name'}),
             'last_name': forms.TextInput(attrs={'required': True, 'class': 'form-control',
                                                 'placeholder': 'lastname'}),
-            'age': forms.TextInput(attrs={'required': True, 'class': 'form-control',
+            'age': forms.TextInput(attrs={'required': False, 'class': 'form-control',
                                           'placeholder': 'age'}),
-            'amount_paid': forms.TextInput(attrs={'required': True, 'class': 'form-control',
+            'amount_paid': forms.TextInput(attrs={'required': False, 'class': 'form-control',
                                                   'placeholder': 'amount paid'}),
-            'amount_left': forms.TextInput(attrs={'required': True, 'class': 'form-control',
+            'amount_left': forms.TextInput(attrs={'required': False, 'class': 'form-control',
                                                   'placeholder': 'amount left'}),
             'note': forms.TextInput(attrs={'required': False, 'class': 'form-control',
                                            'placeholder': 'Patient History'}),

@@ -4,19 +4,21 @@
         <div class="dental-chart {{ allow_edit|yesno:"dental-chart__editable," }}">
             <object  type="image/svg+xml" class="dental-chart--image" data="{% if type == "Deciduous" %}{% static 'dental_chart/deciduous.svg' %}{% else %}{% static 'dental_chart/permanent.svg' %}{% endif %}"></object>
             <div class="dental-chart--menu list-group">
-                <button type="button" class="dental-chart--menu-variant list-group-item" data-action="red"><span class="glyphicon glyphicon-ok-circle dental-chart--menu-variant__red" aria-hidden="true"></span> Red</button>
-                <button type="button" class="dental-chart--menu-variant list-group-item" data-action="yellow"><span class="glyphicon glyphicon-ok-circle dental-chart--menu-variant__yellow" aria-hidden="true"></span> Yellow</button>
-                <button type="button" class="dental-chart--menu-variant list-group-item" data-action="green"><span class="glyphicon glyphicon-ok-circle dental-chart--menu-variant__green" aria-hidden="true"></span> Green</button>
-                <button type="button" class="dental-chart--menu-variant list-group-item" data-action="x"><span class="glyphicon glyphicon-remove-circle dental-chart--menu-variant__x" aria-hidden="true"></span> Absent</button>
+				<button type="button" class="dental-chart--menu-variant list-group-item" data-action="x"><span class="glyphicon glyphicon-remove-circle dental-chart--menu-variant__x" aria-hidden="true"></span> Extraction</button>
+                <button type="button" class="dental-chart--menu-variant list-group-item" data-action="red"><span class="glyphicon glyphicon-ok-circle dental-chart--menu-variant__red" aria-hidden="true"></span> Missing</button>
+                <button type="button" class="dental-chart--menu-variant list-group-item" data-action="yellow"><span class="glyphicon glyphicon-ok-circle dental-chart--menu-variant__yellow" aria-hidden="true"></span> Filling</button>
+                <button type="button" class="dental-chart--menu-variant list-group-item" data-action="green"><span class="glyphicon glyphicon-ok-circle dental-chart--menu-variant__green" aria-hidden="true"></span> Rct</button>
+                
             </div>
         </div>
     </div>
     <div class="col-sm-4">
         <ul class="list-unstyled dental-chart--info">
-            <li><span class="dental-chart--info-color dental-chart--info-color__red"></span>Red</li>
-            <li><span class="dental-chart--info-color dental-chart--info-color__yellow"></span>Yellow</li>
-            <li><span class="dental-chart--info-color dental-chart--info-color__green"></span>Green</li>
-            <li><span class="dental-chart--info-color dental-chart--info-color__x">×</span>X</li>
+			<li><span class="dental-chart--info-color dental-chart--info-color__x">×</span>Extraction</li>
+            <li><span class="dental-chart--info-color dental-chart--info-color__red"></span>Missing</li>
+            <li><span class="dental-chart--info-color dental-chart--info-color__yellow"></span>Filling</li>
+            <li><span class="dental-chart--info-color dental-chart--info-color__green"></span>Rct</li>
+            
         </ul>
     </div>
 </div>
