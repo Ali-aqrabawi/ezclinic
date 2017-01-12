@@ -24,15 +24,13 @@
 <script>
   {
     document.querySelector(".dental-chart--image").addEventListener("load", function() {initDentalChart('{{ init_state }}', {{ allow_edit|yesno:"true,false" }});}, false);
-    if (document.getElementById("id_dental_chart_type")) {
-        // As we dealing with Bootrap jQuery buttons, let’s use jQuery
-        $(".dental-chart-type").click(function(event) {
-            if (event.target.querySelector("input").value === "Deciduous") {
-                document.querySelector(".dental-chart--image").data = "{% static 'dental_chart/deciduous.svg' %}";
-            } else {
-                document.querySelector(".dental-chart--image").data = "{% static 'dental_chart/permanent.svg' %}";
-            }
-        });
-    }
+    // As we dealing with Bootrap jQuery buttons, let’s use jQuery
+    $(".dental-chart-type").click(function(event) {
+        if (event.target.querySelector("input").value === "Deciduous") {
+            document.querySelector(".dental-chart--image").data = "{% static 'dental_chart/deciduous.svg' %}";
+        } else {
+            document.querySelector(".dental-chart--image").data = "{% static 'dental_chart/permanent.svg' %}";
+        }
+    });
   }
 </script>

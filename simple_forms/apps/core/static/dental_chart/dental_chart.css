@@ -29,8 +29,13 @@
     display: inline-block;
     height: 1em;
     width: 1em;
-    margin-right: 0.5em;
+    padding-right: 0.5em;
     vertical-align: middle; }
+  .dental-chart--info-color__x {
+    padding: 0 0 0 2px;
+    margin: 0;
+    border: 1px solid black;
+    line-height: 0.7; }
   .dental-chart--info-color__red {
     background-color: #E00000; }
   .dental-chart--info-color__yellow {

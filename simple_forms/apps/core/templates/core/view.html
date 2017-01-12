@@ -317,6 +317,19 @@
                 </div>
             </div>
             <div class="tab-pane {% if tab == 'tab4' %}active{% endif %}" id="tab4">
+                <div class="row">
+                    <div class="btn-group" data-toggle="buttons">
+                        <label for="id_dental_chart_type_0" class="dental-chart-type btn btn-primary">
+                            <input id="id_dental_chart_type_0" name="dental_chart_type" type="radio" value="Deciduous" required="">
+                            Deciduous
+                        </label>
+
+                        <label for="id_dental_chart_type_1" class="dental-chart-type btn btn-primary active">
+                            <input checked="checked" id="id_dental_chart_type_1" name="dental_chart_type" type="radio" value="Permanent" required="">
+                            Permanent
+                        </label>
+                    </div>
+                </div>
                 {% include "core/dental_chart.html" with type=person.dental_chart_type allow_edit=False init_state=person.dental_chart|default:""|safe %}
             </div>
           {% else %}
@@ -613,6 +626,19 @@
                 </div>
             </div>
             <div class="tab-pane" id="tab4">
+                <div class="row">
+                    <div class="btn-group" data-toggle="buttons">
+                        <label for="id_dental_chart_type_0" class="dental-chart-type btn btn-primary">
+                            <input id="id_dental_chart_type_0" name="dental_chart_type" type="radio" value="Deciduous" required="">
+                            Deciduous
+                        </label>
+
+                        <label for="id_dental_chart_type_1" class="dental-chart-type btn btn-primary active">
+                            <input checked="checked" id="id_dental_chart_type_1" name="dental_chart_type" type="radio" value="Permanent" required="">
+                            Permanent
+                        </label>
+                    </div>
+                </div>
                 {% include "core/dental_chart.html" with type=person.dental_chart_type allow_edit=False init_state=person.dental_chart|default:""|safe %}
             </div>
           {% endif %}

@@ -143,14 +143,18 @@
                 }
             }, true);
 
-            if (allow_edit) {
+            if (allow_edit && document.querySelector(".dental-chart--undo")) {
                 document.querySelector(".dental-chart--undo").addEventListener("click", undo, false);
             }
 
-            initState(init_json);
+            if (!inited) {
+                initState(init_json);
+                inited = true;
+            }
             updateDentalChart();
         };
 
+        var inited = false;
         var state = {
             "current_tooth": null,
             "teeth": {}
