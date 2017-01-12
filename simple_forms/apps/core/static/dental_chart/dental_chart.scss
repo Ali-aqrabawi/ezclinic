@@ -42,11 +42,18 @@ $real-colors: (red: $red, yellow: $yellow, green: $green);
   }
 
   &--info-color {
-      display: inline-block;
-      height: 1em;
-      width: 1em;
-      margin-right: 0.5em;
-      vertical-align: middle;
+    display: inline-block;
+    height: 1em;
+    width: 1em;
+    padding-right: 0.5em;
+    vertical-align: middle;
+  }
+
+  &--info-color__x {
+    padding: 0 0 0 2px;
+    margin: 0;
+    border: 1px solid black;
+    line-height: 0.7;
   }
 
   @each $color, $real-color in $real-colors {
