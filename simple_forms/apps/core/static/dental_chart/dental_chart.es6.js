@@ -147,7 +147,7 @@ function initDentalChart (init_json, allow_edit) {
         }
     }, true);
 
-    if (allow_edit) {
+    if (allow_edit && document.querySelector(".dental-chart--undo")) {
         document.querySelector(".dental-chart--undo").addEventListener("click", undo, false);
     }
 
