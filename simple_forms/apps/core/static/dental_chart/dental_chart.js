@@ -1,12 +1,23 @@
 {
     (function () {
         var initState = function initState(json) {
-            state.teeth = json === "" ? {} : JSON.parse(json);
+            state.teeth = {};
+            if (json && json !== "") {
+                state.teeth = JSON.parse(json);
+            }
         };
 
         var saveStateField = function saveStateField() {
             var field = document.getElementById("id_dental_chart");
             field.value = JSON.stringify(state.teeth);
+        };
+
+        var undo = function undo() {
+            var previous = previous_teeth_states.pop();
+            if (previous) {
+                initState(previous);
+                updateDentalChart();
+            }
         };
 
         // Redraw colors for state change
@@ -15,6 +26,16 @@
         var updateDentalChart = function updateDentalChart() {
             var svg = document.querySelector(".dental-chart--image").contentDocument;
             var chart = document.querySelector(".dental-chart");
+
+            // Clear old state
+            var elements = svg.querySelectorAll(".tooth-shape");
+            for (var i = 0; i < elements.length; i++) {
+                elements[i].className.baseVal = elements[i].className.baseVal.replace(/tooth__\w+/, '');
+            }
+            elements = svg.querySelectorAll("tooth-x");
+            for (var _i = 0; _i < elements.length; _i++) {
+                elements[_i].className.baseVal = elements[_i].className.baseVal.replace(/tooth__x/, '');
+            }
 
             for (var tooth in state.teeth) {
                 var action = state.teeth[tooth];
@@ -25,11 +46,7 @@
                     continue;
                 }
 
-                // Clean previous colours
-                element.className.baseVal = element.className.baseVal.replace(/tooth__\w+/, '');
-
                 var x = svg.querySelector("#tooth-" + tooth + "-x");
-                x.className.baseVal = x.className.baseVal.replace(/tooth__x/, '');
 
                 if (action === "x") {
                     // In case of absent tooth (or tooth to remove) we make
@@ -69,6 +86,7 @@
         var setToothState = function setToothState(event) {
             var element = event.target;
             var tooth_type = element.dataset.action;
+            previous_teeth_states.push(JSON.stringify(state.teeth));
             state.teeth[state.current_tooth] = tooth_type;
             hideToothMenu();
             updateDentalChart();
@@ -105,8 +123,8 @@
             }
 
             elements = document.querySelectorAll(".dental-chart--menu-variant");
-            for (var _i = 0; _i < elements.length; _i++) {
-                elements[_i].addEventListener("click", setToothState, true);
+            for (var _i2 = 0; _i2 < elements.length; _i2++) {
+                elements[_i2].addEventListener("click", setToothState, true);
             }
 
             svg.addEventListener("click", function () {
@@ -114,6 +132,10 @@
                     hideToothMenu();
                 }
             }, true);
+
+            if (allow_edit) {
+                document.querySelector(".dental-chart--undo").addEventListener("click", undo, false);
+            }
 
             initState(init_json);
             updateDentalChart();
@@ -123,6 +145,8 @@
             "current_tooth": null,
             "teeth": {}
         };
+
+        var previous_teeth_states = [];
 
         window.initDentalChart = initDentalChart;
     })();

@@ -4,8 +4,13 @@ let state = {
     "teeth": {}
 };
 
+let previous_teeth_states = [];
+
 function initState(json) {
-    state.teeth = json === "" ? {} : JSON.parse(json);
+    state.teeth = {};
+    if (json && json !== "") {
+        state.teeth = JSON.parse(json);
+    }
 }
 
 function saveStateField() {
@@ -13,10 +18,28 @@ function saveStateField() {
     field.value = JSON.stringify(state.teeth);
 }
 
+function undo() {
+    let previous = previous_teeth_states.pop();
+    if (previous) {
+        initState(previous);
+        updateDentalChart();
+    }
+}
+
 // Redraw colors for state change
 function updateDentalChart () {
     const svg = document.querySelector(".dental-chart--image").contentDocument;
     const chart = document.querySelector(".dental-chart");
+
+    // Clear old state
+    let elements = svg.querySelectorAll(".tooth-shape");
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].className.baseVal = elements[i].className.baseVal.replace(/tooth__\w+/, '');
+    }
+    elements = svg.querySelectorAll("tooth-x");
+    for (let i = 0; i < elements.length; i++) {
+        elements[i].className.baseVal = elements[i].className.baseVal.replace(/tooth__x/, '');
+    }
 
     for (let tooth in state.teeth) {
         const action = state.teeth[tooth];
@@ -27,11 +50,7 @@ function updateDentalChart () {
             continue
         }
 
-        // Clean previous colours
-        element.className.baseVal = element.className.baseVal.replace(/tooth__\w+/, '');
-
         const x = svg.querySelector(`#tooth-${tooth}-x`);
-        x.className.baseVal = x.className.baseVal.replace(/tooth__x/, '');
 
         if (action === "x") {
             // In case of absent tooth (or tooth to remove) we make
@@ -71,6 +90,7 @@ function hideToothMenu() {
 function setToothState(event) {
     const element = event.target;
     const tooth_type = element.dataset.action;
+    previous_teeth_states.push(JSON.stringify(state.teeth));
     state.teeth[state.current_tooth] = tooth_type;
     hideToothMenu();
     updateDentalChart();
@@ -116,6 +136,10 @@ function initDentalChart (init_json, allow_edit) {
             hideToothMenu();
         }
     }, true);
+
+    if (allow_edit) {
+        document.querySelector(".dental-chart--undo").addEventListener("click", undo, false);
+    }
 
     initState(init_json);
     updateDentalChart();
