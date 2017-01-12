@@ -26,20 +26,20 @@ function updateDentalChart () {
         if (! element) {
             continue
         }
+
+        // Clean previous colours
+        element.className.baseVal = element.className.baseVal.replace(/tooth__\w+/, '');
+
         const x = svg.querySelector(`#tooth-${tooth}-x`);
+        x.className.baseVal = x.className.baseVal.replace(/tooth__x/, '');
 
-        element.className.baseVal.replace(/tooth__red/, '');
-        element.className.baseVal.replace(/tooth__yellow/, '');
-        element.className.baseVal.replace(/tooth__green/, '');
-
-        // In case of absent tooth (or tooth to remove) we make
-        // absensce sign — &times; — visible
         if (action === "x") {
+            // In case of absent tooth (or tooth to remove) we make
+            // absensce sign — &times; — visible
             x.className.baseVal += " tooth__x";
         } else {
-        // In other cases make tooth colored
+            // In other cases make tooth colored
             element.className.baseVal += ` tooth__${action}`;
-            x.className.baseVal.replace(/tooth__x/, '');
         }
     }
 }

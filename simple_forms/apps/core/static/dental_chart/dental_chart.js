@@ -9,6 +9,9 @@
             field.value = JSON.stringify(state.teeth);
         };
 
+        // Redraw colors for state change
+
+
         var updateDentalChart = function updateDentalChart() {
             var svg = document.querySelector(".dental-chart--image").contentDocument;
             var chart = document.querySelector(".dental-chart");
@@ -21,17 +24,20 @@
                 if (!element) {
                     continue;
                 }
-                var x = svg.querySelector("#tooth-" + tooth + "-x");
 
-                element.className.baseVal.replace(/tooth__red/, '');
-                element.className.baseVal.replace(/tooth__yellow/, '');
-                element.className.baseVal.replace(/tooth__green/, '');
+                // Clean previous colours
+                element.className.baseVal = element.className.baseVal.replace(/tooth__\w+/, '');
+
+                var x = svg.querySelector("#tooth-" + tooth + "-x");
+                x.className.baseVal = x.className.baseVal.replace(/tooth__x/, '');
 
                 if (action === "x") {
+                    // In case of absent tooth (or tooth to remove) we make
+                    // absensce sign — &times; — visible
                     x.className.baseVal += " tooth__x";
                 } else {
+                    // In other cases make tooth colored
                     element.className.baseVal += " tooth__" + action;
-                    x.className.baseVal.replace(/tooth__x/, '');
                 }
             }
         };
