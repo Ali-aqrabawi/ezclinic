@@ -32,7 +32,7 @@
             for (var i = 0; i < elements.length; i++) {
                 elements[i].className.baseVal = elements[i].className.baseVal.replace(/tooth__\w+/, '');
             }
-            elements = svg.querySelectorAll("tooth-x");
+            elements = svg.querySelectorAll(".tooth-x");
             for (var _i = 0; _i < elements.length; _i++) {
                 elements[_i].className.baseVal = elements[_i].className.baseVal.replace(/tooth__x/, '');
             }
@@ -85,9 +85,19 @@
 
         var setToothState = function setToothState(event) {
             var element = event.target;
-            var tooth_type = element.dataset.action;
+            var tooth_type = void 0;
+            for (var e = element; e; e = e.parentNode) {
+                if (e.dataset && e.dataset.action) {
+                    tooth_type = e.dataset.action;
+                    break;
+                }
+            }
             previous_teeth_states.push(JSON.stringify(state.teeth));
-            state.teeth[state.current_tooth] = tooth_type;
+            if (tooth_type === "clear") {
+                delete state.teeth[state.current_tooth];
+            } else {
+                state.teeth[state.current_tooth] = tooth_type;
+            }
             hideToothMenu();
             updateDentalChart();
             saveStateField();
@@ -124,7 +134,7 @@
 
             elements = document.querySelectorAll(".dental-chart--menu-variant");
             for (var _i2 = 0; _i2 < elements.length; _i2++) {
-                elements[_i2].addEventListener("click", setToothState, true);
+                elements[_i2].addEventListener("click", setToothState, false);
             }
 
             svg.addEventListener("click", function () {
