@@ -1,4 +1,5 @@
 {
+let inited = false;
 let state = {
     "current_tooth": null,
     "teeth": {}
@@ -151,7 +152,10 @@ function initDentalChart (init_json, allow_edit) {
         document.querySelector(".dental-chart--undo").addEventListener("click", undo, false);
     }
 
-    initState(init_json);
+    if (! inited ) {
+        initState(init_json);
+        inited = true;
+    }
     updateDentalChart();
 }
 
