@@ -15,17 +15,15 @@
       {% else %}
         Appointments for {{ date|date:"F d"}}
       {% endif %}
-      <div class="btn-group">
-        <button class="btn btn-default patients-datepicker" >
+        <button class="btn btn-primary patients-datepicker" >
           <span class="glyphicon glyphicon-th"></span> {% trans "Check for other day" %}
         </button>
-        <a href="{% url 'add_person' %}" class="btn btn-default">
+        <a href="{% url 'add_person' %}" class="btn btn-primary">
           <span class="glyphicon glyphicon-plus"></span> {% trans  "Add Patient" %}
         </a>
-        <button class="btn btn-default add-event">
+        <button class="btn btn-primary add-event">
           <span class="glyphicon glyphicon-edit"></span> {% trans "Add event" %}
         </button>
-      </div>
     </h2>
     <form id="patients-calendar-form" action="">
       <input id="patients-calendar-form-appointment" name="appointment" type="hidden">
