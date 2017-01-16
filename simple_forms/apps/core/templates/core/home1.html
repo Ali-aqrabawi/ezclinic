@@ -3,25 +3,19 @@
 {% load i18n %}
 
 {% block content %}
-<style>
-  #add-event-form {
-    display: none;
-  }
-</style>
-
     <h2 id="calendar-header">
       {% if today %}
         Today's Appointments
       {% else %}
         Appointments for {{ date|date:"F d"}}
       {% endif %}
-        <button class="btn btn-primary patients-datepicker" >
+        <button class="btn btn-info patients-datepicker" >
           <span class="glyphicon glyphicon-th"></span> {% trans "Check for other day" %}
         </button>
-        <a href="{% url 'add_person' %}" class="btn btn-primary">
+        <a href="{% url 'add_person' %}" class="btn btn-info">
           <span class="glyphicon glyphicon-plus"></span> {% trans  "Add Patient" %}
         </a>
-        <button class="btn btn-primary add-event">
+        <button class="btn btn-info add-event">
           <span class="glyphicon glyphicon-edit"></span> {% trans "Add event" %}
         </button>
     </h2>
@@ -29,7 +23,7 @@
       <input id="patients-calendar-form-appointment" name="appointment" type="hidden">
     </form>
 
-    <form id="add-event-form" class="form-horizontal" method="POST">
+    <form id="add-event-form" class="form-horizontal hidden" method="POST">
       {% csrf_token %}
       <div class="form-group">
         <label class="col-sm-2 control-label" for="{{ event_form.date.id_for_label }}">Date</label>
