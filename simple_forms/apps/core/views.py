@@ -1,4 +1,9 @@
 # coding: utf-8
+
+import datetime
+import logging
+
+
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.http import JsonResponse
@@ -6,7 +11,6 @@ from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
-import logging
 from django.http import HttpResponse
 
 from simple_forms.apps.core.models import Person, Picture, Diagcode, PersonForm, UserForm, User
@@ -306,14 +310,27 @@ def foto(request, person_id):
 
     return render(request, 'core/home3.html', {'persons': persons})
 
-
-def calender(request):
+def calendar(request):
     if not request.user.is_authenticated():
-
         return render(request, 'core/login.html')
 
-    else:
-        return render(request, 'core/calender.html')
+    persons = None
+
+
+    try:
+        logging.info(request.GET.get("appointment", "").strip())
+        date = datetime.datetime.strptime(request.GET.get("appointment", "").strip(), "%Y-%m-%d").date()
+    except ValueError as e:
+        date = datetime.date.today()
+
+    logging.info(date);
+
+    persons = request.user.person_set.filter(date=date)
+
+    return render(request, 'core/home1.html',
+            {'persons': persons, 'date': date, "today": date == datetime.date.today()})
+    # return render(request, 'core/calendar.html')
+
 
 # search by name or last name
 
@@ -339,15 +356,3 @@ def search(request):
     return render(request, 'core/home.html', {'persons': persons})
 
 
-def date(request):
-
-    if not request.user.is_authenticated():
-
-        return render(request, 'core/login.html')
-
-    if ('appointement' in request.GET) and request.GET['appointement'].strip():
-        date = request.GET['appointement']
-
-        persons = Person.objects.filter(Q(date=date) & Q(user=request.user))
-
-    return render(request, 'core/home1.html', {'persons': persons})

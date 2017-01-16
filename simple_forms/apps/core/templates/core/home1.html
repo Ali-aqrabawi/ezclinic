@@ -1,13 +1,22 @@
 {% extends 'base.html' %}
 {% load i18n %}
+
 {% block content %}
 
-  <h2>
-    All Pateints Record
-    <a href="{% url 'add_person' %}" class="btn btn-info pull-right">
-      <span class="glyphicon glyphicon-plus"></span> {% trans  "Add Pateints" %}
-    </a>
-  </h2>
+    <h2>
+      Your patients for {% if today %}today{% else %}{{ date|date:"F d"}}{% endif %}
+      <div class="btn-group">
+        <button class="btn btn-default patients-datepicker" >
+          <span class="glyphicon glyphicon-th"></span>
+        </button>
+        <a href="{% url 'add_person' %}" class="btn btn-default">
+          <span class="glyphicon glyphicon-plus"></span> {% trans  "Add Patient" %}
+        </a>
+      </div>
+    </h2>
+    <form id="patients-calendar-form" action="">
+      <input id="patients-calendar-form-appointment" name="appointment" type="hidden">
+    </form>
 
   <table class="table">
     <thead>
@@ -16,13 +25,10 @@
         <th>Lastname</th>
         <th>Martial Status</th>
         <th>Age</th>
-          <th>Sex</th>
-          <th>$ Paid</th>
-          <th>$Left</th>
-          <th>Appointment Date</th>
-           <th>Delete</th>
-          <th>View</th>
-
+        <th>Sex</th>
+        <th>$ Paid</th>
+        <th>$ Left</th>
+        <th>View</th>
       </tr>
     </thead>
     <tbody>
@@ -32,20 +38,10 @@
           <td>{{ person.last_name }}</td>
           <td>{{ person.martial_status }}</td>
           <td>{{ person.age }}</td>
-            <td>{{ person.sex }}</td>
-            <td>{{ person.amount_paid }}</td>
+          <td>{{ person.sex }}</td>
+          <td>{{ person.amount_paid }}</td>
           <td>{{ person.amount_left}}</td>
-            <td>{{ person.date | safe }}</td>
-
-        <td><form id=''  name='delete' action="{% url 'delete_person' person.id %}"
-              method='POST'>
-
-
-        {% csrf_token %}
-		<button type='submit' class='btn btn-xs btn-link icon'><i class='glyphicon glyphicon-remove'></i></button>
-	</form></td>
-        <td><a href="{% url 'edit' person.id %}"><i class="glyphicon glyphicon-list-alt"></i></a></td>
-
+          <td><a href="{% url 'edit' person.id %}"><i class="glyphicon glyphicon-list-alt"></i></a></td>
         </tr>
       {% empty %}
         <tr>
@@ -75,4 +71,13 @@
     {% endif %}
   </ul>
 {% endif %}
+<script>
+  $(".patients-datepicker")
+  .datepicker({autoClose: true, todayBtn: true, todayHighlight: true})
+  .on("changeDate", function(event) {
+    console.log();
+    $("#patients-calendar-form-appointment").val(event.format("yyyy-mm-dd"));
+    $("#patients-calendar-form").submit();
+  });
+</script>
 {% endblock %}
