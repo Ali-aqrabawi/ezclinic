@@ -44,8 +44,7 @@ class Person(models.Model):
     age = models.IntegerField(default=100)
     martial_status = models.CharField(
         max_length=20, choices=STATUS_CHOICES, default=("Single"))
-    sex = models.CharField(
-        max_length=20, choices=SEX_CHOICES, default=("Male"))
+    sex = models.CharField( max_length=20, choices=SEX_CHOICES, default=("Male"))
     mobile = models.CharField(max_length=26, default=0011)
     amount_paid = models.CharField(max_length=256, null=True,blank=True)
     amount_left = models.CharField(max_length=256, null=True, blank=True)
@@ -89,6 +88,13 @@ class Diagcode(models.Model):
 class DentalChart(models.Model):
     person = models.ForeignKey(Person, related_name='dental_charts')
 
+class Event(models.Model):
+    user = models.ForeignKey(User)
+    text = models.TextField(default='', blank=True)
+    date = models.DateField()
+    time = models.TimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 class PersonForm(forms.ModelForm):
     pictures = forms.FileField(widget=forms.ClearableFileInput(
@@ -135,3 +141,7 @@ class UserForm(forms.ModelForm):
         fields = ['username', 'email', 'password', 'country',
                   'last_name', 'first_name', 'city', 'clinic']
 
+class EventForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = ['text', 'date', 'time']

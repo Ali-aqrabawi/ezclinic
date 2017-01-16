@@ -16,6 +16,12 @@ indexes:
   - name: __key__
     direction: desc
 
+- kind: core_event
+  properties:
+  - name: date
+  - name: user_id
+  - name: time
+
 - kind: core_person
   properties:
   - name: __key__

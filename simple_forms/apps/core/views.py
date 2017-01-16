@@ -13,7 +13,7 @@ from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 
-from simple_forms.apps.core.models import Person, Picture, Diagcode, PersonForm, UserForm, User
+from simple_forms.apps.core.models import Person, Picture, Diagcode, PersonForm, UserForm, User, EventForm
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
@@ -76,7 +76,7 @@ def add_person(request):
         return render(request, 'core/add_person.html', context)
 
 
-def home(request):
+def patients(request):
 
     if not request.user.is_authenticated():
 
@@ -316,6 +316,11 @@ def calendar(request):
 
     persons = None
 
+    event_form = EventForm(request.POST)
+    if event_form.is_valid():
+        event = event_form.save(commit=False)
+        event.user = request.user
+        event.save()
 
     try:
         logging.info(request.GET.get("appointment", "").strip())
@@ -323,12 +328,15 @@ def calendar(request):
     except ValueError as e:
         date = datetime.date.today()
 
-    logging.info(date);
-
     persons = request.user.person_set.filter(date=date)
+    events = request.user.event_set.filter(date=date)
 
     return render(request, 'core/home1.html',
-            {'persons': persons, 'date': date, "today": date == datetime.date.today()})
+            {'persons': persons,
+             'events': events,
+             'date': date,
+             'today': date == datetime.date.today(),
+             'event_form': event_form,})
     # return render(request, 'core/calendar.html')
 
 

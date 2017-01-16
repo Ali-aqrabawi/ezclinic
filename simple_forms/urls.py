@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^admin/',admin.site.urls),
     url(r'^$', views.calendar, name='home'),
     url(r'^calendar/$', views.calendar, name='calendar'),
+    url(r'^patients/$', views.patients, name='patients'),
     url(r'^add/$', views.add_person, name='add_person'),
     url(r'^register/$', views.register, name='register'),
     url(r'^login_user/$', views.login_user, name='login_user'),
