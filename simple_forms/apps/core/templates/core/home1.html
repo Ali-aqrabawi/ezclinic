@@ -41,12 +41,6 @@
         </div>
       </div>
       <div class="form-group">
-        <label class="col-sm-2 control-label" for="{{ event_form.time.id_for_label }}">Time (optional)</label>
-        <div class="col-sm-4">
-          {% render_field event_form.time class="form-control"  placeholder="HH:MM" %}
-        </div>
-      </div>
-      <div class="form-group">
         <label class="col-sm-2 control-label" for="{{ event_form.text.id_for_label }}">Event text</label>
         <div class="col-sm-4">
           <textarea class="form-control" placeholder="Event text" id="id_text" name="text" rows="10"></textarea>
@@ -61,7 +55,7 @@
 
     {% for event in events %}
     <div class="row">
-      <div class="col-sm-2">{{ event.date }}{% if event.time %} {{ event.time }}{% endif %}</div>
+      <div class="col-sm-2">{{ event.date }}</div>
       <div class="col-sm-8">{{ event.text }}</div>
     </div>
     {% endfor %}

@@ -92,7 +92,6 @@ class Event(models.Model):
     user = models.ForeignKey(User)
     text = models.TextField(default='', blank=True)
     date = models.DateField()
-    time = models.TimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -144,4 +143,4 @@ class UserForm(forms.ModelForm):
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
-        fields = ['text', 'date', 'time']
+        fields = ['text', 'date']
