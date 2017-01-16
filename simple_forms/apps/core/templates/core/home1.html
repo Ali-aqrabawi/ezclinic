@@ -10,7 +10,11 @@
 </style>
 
     <h2 id="calendar-header">
-      Your patients for {% if today %}today{% else %}{{ date|date:"F d"}}{% endif %}
+      {% if today %}
+        Today's Appointments
+      {% else %}
+        Appointments for {{ date|date:"F d"}}
+      {% endif %}
       <div class="btn-group">
         <button class="btn btn-default patients-datepicker" >
           <span class="glyphicon glyphicon-th"></span>
