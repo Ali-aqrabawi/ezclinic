@@ -42,7 +42,7 @@
                     <div class="col-sm-2 form-group">
                         <label for="date">{% trans "Next Appoinment:" %}</label>
                         <button type="button" class="col-sm-12 btn btn-info" data-toggle="modal" data-target="#appointment-modal">
-                          {{ person.date|default:"." | safe}} {% if person.date and person.time %}{{ person.time|time:"H:i" }}{% endif %}
+                          {{ person.date|default:"Set date" | safe}}{% if person.date and person.time %} {{ person.time|time:"H:i" }}{% endif %}
                         </button>
                     </div>
                 </div>
@@ -671,7 +671,7 @@
               <div class="form-group col-sm-6">
                 <label for="{{ appointment_form.date.id_for_label }}">{% trans "Next Appoinment Date" %}</label>
                 <div class="input-group date" data-provide="datepicker" data-date-autoclose="true" data-date-format="yyyy-mm-dd">
-                  {{ appointment_form.date|add_class:"form-control" }}
+                  {% render_field appointment_form.date value=person.date class="form-control" %}
                   <div class="input-group-addon">
                     <span class="glyphicon glyphicon-th"></span>
                   </div>
