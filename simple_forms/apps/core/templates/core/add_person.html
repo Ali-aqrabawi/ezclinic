@@ -32,8 +32,8 @@
                         </div>
                         <div class="col-sm-2 form-group">
                           <label for="{{ form.date.id_for_label }}">{% trans "Next Appoinment:" %}</label>
-                          <button id="appointment-button" type="button" class="col-sm-12 btn btn-info" data-toggle="modal" data-target="#appointment-modal">
-                            {{ form.date.value|date:"Y-m-d" }}{% if form.date.value and form.time.value %} {{ form.time.value|time:"H:i" }}{% endif %}
+                          <button id="appointment-button" type="button" class="col-sm-12 btn btn-info btn-sm" data-toggle="modal" data-target="#appointment-modal">
+                            {{ form.date.value|date:"Y-m-d" }}{% if form.date.value and form.time.value %} {{ form.time.value|time:"f A" }}{% endif %}
                           </button>
                         </div>
                     </div>
@@ -214,7 +214,7 @@
                 </div>
                 <div class="form-group col-sm-6">
                   <label for="{{ form.time.id_for_label }}">{% trans "Next Appoinment Time" %}</label>
-                  <input id="{{ form.time.id_for_label }}" name="time" class="form-control" value="{{ form.time.value|time:"H:i"}}" placeholder="HH:MM" >
+                  <input id="{{ form.time.id_for_label }}" name="time" class="form-control" value="{{ form.time.value|time:"f A"}}" placeholder="HH:MM" >
                 </div>
               </div>
               <div class="modal-footer">

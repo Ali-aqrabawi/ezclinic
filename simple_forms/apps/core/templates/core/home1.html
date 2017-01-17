@@ -46,7 +46,7 @@
         <th>Lastname</th>
         <th class="col-md-3">Treatment done</th>
         <th class="col-md-3">Treatment plan</th>
-        <th class="col-md-2 text-right">Appointment time</th>
+        <th class="col-md-2 text-center">Appointment time</th>
         <th>Cancel</th>
         <th>View</th>
       </tr>
@@ -58,7 +58,7 @@
           <td>{{ person.last_name }}</td>
           <td>{{ person.treatment_done }}</td>
           <td>{{ person.treatment_plan}}</td>
-          <td class="text-right">{{ person.time|time:"f A" }}</td>
+          <td class="text-center">{{ person.time|time:"f A" }}</td>
           <td>
             <button data-person-id="{{ person.id }}" type="button" class="cancel-button btn btn-xs btn-link">
               <span  class="glyphicon glyphicon-minus"></span>

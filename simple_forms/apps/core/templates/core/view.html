@@ -41,8 +41,8 @@
                     </div>
                     <div class="col-sm-2 form-group">
                         <label for="date">{% trans "Next Appoinment:" %}</label>
-                        <button type="button" class="col-sm-12 btn btn-info" data-toggle="modal" data-target="#appointment-modal">
-                          {{ person.date|default:"Set date" | safe}}{% if person.date and person.time %} {{ person.time|time:"H:i" }}{% endif %}
+                        <button type="button" class="col-sm-12 btn btn-info btn-sm" data-toggle="modal" data-target="#appointment-modal">
+                          {{ person.date|default:"Set date" | safe}}{% if person.date and person.time %} {{ person.time|time:"f A" }}{% endif %}
                         </button>
                     </div>
                 </div>
@@ -351,8 +351,8 @@
                     </div>
                     <div class="col-sm-2 form-group">
                         <label for="date">{% trans "Next Appoinment:" %}</label>
-                        <button type="button" class="col-sm-12 btn btn-info" data-toggle="modal" data-target="#appointment-modal">
-                          {{ person.date|default:"." | safe}} {% if person.date and person.time %}{{ person.time|time:"H:i" }}{% endif %}
+                        <button type="button" class="col-sm-12 btn btn-info btn-sm" data-toggle="modal" data-target="#appointment-modal">
+                          {{ person.date|default:"." | safe}} {% if person.date and person.time %}{{ person.time|time:"f A" }}{% endif %}
                         </button>
                     </div>
                 </div>
