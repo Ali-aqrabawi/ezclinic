@@ -47,17 +47,23 @@
         <th class="col-md-3">Treatment done</th>
         <th class="col-md-3">Treatment plan</th>
         <th class="col-md-2 text-right">Appointment time</th>
+        <th>Cancel</th>
         <th>View</th>
       </tr>
     </thead>
     <tbody>
       {% for person in persons %}
-        <tr>
+        <tr id="person-{{ person.id }}">
           <td>{{ person.name }}</td>
           <td>{{ person.last_name }}</td>
           <td>{{ person.treatment_done }}</td>
           <td>{{ person.treatment_plan}}</td>
           <td class="text-right">{{ person.time|time:"f A" }}</td>
+          <td>
+            <button data-person-id="{{ person.id }}" type="button" class="cancel-button btn btn-xs btn-link">
+              <span  class="glyphicon glyphicon-minus"></span>
+            </button>
+          </td>
           <td><a  href="{% url 'view' person.id %}"><i  class="glyphicon glyphicon-list-alt"></i></a></td>
         </tr>
       {% empty %}
@@ -175,4 +181,21 @@
 
   });
 </script>
+  <script>
+    var hidden_persons = JSON.parse(localStorage["hidden_persons"] || "[]");
+    for (var i = 0; i < hidden_persons.length; i++) {
+      $("#person-" + hidden_persons[i]).hide();
+    }
+
+    $(".cancel-button").click(function () {
+      var user_id = $(this).data("person-id");
+      bootbox.confirm("Are you sure you want to cancel an appointment?", function(confirmed) {
+        if (confirmed) {
+          hidden_persons.push(user_id);
+          localStorage["hidden_persons"] = JSON.stringify(hidden_persons);
+          $("#person-" + user_id).hide();
+        }
+      });
+    });
+  </script>
 {% endblock %}
