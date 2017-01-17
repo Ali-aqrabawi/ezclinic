@@ -27,6 +27,12 @@ indexes:
   - name: __key__
     direction: desc
 
+- kind: core_person
+  properties:
+  - name: date
+  - name: user_id
+  - name: time
+
 - kind: core_picture
   properties:
   - name: person_id
