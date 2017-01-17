@@ -13,7 +13,7 @@ from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 
-from simple_forms.apps.core.models import Person, Picture, Diagcode, PersonForm, UserForm, User, EventForm
+from simple_forms.apps.core.models import Person, Picture, Diagcode, PersonForm, UserForm, User, EventForm, AppointmentForm
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
@@ -299,8 +299,15 @@ def view(request, person_id):
 
     print pictures_tuple, last_picture
 
+    appointment_form = AppointmentForm(request.POST)
+    if appointment_form.is_valid():
+        person.date = appointment_form.cleaned_data["date"]
+        person.time = appointment_form.cleaned_data["time"]
+        person.save()
+
     return render(request, 'core/view.html', {'person': person, 'pictures_tuple': pictures_tuple,
-                                              'last_picture': last_picture, 'tab': tab})
+                                              'last_picture': last_picture, 'tab': tab,
+                                              'appointment_form': appointment_form})
 
     #====================================
 

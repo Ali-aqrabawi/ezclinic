@@ -41,7 +41,9 @@
                     </div>
                     <div class="col-sm-2 form-group">
                         <label for="date">{% trans "Next Appoinment:" %}</label>
-                        <input class="form-control" value='{{ person.date|default:"." | safe}}' readonly>
+                        <button type="button" class="col-sm-12 btn btn-info" data-toggle="modal" data-target="#appointment-modal">
+                          {{ person.date|default:"." | safe}} {% if person.date and person.time %}{{ person.time|time:"H:i" }}{% endif %}
+                        </button>
                     </div>
                 </div>
                 <div class="row">
@@ -338,7 +340,6 @@
                     <div class="col-sm-2 form-group">
                         <label for="name" >{% trans "Name:" %}</label>
                         <input class="form-control" value='{{ person.name|default:"."  }}' readonly>
-
                     </div>
                     <div class="col-sm-2 form-group">
                         <label for="lname">{% trans "Lastname:" %}</label>
@@ -350,7 +351,9 @@
                     </div>
                     <div class="col-sm-2 form-group">
                         <label for="date">{% trans "Next Appoinment:" %}</label>
-                        <input class="form-control" value='{{ person.date|default:"." | safe}}' readonly>
+                        <button type="button" class="col-sm-12 btn btn-info" data-toggle="modal" data-target="#appointment-modal">
+                          {{ person.date|default:"." | safe}} {% if person.date and person.time %}{{ person.time|time:"H:i" }}{% endif %}
+                        </button>
                     </div>
                 </div>
                 <div class="row">
@@ -655,12 +658,42 @@
         <a href="{% url 'home' %}" class="btn btn-default">Back</a>
     </div>
 
-
+    <div id="appointment-modal" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">{% trans "Next appointment" %}</h4>
+          </div>
+          <form method="POST">
+            {% csrf_token %}
+          <div class="modal-body">
+              <div class="form-group col-sm-6">
+                <label for="{{ appointment_form.date.id_for_label }}">{% trans "Next Appoinment Date" %}</label>
+                <div class="input-group date" data-provide="datepicker" data-date-autoclose="true" data-date-format="yyyy-mm-dd">
+                  {{ appointment_form.date|add_class:"form-control" }}
+                  <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-th"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group col-sm-6">
+                <label for="{{ appointment_form.time.id_for_label }}">{% trans "Next Appoinment Time" %}</label>
+                {% render_field appointment_form.time placeholder="HH:MM" class="form-control" %}
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save changes</button>
+          </div>
+        </form>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
 
   
     <script src="{% static 'fancybox/source/jquery.fancybox.pack.js' %}" ></script>
-    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript">
       $(document).ready(function() {
             $(".fancybox")

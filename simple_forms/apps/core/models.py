@@ -51,6 +51,7 @@ class Person(models.Model):
     note = models.CharField(max_length=256, null=True, blank=True)
     address = models.CharField(max_length=256, null=True, blank=True)
     date = models.DateField(("Date"), default=date.today, blank=True)
+    time = models.TimeField(("Time"), blank=True)
     chief_complain = models.CharField(max_length=256, null=True, blank=True)
     treatment_plan = models.CharField(max_length=256, null=True, blank=True)
     treatment_done = models.CharField(max_length=256, null=True, blank=True)
@@ -102,7 +103,7 @@ class PersonForm(forms.ModelForm):
     class Meta:
         model = Person
         fields = ['name', 'last_name', 'age', 'martial_status', 'mobile', 'sex', 'dental_chart_type',
-                  'amount_paid', 'amount_left', 'note', 'address', 'date', 'treatment_done', 'treatment_plan', 'chief_complain',
+                  'amount_paid', 'amount_left', 'note', 'address', 'date', 'time', 'treatment_done', 'treatment_plan', 'chief_complain',
                   'dental_chart']
         widgets = {
             'name': forms.TextInput(attrs={'required': True, 'class': 'form-control',
@@ -144,3 +145,7 @@ class EventForm(forms.ModelForm):
     class Meta:
         model = Event
         fields = ['text', 'date']
+
+class AppointmentForm(forms.Form):
+    date = forms.DateField()
+    time = forms.TimeField(required=False)

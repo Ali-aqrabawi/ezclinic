@@ -40,8 +40,13 @@
                                {{ form.sex|add_class:"form-control" }}
                             </div>
                             <div class="col-sm-2 form-group">
-                               <label for="date">{% trans "Next Appoinment:" %}</label>
-                              {{ form.date|attr:"data-provide:datepicker"|add_class:"form-control datepicker" }}
+                              <label for="{{ form.date.id_for_label }}">{% trans "Visit time:" %}</label>
+                              <div class="input-group date" data data-provide="datepicker" data-date-autoclose="true" data-date-format="yyyy-mm-dd" data-date-show-on-focus="false">
+                                {{form.time|add_class:"form-control" }}
+                                <div class="input-group-addon">
+                                  <span class="glyphicon glyphicon-th"></span>
+                                </div>
+                              </div>
                             </div>
                         </div>
                         <div class="row">
@@ -335,11 +340,6 @@
 
 
     </form>
-    <script type="text/javascript">
-        $('.datepicker').datepicker({
-            format: "yyyy-mm-dd",
-        });
-    </script>
     <script type="text/javascript">
         $(document).ready(function(){
             $("form#form1").submit(function(e) {
