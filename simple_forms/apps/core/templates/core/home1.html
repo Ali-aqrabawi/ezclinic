@@ -3,12 +3,26 @@
 {% load i18n %}
 
 {% block content %}
-    <h2 id="calendar-header">
-      {% if today %}
+<style>
+  .page-header {
+    padding: 1em 0 1em 0;
+  }
+  .page-header--h {
+    line-height: 0;
+  }
+</style>
+    <div class="row page-header">
+      <div class="col-md-6">
+        <h2 class="page-header--h">
+        {% if today %}
         Today's Appointments
-      {% else %}
+        {% else %}
         Appointments for {{ date|date:"F d"}}
-      {% endif %}
+        {% endif %}
+      </h2>
+      </div>
+      <div class="col-md-6">
+        <div class="pull-right">
         <button class="btn btn-info patients-datepicker" >
           <span class="glyphicon glyphicon-th"></span> {% trans "Check for other day" %}
         </button>
@@ -18,30 +32,21 @@
         <button class="btn btn-info add-event" data-toggle="modal" data-target="#add-event-modal">
           <span class="glyphicon glyphicon-edit"></span> {% trans "Add event" %}
         </button>
-    </h2>
+      </div>
+      </div>
+    </div>
     <form id="patients-calendar-form" action="">
       <input id="patients-calendar-form-appointment" name="appointment" type="hidden">
     </form>
-
-
-    {% for event in events %}
-    <div class="row">
-      <div class="col-sm-2">{{ event.date }}</div>
-      <div class="col-sm-8">{{ event.text }}</div>
-    </div>
-    {% endfor %}
 
   <table class="table">
     <thead>
       <tr>
         <th>Name</th>
         <th>Lastname</th>
-        <th>Martial Status</th>
-        <th>Age</th>
-        <th>Sex</th>
-        <th>$ Paid</th>
-        <th>$ Left</th>
-        <th>View</th>
+        <th>Treatment done</th>
+        <th>Treatment plan</th>
+        <th>Appointment time</th>
       </tr>
     </thead>
     <tbody>
@@ -49,12 +54,9 @@
         <tr>
           <td>{{ person.name }}</td>
           <td>{{ person.last_name }}</td>
-          <td>{{ person.martial_status }}</td>
-          <td>{{ person.age }}</td>
-          <td>{{ person.sex }}</td>
-          <td>{{ person.amount_paid }}</td>
-          <td>{{ person.amount_left}}</td>
-          <td><a href="{% url 'edit' person.id %}"><i class="glyphicon glyphicon-list-alt"></i></a></td>
+          <td>{{ person.treatment_done }}</td>
+          <td>{{ person.treatment_plan}}</td>
+          <td>{{ person.time }}</td>
         </tr>
       {% empty %}
         <tr>
@@ -63,7 +65,24 @@
       {% endfor %}
     </tbody>
   </table>
- {% if persons.has_other_pages %}
+
+  {% if events %}
+  <h2>Events
+    <button id="hide-events" class="btn btn-info pull-right" type="button">{% trans "Hide" %}</button>
+  </h2>
+
+  <div id="events-table">
+    <table id="events-table" class="table">
+      <tbody>
+        {% for event in events %}
+        <tr><td>{{ event.text }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+    {% if persons.has_other_pages %}
   <ul class="pagination">
     {% if persons.has_previous %}
       <li><a href="?page={{ persons.previous_page_number }}">&laquo;</a></li>
@@ -124,11 +143,32 @@
 
 
 <script>
+  var key = 'events-state-{{ date|date:"Y-m-d" }}';
+  // Default is show
+  var events_state = window.localStorage[key] === "hide" ? "hide" : "show" ;
+ 
   $(".patients-datepicker")
     .datepicker({autoClose: true, todayBtn: true, todayHighlight: true})
     .on("changeDate", function(event) {
       $("#patients-calendar-form-appointment").val(event.format("yyyy-mm-dd"));
       $("#patients-calendar-form").submit();
     });
+
+  $("#events-table").collapse(); // Init
+  if (events_state === "hide") {
+    $("#hide-events").html("Show");
+  }
+  $("#events-table").collapse(events_state);
+  $("#events-table").on("show.bs.collapse", function() {
+    $("#hide-events").text("Hide");
+    window.localStorage[key] = "show";
+  });
+  $("#events-table").on("hide.bs.collapse", function() {
+    $("#hide-events").text("Show");
+    window.localStorage[key] = "hide";
+  });
+  $("#hide-events").click(function() {
+    $("#events-table").collapse("toggle");
+  });
 </script>
 {% endblock %}
