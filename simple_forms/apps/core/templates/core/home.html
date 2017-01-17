@@ -159,11 +159,16 @@ $("form#form1").submit(function(e) {
     for (var i = 0; i < hidden_persons.length; i++) {
       $("#person-" + hidden_persons[i]).hide();
     }
+
     $(".cancel-button").click(function () {
       var user_id = $(this).data("person-id");
-      hidden_persons.push(user_id);
-      localStorage["hidden_persons"] = JSON.stringify(hidden_persons);
-      $("#person-" + user_id).hide();
+      bootbox.confirm("Are you sure you want to delete a Pateint?", function(confirmed) {
+        if (confirmed) {
+          hidden_persons.push(user_id);
+          localStorage["hidden_persons"] = JSON.stringify(hidden_persons);
+          $("#person-" + user_id).hide();
+        }
+      });
     });
   </script>
 
