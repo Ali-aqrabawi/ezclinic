@@ -39,7 +39,8 @@ $("form#form1").submit(function(e) {
           <th>Medical History</th>
 		  <th class="col-md-4" style="text-align: center;">picture</th>
           <th>Address</th>            
-           <th>Delete</th>
+          <th>Cancel</th>
+          <th>Delete</th>
           <th>View</th>
 
       </tr>
@@ -49,7 +50,7 @@ $("form#form1").submit(function(e) {
 
 	
       {% for person in persons %}
-        <tr>
+        <tr id="person-{{ person.id }}">
           <td>{{ person.name }}</td>
           <td>{{ person.last_name }}</td>
           
@@ -76,6 +77,11 @@ $("form#form1").submit(function(e) {
           </td>
           <td>{{ person.address }}</td>
           
+          <td>
+            <button data-person-id="{{ person.id }}" type="button" class="cancel-button btn btn-xs btn-link">
+              <span  class="glyphicon glyphicon-minus"></span>
+            </button>
+          </td>
 
 
         <td><form id='form1'  name='delete'  action="{% url 'delete_person' person.id %}"
@@ -147,6 +153,18 @@ $("form#form1").submit(function(e) {
 
 
         });
+  </script>
+  <script>
+    var hidden_persons = JSON.parse(localStorage["hidden_persons"] || "[]");
+    for (var i = 0; i < hidden_persons.length; i++) {
+      $("#person-" + hidden_persons[i]).hide();
+    }
+    $(".cancel-button").click(function () {
+      var user_id = $(this).data("person-id");
+      hidden_persons.push(user_id);
+      localStorage["hidden_persons"] = JSON.stringify(hidden_persons);
+      $("#person-" + user_id).hide();
+    });
   </script>
 
 {% endblock %}
