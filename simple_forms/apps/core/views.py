@@ -339,7 +339,10 @@ def calendar(request):
         # Redirect after POST
         return redirect(request.get_full_path())
 
-    persons = request.user.person_set.filter(date=date)
+    # Simulate ORDER BY with NULLS LAST
+    persons = list(request.user.person_set.filter(date=date))
+    persons.sort(key=lambda p: p.time or datetime.time(23, 59, 59))
+
     events = request.user.event_set.filter(date=date)
 
     return render(request, 'core/home1.html',
