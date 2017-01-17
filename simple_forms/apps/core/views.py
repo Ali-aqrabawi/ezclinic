@@ -7,6 +7,7 @@ import logging
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.http import JsonResponse
+from django.views.decorators.cache  import never_cache
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 from django.shortcuts import render, redirect
@@ -317,23 +318,26 @@ def foto(request, person_id):
 
     return render(request, 'core/home3.html', {'persons': persons})
 
+@never_cache
 def calendar(request):
     if not request.user.is_authenticated():
         return render(request, 'core/login.html')
 
     persons = None
 
-    event_form = EventForm(request.POST)
-    if event_form.is_valid():
-        event = event_form.save(commit=False)
-        event.user = request.user
-        event.save()
-
     try:
         logging.info(request.GET.get("appointment", "").strip())
         date = datetime.datetime.strptime(request.GET.get("appointment", "").strip(), "%Y-%m-%d").date()
     except ValueError as e:
         date = datetime.date.today()
+
+    event_form = EventForm(request.POST)
+    if event_form.is_valid():
+        event = event_form.save(commit=False)
+        event.user = request.user
+        event.save()
+        # Redirect after POST
+        return redirect(request.get_full_path())
 
     persons = request.user.person_set.filter(date=date)
     events = request.user.event_set.filter(date=date)
@@ -344,7 +348,6 @@ def calendar(request):
              'date': date,
              'today': date == datetime.date.today(),
              'event_form': event_form,})
-    # return render(request, 'core/calendar.html')
 
 
 # search by name or last name
