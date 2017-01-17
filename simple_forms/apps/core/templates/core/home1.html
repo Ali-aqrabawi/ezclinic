@@ -47,6 +47,7 @@
         <th>Treatment done</th>
         <th>Treatment plan</th>
         <th>Appointment time</th>
+        <th>View</th>
       </tr>
     </thead>
     <tbody>
@@ -56,7 +57,8 @@
           <td>{{ person.last_name }}</td>
           <td>{{ person.treatment_done }}</td>
           <td>{{ person.treatment_plan}}</td>
-          <td>{{ person.time }}</td>
+          <td>{{ person.time|time:"H:i" }}</td>
+          <td><a  href="{% url 'view' person.id %}"><i  class="glyphicon glyphicon-list-alt"></i></a></td>
         </tr>
       {% empty %}
         <tr>
