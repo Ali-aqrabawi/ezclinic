@@ -356,7 +356,10 @@
                 </div>
                 <div class="form-group col-sm-6">
                   <label for="{{ form.time.id_for_label }}">{% trans "Next Appoinment Time" %}</label>
-                  <input id="{{ form.time.id_for_label }}" name="time" class="form-control" value="{{ form.time.value|time:"f A"}}" placeholder="HH:MM" >
+                  <div class="input-group bootstrap-timepicker timepicker">
+                    <input id="{{ form.time.id_for_label }}" name="time" class="form-control" value="{{ form.time.value|time:"f A"}}" placeholder="HH:MM" >
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                  </div>
                 </div>
               </div>
               <div class="modal-footer">
@@ -369,6 +372,7 @@
 
     </form>
     <script>
+      $("#{{ form.time.id_for_label }}").timepicker();
       $("#clear-appointment").click(function() {
         $("#{{ form.date.id_for_label }}").val("");
         $("#{{ form.time.id_for_label }}").val("");
@@ -383,6 +387,7 @@
       });
     </script>
     <script type="text/javascript">
+
         $(document).ready(function(){
             $("form#form1").submit(function(e) {
                 e.preventDefault();

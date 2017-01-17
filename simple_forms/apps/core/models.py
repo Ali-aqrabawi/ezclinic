@@ -99,6 +99,7 @@ class Event(models.Model):
 class PersonForm(forms.ModelForm):
     pictures = forms.FileField(widget=forms.ClearableFileInput(
         attrs={'required': False, 'multiple': True, 'class': 'form-control'}), required=False)
+    time = forms.TimeField(input_formats=["%I:%M %p"])
 
     class Meta:
         model = Person
@@ -148,4 +149,4 @@ class EventForm(forms.ModelForm):
 
 class AppointmentForm(forms.Form):
     date = forms.DateField()
-    time = forms.TimeField(required=False)
+    time = forms.TimeField(input_formats=["%I:%M %p"], required=False)
