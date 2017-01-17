@@ -71,8 +71,8 @@
     <button id="hide-events" class="btn btn-info pull-right" type="button">{% trans "Hide" %}</button>
   </h2>
 
-  <div id="events-table">
-    <table id="events-table" class="table">
+  <div id="events-table" class="hidden">
+    <table class="table">
       <tbody>
         {% for event in events %}
         <tr><td>{{ event.text }}</td></tr>
@@ -145,7 +145,7 @@
 <script>
   var key = 'events-state-{{ date|date:"Y-m-d" }}';
   // Default is show
-  var events_state = window.localStorage[key] === "hide" ? "hide" : "show" ;
+  var events_shown = !! JSON.parse(window.localStorage[key] || "true");
  
   $(".patients-datepicker")
     .datepicker({autoClose: true, todayBtn: true, todayHighlight: true})
@@ -154,21 +154,23 @@
       $("#patients-calendar-form").submit();
     });
 
-  $("#events-table").collapse(); // Init
-  if (events_state === "hide") {
+  if (!events_shown) {
+    $("#events-table").hide();
     $("#hide-events").html("Show");
   }
-  $("#events-table").collapse(events_state);
-  $("#events-table").on("show.bs.collapse", function() {
-    $("#hide-events").text("Hide");
-    window.localStorage[key] = "show";
-  });
-  $("#events-table").on("hide.bs.collapse", function() {
-    $("#hide-events").text("Show");
-    window.localStorage[key] = "hide";
-  });
+  $("#events-table").removeClass("hidden");
+  
   $("#hide-events").click(function() {
-    $("#events-table").collapse("toggle");
+    events_shown = ! events_shown;
+    window.localStorage[key] = events_shown;
+    if (events_shown) {
+      $("#events-table").show();
+      $("#hide-events").html("Hide");
+    } else {
+      $("#events-table").hide();
+      $("#hide-events").html("Show");
+    }
+
   });
 </script>
 {% endblock %}
