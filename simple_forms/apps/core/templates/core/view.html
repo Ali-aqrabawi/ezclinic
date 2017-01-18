@@ -680,7 +680,7 @@
               <div class="form-group col-sm-6">
                 <label for="{{ appointment_form.time.id_for_label }}">{% trans "Next Appoinment Time" %}</label>
                 <div class="input-group bootstrap-timepicker timepicker">
-                  <input id="{{ appointment_form.time.id_for_label }}" name="time" class="form-control" value="{{ appointment_form.time.value|time:"f A"}}" placeholder="HH:MM" >
+                  <input id="{{ appointment_form.time.id_for_label }}" name="time" class="form-control" value="{{ person.time|time:"f A"}}" placeholder="HH:MM" >
                   <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                 </div>
               </div>
