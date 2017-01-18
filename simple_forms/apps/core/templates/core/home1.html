@@ -75,8 +75,12 @@
   </table>
 
   {% if events %}
-  <h2>Events
-    <button id="hide-events" class="btn btn-info pull-right" type="button">{% trans "Hide" %}</button>
+  <h2> {% if today %}
+        Today's Events
+        {% else %}
+        Events of {{ date|date:"F d"}}
+        {% endif %}
+    <button id="hide-events" class="btn btn-info pull-right" type="button">{% trans "Hide Events" %}</button>
   </h2>
 
   <div id="events-table" class="hidden">
@@ -164,7 +168,7 @@
 
   if (!events_shown) {
     $("#events-table").hide();
-    $("#hide-events").html("Show");
+    $("#hide-events").html("Show Events");
   }
   $("#events-table").removeClass("hidden");
   
@@ -173,10 +177,10 @@
     window.localStorage[key] = events_shown;
     if (events_shown) {
       $("#events-table").show();
-      $("#hide-events").html("Hide");
+      $("#hide-events").html("Hide Events");
     } else {
       $("#events-table").hide();
-      $("#hide-events").html("Show");
+      $("#hide-events").html("Show Events");
     }
 
   });
