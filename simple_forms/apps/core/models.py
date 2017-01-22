@@ -9,6 +9,8 @@ from datetime import date
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import ugettext_lazy as _
 
+from django_countries.fields import CountryField
+
 from djangae import fields, storage
 
 STATUS_CHOICES = (
@@ -34,7 +36,7 @@ public_storage = storage.CloudStorage(
 class User(AbstractUser):
     email = models.EmailField(_('email address'), unique=True, null=False, blank=False)
 
-    country = models.CharField(max_length=30)
+    country = CountryField()
     city = models.CharField(max_length=30)
     clinic = models.CharField(max_length=30)
 
