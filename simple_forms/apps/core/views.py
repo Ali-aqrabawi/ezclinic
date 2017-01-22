@@ -324,7 +324,7 @@ def calendar(request):
 
     events = request.user.event_set.filter(date=date)
 
-    return render(request, 'core/home1.html',
+    return render(request, 'core/calendar.html',
             {'persons': persons,
              'events': events,
              'date': date,

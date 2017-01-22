@@ -1,148 +1,205 @@
 {% extends 'base.html' %}
-{% load staticfiles %}
+{% load widget_tweaks %}
 {% load i18n %}
+
 {% block content %}
-<html>
-  <head>
-    <meta charset="UTF-8">
-	
-    <link rel="stylesheet" href="../stylesheets/calendarview.css">
-      <link href="{% static "javascripts/calendarview.js" %}" rel="stylesheet">
-     <link href="{% static "stylesheets/calendarview.css" %}" rel="stylesheet">
-    <style>
-
-      div.calendar {
-        max-width: 240px;
-        margin-left: auto;
-        margin-right: auto;
-      }
-      div.calendar table {
-        width: 100%;
-      }
-      div.dateField {
-        width: 140px;
-        padding: 6px;
-        -webkit-border-radius: 6px;
-        -moz-border-radius: 6px;
-        color: #555;
-        background-color: white;
-        margin-left: auto;
-        margin-right: auto;
-        text-align: center;
-		font-family: Trebuchet MS;
-      }
-      div#popupDateField:hover {
-        background-color: #cde;
-        cursor: pointer;
-      }
-	          .dateField {
-             display: block;
-             margin : 0 auto;
-			 margin-left: auto; 
-			 margin-right: auto; 
-			 max-width: 190px; 
-			 width:100%;
-			 font-family: Trebuchet MS;
-			 
-        }
-		
-		        #btn{
-             display: block;
-             margin : 0 auto;
-			 margin-left: auto; 
-			 margin-right: auto; 
-			 max-width: 190px; 
-			 font-family: Trebuchet MS;
-			 
-        }
-
-
-
-
-
-    </style>
-      <script src="{% static "javascripts/prototype.js" %}"></script>
-      <script src="{% static "javascripts/calendarview.js" %}"></script>
-
-
-
-    <script>
-      function setupCalendars() {
-        // Embedded Calendar
-        Calendar.setup(
-          {
-            dateField: 'embeddedDateField',
-            parentElement: 'embeddedCalendar'
-          }
-        )
-
-        // Popup Calendar
-        Calendar.setup(
-          {
-            dateField: 'popupDateField',
-            triggerElement: 'popupDateField'
-          }
-        )
-      }
-
-      Event.observe(window, 'load', function() { setupCalendars() })
-	  
-	  function validateForm()
-	  {
-	    var dateValue=document.forms['Form']['embeddedDateField'].value;
-		if (dateValue==='')
-		{
-		  alert('Please Choose a date from the calendar');
-		  return false;
-		} else {
-		    var regEx = /^\d{4}-\d{2}-\d{2}$/;
-			if (!(dateValue.match(regEx) != null)) {
-			alert('format should be yyyy-mm-dd , please choose a day in the calender');
-			return false;
-		}
-		
-		
-	
-	  }
-	  }
-
-	  
-    </script>
-	
-	 
-	
-  </head>
-  <body>
-
-    <div style="float: left; width: 80% ;padding-left: 21%">
-      <div style="height: 400px; background-color: #efefef; padding: 10px; -webkit-border-radius: 12px; -moz-border-radius: 12px; margin-right: 10px">
-        <h3 style="text-align: center; background-color: white; -webkit-border-radius: 10px; -moz-border-radius: 10px; margin-top: 0px; margin-bottom: 20px; padding: 8px">
-        Appointement calendar
-        </h3>
-        <div id="embeddedExample" style="">
-          <div id="embeddedCalendar" style="margin-left: auto; margin-right: auto">
-          </div>
-		  </div>
-		  <br>
-          
-		<div id="embeddedExample" style="">
-             <form role="search" method="get" name="Form" onsubmit="return validateForm()" action="{% url 'date' %}">
-                
-                    <input type="text" id="embeddedDateField" class="dateField" style="text-align: center;" name="appointement" value="{{ request.GET.appointement }}"><br>
-                
-                <button type="submit"  id="btn" class="btn btn-info">Check Appointment</button>
-            </form>
-			
-          <br />
-		  </div>
-        
+<style>
+  .page-header {
+    padding: 1em 0 1em 0;
+  }
+  .page-header--h {
+    line-height: 0;
+  }
+</style>
+    <div class="row page-header">
+      <div class="col-md-6">
+        <h2 class="page-header--h">
+        {% if today %}
+        Today's Appointments
+        {% else %}
+        Appointments for {{ date|date:"F d"}}
+        {% endif %}
+      </h2>
+      </div>
+      <div class="col-md-6">
+        <div class="pull-right">
+        <button class="btn btn-info patients-datepicker" >
+          <span class="glyphicon glyphicon-th"></span> {% trans "Check for other day" %}
+        </button>
+        <a href="{% url 'add_person' %}" class="btn btn-info">
+          <span class="glyphicon glyphicon-plus"></span> {% trans  "Add Patient" %}
+        </a>
+        <button class="btn btn-info add-event" data-toggle="modal" data-target="#add-event-modal">
+          <span class="glyphicon glyphicon-edit"></span> {% trans "Add event" %}
+        </button>
+      </div>
       </div>
     </div>
+    <form id="patients-calendar-form" action="">
+      <input id="patients-calendar-form-appointment" name="appointment" type="hidden">
+    </form>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Lastname</th>
+        <th class="col-md-3">Treatment done</th>
+        <th class="col-md-3">Treatment plan</th>
+        <th class="col-md-2 text-center">Appointment time</th>
+        <th>Cancel</th>
+        <th>View</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for person in persons %}
+        <tr id="person-{{ person.id }}">
+          <td>{{ person.name }}</td>
+          <td>{{ person.last_name }}</td>
+          <td>{{ person.treatment_done|linebreaks }}</td>
+          <td>{{ person.treatment_plan|linebreaks }}</td>
+          <td class="text-center">{{ person.time|time:"f A" }}</td>
+          <td>
+            <button data-person-id="{{ person.id }}" type="button" class="cancel-button btn btn-xs btn-link">
+              <span  class="glyphicon glyphicon-minus"></span>
+            </button>
+          </td>
+          <td><a  href="{% url 'view' person.id %}"><i  class="glyphicon glyphicon-list-alt"></i></a></td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="6" class="text-center">No result</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% if events %}
+  <h2> {% if today %}
+        Today's Events
+        {% else %}
+        Events of {{ date|date:"F d"}}
+        {% endif %}
+    <button id="hide-events" class="btn btn-info pull-right" type="button">{% trans "Hide Events" %}</button>
+  </h2>
+
+  <div id="events-table" class="hidden">
+    <table class="table">
+      <tbody>
+        {% for event in events %}
+        <tr><td>{{ event.text }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+    {% if persons.has_other_pages %}
+  <ul class="pagination">
+    {% if persons.has_previous %}
+      <li><a href="?page={{ persons.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in persons.paginator.page_range %}
+      {% if persons.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if persons.has_next %}
+      <li><a href="?page={{ persons.next_page_number }}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
+{% endif %}
+
+<div id="add-event-modal" class="modal fade" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">{% trans "Add event" %}</h4>
+      </div>
+      <form method="POST" id="add-event-form" class="form-horizontal">
+        {% csrf_token %}
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="{{ event_form.date.id_for_label }}">Date</label>
+            <div class="col-sm-4">
+              <div class="input-group date" data-provide="datepicker" data-date-autoclose="true" data-date-format="yyyy-mm-dd">
+                {{ event_form.date|add_class:"form-control" }}
+                <div class="input-group-addon">
+                  <span class="glyphicon glyphicon-th"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label" for="{{ event_form.text.id_for_label }}">Event text</label>
+            <div class="col-sm-10">
+              <textarea class="form-control" placeholder="Event text" id="id_text" name="text" rows="10"></textarea>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </form>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 
+<script>
+  var key = 'events-state-{{ date|date:"Y-m-d" }}';
+  // Default is show
+  var events_shown = !! JSON.parse(window.localStorage[key] || "true");
+ 
+  $(".patients-datepicker")
+    .datepicker({autoClose: true, todayBtn: true, todayHighlight: true})
+    .on("changeDate", function(event) {
+      $("#patients-calendar-form-appointment").val(event.format("yyyy-mm-dd"));
+      $("#patients-calendar-form").submit();
+    });
 
+  if (!events_shown) {
+    $("#events-table").hide();
+    $("#hide-events").html("Show Events");
+  }
+  $("#events-table").removeClass("hidden");
+  
+  $("#hide-events").click(function() {
+    events_shown = ! events_shown;
+    window.localStorage[key] = events_shown;
+    if (events_shown) {
+      $("#events-table").show();
+      $("#hide-events").html("Hide Events");
+    } else {
+      $("#events-table").hide();
+      $("#hide-events").html("Show Events");
+    }
 
+  });
+</script>
+  <script>
+    var hidden_persons = JSON.parse(localStorage["hidden_persons"] || "[]");
+    for (var i = 0; i < hidden_persons.length; i++) {
+      $("#person-" + hidden_persons[i]).hide();
+    }
 
-  </body>
-</html>
+    $(".cancel-button").click(function () {
+      var user_id = $(this).data("person-id");
+      bootbox.confirm("Are you sure you want to cancel an appointment?", function(confirmed) {
+        if (confirmed) {
+          hidden_persons.push(user_id);
+          localStorage["hidden_persons"] = JSON.stringify(hidden_persons);
+          $("#person-" + user_id).hide();
+        }
+      });
+    });
+  </script>
 {% endblock %}
