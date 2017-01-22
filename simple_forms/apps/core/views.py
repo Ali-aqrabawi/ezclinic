@@ -249,7 +249,10 @@ def edit(request, person_id):
                     else:
                         pass
 
-        return redirect(reverse('view', args=(i.id,)))
+        url = reverse('view', args=(i.id,))
+        if tab:
+            url = "{}?tab={}".format(url, tab)
+        return redirect(url)
     else:
         form = PersonForm(instance=i)
 
