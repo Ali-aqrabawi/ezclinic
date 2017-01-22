@@ -1,15 +1,16 @@
 from __future__ import unicode_literals
+import logging
+
 #from django.contrib.auth.models import Permission, User
 from django.contrib.auth.models import Permission
 from django.db import models
 from django import forms
 from datetime import date
 from django.contrib.auth.models import AbstractUser
-import logging
-
+from django.utils.translation import ugettext_lazy as _
 
 from djangae import fields, storage
-import logging
+
 STATUS_CHOICES = (
     ("Unmarried", ("Unmarried")),
     ("Married", ("Married")),
@@ -31,6 +32,7 @@ public_storage = storage.CloudStorage(
 
 
 class User(AbstractUser):
+    email = models.EmailField(_('email address'), unique=True, null=False, blank=False)
 
     country = models.CharField(max_length=30)
     city = models.CharField(max_length=30)
