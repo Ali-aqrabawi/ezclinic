@@ -356,6 +356,6 @@ def search(request):
     elif q1:
         persons = Person.objects.filter(Q(last_name=q1))
 
-    return render(request, 'core/home.html', {'persons': persons})
+    return render(request, 'core/search.html', {'persons': persons})
 
 

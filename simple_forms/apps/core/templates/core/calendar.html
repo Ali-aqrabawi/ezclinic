@@ -39,40 +39,41 @@
       <input id="patients-calendar-form-appointment" name="appointment" type="hidden">
     </form>
 
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Lastname</th>
-        <th class="col-md-3">Treatment done</th>
-        <th class="col-md-3">Treatment plan</th>
-        <th class="col-md-2 text-center">Appointment time</th>
-        <th>Cancel</th>
-        <th>View</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for person in persons %}
-        <tr id="person-{{ person.id }}">
-          <td>{{ person.name }}</td>
-          <td>{{ person.last_name }}</td>
-          <td>{{ person.treatment_done|linebreaks }}</td>
-          <td>{{ person.treatment_plan|linebreaks }}</td>
-          <td class="text-center">{{ person.time|time:"f A" }}</td>
-          <td>
-            <button data-person-id="{{ person.id }}" type="button" class="cancel-button btn btn-xs btn-link">
-              <span  class="glyphicon glyphicon-minus"></span>
-            </button>
-          </td>
-          <td><a  href="{% url 'view' person.id %}"><i  class="glyphicon glyphicon-list-alt"></i></a></td>
-        </tr>
-      {% empty %}
-        <tr>
-          <td colspan="6" class="text-center">No result</td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Lastname</th>
+                <th class="col-md-3">Treatment done</th>
+                <th class="col-md-3">Treatment plan</th>
+                <th class="col-md-2 text-center">Appointment time</th>
+                <th>Cancel</th>
+                <th>View</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for person in persons %}
+            <tr id="person-{{ person.id }}">
+                <td>{{ person.name }}</td>
+                <td>{{ person.last_name }}</td>
+                <td>{{ person.treatment_done|linebreaks }}</td>
+                <td>{{ person.treatment_plan|linebreaks }}</td>
+                <td class="text-center">{{ person.time|time:"f A" }}</td>
+                <td>
+                    <button data-person-id="{{ person.id }}" type="button" class="cancel-button btn btn-xs btn-link">
+                        <span  class="glyphicon glyphicon-minus"></span>
+                    </button>
+                </td>
+                <td><a  href="{% url 'view' person.id %}"><i  class="glyphicon glyphicon-list-alt"></i></a></td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center">No result</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
 
   {% if events %}
   <h2> {% if today %}
