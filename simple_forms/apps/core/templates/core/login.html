@@ -3,7 +3,7 @@
 {% block login_active %}active{% endblock %}
 {% load staticfiles %}
 {% load i18n %}
-<link href="{% static "css/patients.css" %}" rel="stylesheet">
+{% load widget_tweaks %}
 {% block body %}
 <div class="container-fluid">
 
@@ -11,38 +11,33 @@
         <div class="col-sm-4 col-sm-offset-4 col-xs-12 col-xs-offset-0">
             <div class="panel panel-default">
                 <div class="panel-body">
+                    <img class="img-responsive" style="margin-left: auto; margin-right:" src="{% static "img/logo2.jpg" %}" alt="Logo" />
 
                     <form class="form-horizontal" role="form" action="{% url 'login_user'%}" method="post" enctype="multipart/form-data">
-                         <img class="img-responsive" style="margin-left: auto; margin-right:" src="{% static "img/logo2.jpg" %}" alt="Logo" />
                         {% csrf_token %}
-                        <div class="form-group">
-                          <span id="login" > <h3>Login here</h3></span>
+                           <h3 class="text-center">Login here</h3>
                     {% if error_message %}
-                        <p id="errors" style="color:red;" ><strong>{{ error_message }}</strong></p>
+                        <p  class="alert alert-danger text-center"><strong>{{ error_message }}</strong></p>
                     {% endif %}
-					
-					
-					
-                            <label class="control-label col-sm-2" for="id_username">
-                                <span id="username_login">Username:</span>
-                            </label>
-                            <div class="col-sm-7">
-                                <input id="id_username_login" class="form-control"  maxlength="30" name="username" type="text">
-                            </div>
-                        </div>
-						
-						
-						
                         <div class="form-group">
-                            <label class="control-label col-sm-2" for="id_password">
-                                <span id="labl_password_login">Password:</span>
+                            <label class="control-label col-sm-4" for="{{ form.username.id_for_label }}">
+                                Username:
                             </label>
-                            <div class="col-sm-7">
-                                <input id="id_password_login" class="form-control"  maxlength="30" name="password" type="password">
+                            <div class="col-sm-8">
+                                {% render_field form.username class="form-control" placeholder="Username or email" %}
                             </div>
                         </div>
-						
-						
+
+                        <div class="form-group">
+                            <label class="control-label col-sm-4" for="{{ form.password.id_for_label }}">
+                                Password:
+                            </label>
+                            <div class="col-sm-8">
+                                {% render_field form.password class="form-control" placeholder="Password" %}
+                            </div>
+                        </div>
+
+
                         <div class="form-group">
                             <div class="col-sm-offset-4 col-sm-12">
                                 <button type="submit" class="btn btn-info">Submit</button>

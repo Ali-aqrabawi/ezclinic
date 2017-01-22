@@ -6,6 +6,7 @@ import logging
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
+from django.contrib.auth.forms import AuthenticationForm
 from django.http import JsonResponse
 from django.views.decorators.cache  import never_cache
 from django.shortcuts import render, get_object_or_404
@@ -180,22 +181,20 @@ def logout_user(request):
 
 
 def login_user(request):
+    form = AuthenticationForm(request.POST)
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
         if user is not None:
             if user.is_active:
-
                 login(request, user)
-                albums = Person.objects.filter(user=request.user)
-                # return render(request, 'core/home.html', {'persons': albums})
                 return redirect("home")
             else:
-                return render(request, 'core/login.html', {'error_message': 'Your account has been disabled'})
+                return render(request, 'core/login.html', {'error_message': 'Your account has been disabled', 'form': form})
         else:
-            return render(request, 'core/login.html', {'error_message': 'Invalid login'})
-    return render(request, 'core/login.html')
+            return render(request, 'core/login.html', {'error_message': 'Invalid login', 'form': form})
+    return render(request, 'core/login.html', {'form': form})
 
 #=================regetser a doctor======================
 
