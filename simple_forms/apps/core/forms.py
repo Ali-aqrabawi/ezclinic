@@ -1,4 +1,12 @@
+from __future__ import unicode_literals
+
 from django import forms
+from django.utils.translation import ugettext, ugettext_lazy as _
+from django.contrib.auth import (authenticate, get_user_model,
+                                 password_validation)
+from django.contrib.auth.forms import PasswordResetForm
+
+from djangae.utils import get_in_batches
 
 from . import models as m
 
@@ -70,3 +78,51 @@ class ReceiptForm(forms.ModelForm):
         model = m.Receipt
         fields = ['amount']
 
+
+class SetPasswordForm(forms.Form):
+    """
+    A form that lets a user change set their password without entering the old
+    password
+    """
+    new_password = forms.CharField(
+        label=_("New password"),
+        widget=forms.PasswordInput,
+        strip=False,
+        help_text=password_validation.password_validators_help_text_html(),
+    )
+
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
+        super(SetPasswordForm, self).__init__(*args, **kwargs)
+
+    def save(self, commit=True):
+        password = self.cleaned_data["new_password"]
+        self.user.set_password(password)
+        if commit:
+            self.user.save()
+        return self.user
+
+
+class AppEnginePasswordResetForm(PasswordResetForm):
+    email = forms.EmailField(label=_("Email"), max_length=254)
+
+    def get_users(self, email):
+        """Given an email, return matching user(s) who should receive a reset.
+
+        This allows subclasses to more easily customize the default policies
+        that prevent inactive users and users with unusable passwords from
+        resetting their password.
+        """
+        active_users = list(get_user_model()._default_manager.filter(
+            email__iexact=email, is_active=True))
+        # Mild data migration
+        # To use __iexact we have to resave models. Djangae do the rest
+        # https://djangae.readthedocs.io/en/latest/db_backend/#special-indexes
+        if len(active_users) == 0:
+            for u in get_in_batches(
+                    get_user_model()._default_manager.all(), 30):
+                u.save()
+            active_users = list(get_user_model()._default_manager.filter(
+                email__iexact=email, is_active=True))
+
+        return (u for u in active_users if u.has_usable_password())

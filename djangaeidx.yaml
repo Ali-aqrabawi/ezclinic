@@ -1,3 +1,5 @@
 core_person:
   last_name: [iexact]
   name: [iexact]
+core_user:
+  email: [iexact]
