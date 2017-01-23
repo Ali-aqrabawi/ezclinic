@@ -7,6 +7,7 @@ import logging
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.cache  import never_cache
 from django.shortcuts import render, get_object_or_404
@@ -20,88 +21,60 @@ from simple_forms.apps.core.models import Person, Picture, Diagcode, PersonForm,
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
 
-"""
-def home(request):
-    persons = Person.objects.all()
-    return render(request, 'core/home.html', { 'persons': persons })
-
-
-
-def home(request):
-    if not request.user.is_authenticated():
-        return render(request, 'core/login.html')
-    else:
-        persons = Person.objects.filter(user=request.user)
-
-
-
-    return render(request, 'core/home.html', {'persons': persons})
-
-
-"""
-
-
+@login_required
 def add_person(request):
-    if not request.user.is_authenticated():
-        return render(request, 'core/login.html')
-    else:
-        form = PersonForm(request.POST or None,
-                          request.FILES or None, instance=Person())
-        #form = PersonForm(request.POST or None,request.FILES )
-        print 'invalid'
-        if form.is_valid():
-            print 'valid'
-            persons = form.save()
+    form = PersonForm(request.POST or None,
+                        request.FILES or None, instance=Person())
+    #form = PersonForm(request.POST or None,request.FILES )
+    print 'invalid'
+    if form.is_valid():
+        print 'valid'
+        persons = form.save()
 
-            persons.user = request.user
-            # to captilized the first litter so we have consistancy when
-            # quering , this is a workarround since __iexact is not working
-            persons.name = persons.name.title()
-            persons.last_name = persons.last_name.title()
+        persons.user = request.user
+        # to captilized the first litter so we have consistancy when
+        # quering , this is a workarround since __iexact is not working
+        persons.name = persons.name.title()
+        persons.last_name = persons.last_name.title()
 
-            persons.save()
-            files = request.FILES.getlist('pictures')
-            if files:
-                for f in files:
-                    Picture.objects.create(person=persons, picture=f)
+        persons.save()
+        files = request.FILES.getlist('pictures')
+        if files:
+            for f in files:
+                Picture.objects.create(person=persons, picture=f)
 
-            diagcodes = request.POST.getlist('diagcode')
-            if diagcodes:
-                for diagcode in diagcodes:
-                    Diagcode.objects.create(person=persons, diagcode=diagcode)
+        diagcodes = request.POST.getlist('diagcode')
+        if diagcodes:
+            for diagcode in diagcodes:
+                Diagcode.objects.create(person=persons, diagcode=diagcode)
 
-            return redirect(reverse('view', args=(persons.id,)))
-        context = {
-            "form": form,
-        }
+        return redirect(reverse('view', args=(persons.id,)))
+    context = {
+        "form": form,
+    }
 
-        return render(request, 'core/add_person.html', context)
+    return render(request, 'core/add_person.html', context)
 
 
+@login_required
 def patients(request):
+    persons = Person.objects.filter(user=request.user)
 
-    if not request.user.is_authenticated():
+    page = request.GET.get('page', 1)
 
-        return render(request, 'core/login.html')
-    else:
+    paginator = Paginator(persons, 6)
+    # to avoid unsppuorted query by datastore
+    if not persons:
+        return render(request, 'core/home.html', {'persons': persons})
 
-        persons = Person.objects.filter(user=request.user)
+    try:
+        persons = paginator.page(page)
+    except PageNotAnInteger:
 
-        page = request.GET.get('page', 1)
+        persons = paginator.page(1)
+    except EmptyPage:
 
-        paginator = Paginator(persons, 6)
-        # to avoid unsppuorted query by datastore
-        if not persons:
-            return render(request, 'core/home.html', {'persons': persons})
-
-        try:
-            persons = paginator.page(page)
-        except PageNotAnInteger:
-
-            persons = paginator.page(1)
-        except EmptyPage:
-
-            persons = paginator.page(paginator.num_pages)
+        persons = paginator.page(paginator.num_pages)
 
     return render(request, 'core/home.html', {'persons': persons})
 
@@ -119,11 +92,8 @@ def add_person(request):
 #===========delete a prson==================
 
 
+@login_required
 def delete_person(request, person_id):
-    if not request.user.is_authenticated():
-
-        return render(request, 'core/login.html')
-
     if request.method == "GET":
 
         c = get_object_or_404(Person, pk=person_id)
@@ -143,11 +113,8 @@ def delete_person(request, person_id):
 '''
 
 
+@login_required
 def delete_person_image(request, person_id, image_id):
-    if not request.user.is_authenticated():
-
-        return render(request, 'core/login.html')
-
     if request.method == "GET":
         image = get_object_or_404(Picture, pk=image_id)
         image.delete()
@@ -156,11 +123,8 @@ def delete_person_image(request, person_id, image_id):
         return redirect(reverse('view', args=(person_id,)))
 
 
+@login_required
 def delete_person_diagcode(request, person_id, diagcode_id):
-    if not request.user.is_authenticated():
-
-        return render(request, 'core/login.html')
-
     if request.method == "GET":
         diagcode = get_object_or_404(Diagcode, pk=diagcode_id)
         diagcode.delete()
@@ -171,11 +135,7 @@ def delete_person_diagcode(request, person_id, diagcode_id):
 
 def logout_user(request):
     logout(request)
-    form = UserForm(request.POST or None)
-    context = {
-        "form": form,
-    }
-    return render(request, 'core/login.html', context)
+    return redirect(reverse("login_user"))
 
 #=====================doctor login======================
 
@@ -220,11 +180,8 @@ def register(request):
 #======================edit the patient details
 
 
+@login_required
 def edit(request, person_id):
-
-    if not request.user.is_authenticated():
-        return render(request, 'core/login.html')
-
     i = get_object_or_404(Person, pk=person_id)
     tab = request.GET.get('tab')
 
@@ -262,11 +219,8 @@ def edit(request, person_id):
 
 #======================= view
 
+@login_required
 def view(request, person_id):
-
-    if not request.user.is_authenticated():
-        return render(request, 'core/login.html')
-
     person = get_object_or_404(Person, pk=person_id)
     tab = request.GET.get('tab')
     pictures = person.pictures.all()
@@ -301,10 +255,8 @@ def foto(request, person_id):
     return render(request, 'core/home3.html', {'persons': persons})
 
 @never_cache
+@login_required
 def calendar(request):
-    if not request.user.is_authenticated():
-        return render(request, 'core/login.html')
-
     persons = None
 
     try:
@@ -336,14 +288,8 @@ def calendar(request):
 
 
 # search by name or last name
-
-
+@login_required
 def search(request):
-
-    if not request.user.is_authenticated():
-
-        return render(request, 'core/login.html')
-
     q = request.GET.get("q", None).title()
 
     q1 = request.GET.get("q1", None).title()
@@ -357,5 +303,4 @@ def search(request):
         persons = Person.objects.filter(Q(last_name=q1))
 
     return render(request, 'core/search.html', {'persons': persons})
-
 

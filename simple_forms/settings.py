@@ -30,6 +30,7 @@ ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'core.User'
 AUTHENTICATION_BACKENDS = ['simple_forms.apps.core.auth.EmailOrUsernameModelBackend']
+LOGIN_URL = 'login_user'
 
 
 GENERATE_SPECIAL_INDEXES_DURING_TESTING = True
