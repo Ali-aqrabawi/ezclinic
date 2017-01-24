@@ -1,15 +1,18 @@
 from __future__ import unicode_literals
+import logging
+
 #from django.contrib.auth.models import Permission, User
 from django.contrib.auth.models import Permission
 from django.db import models
 from django import forms
 from datetime import date
 from django.contrib.auth.models import AbstractUser
-import logging
+from django.utils.translation import ugettext_lazy as _
 
+from django_countries.fields import CountryField
 
 from djangae import fields, storage
-import logging
+
 STATUS_CHOICES = (
     ("Unmarried", ("Unmarried")),
     ("Married", ("Married")),
@@ -31,8 +34,9 @@ public_storage = storage.CloudStorage(
 
 
 class User(AbstractUser):
+    email = models.EmailField(_('email address'), unique=True, null=False, blank=False)
 
-    country = models.CharField(max_length=30)
+    country = CountryField()
     city = models.CharField(max_length=30)
     clinic = models.CharField(max_length=30)
 
@@ -117,8 +121,9 @@ class PersonForm(forms.ModelForm):
                                                   'placeholder': 'amount paid'}),
             'amount_left': forms.TextInput(attrs={'required': False, 'class': 'form-control',
                                                   'placeholder': 'amount left'}),
-            'note': forms.TextInput(attrs={'required': False, 'class': 'form-control',
-                                           'placeholder': 'Patient History'}),
+            'note': forms.Textarea(attrs={'required': False, 'class': 'form-control',
+                                           'placeholder': 'Patient History',
+                                           'rows': '3'}),
             'address': forms.TextInput(attrs={'required': False, 'class': 'form-control',
                                               'placeholder': 'Current address'}),
             'chief_complain': forms.TextInput(attrs={'required': False, 'class': 'form-control',

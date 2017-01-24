@@ -6,6 +6,7 @@ import logging
 
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
+from django.contrib.auth.forms import AuthenticationForm
 from django.http import JsonResponse
 from django.views.decorators.cache  import never_cache
 from django.shortcuts import render, get_object_or_404
@@ -180,34 +181,27 @@ def logout_user(request):
 
 
 def login_user(request):
+    form = AuthenticationForm(request.POST)
     if request.method == "POST":
         username = request.POST['username']
         password = request.POST['password']
         user = authenticate(username=username, password=password)
         if user is not None:
             if user.is_active:
-
                 login(request, user)
-                albums = Person.objects.filter(user=request.user)
-                # return render(request, 'core/home.html', {'persons': albums})
                 return redirect("home")
             else:
-                return render(request, 'core/login.html', {'error_message': 'Your account has been disabled'})
+                return render(request, 'core/login.html', {'error_message': 'Your account has been disabled', 'form': form})
         else:
-            return render(request, 'core/login.html', {'error_message': 'Invalid login'})
-    return render(request, 'core/login.html')
+            return render(request, 'core/login.html', {'error_message': 'Invalid login', 'form': form})
+    return render(request, 'core/login.html', {'form': form})
 
 #=================regetser a doctor======================
 
 
 def register(request):
     form = UserForm(request.POST or None)
-    context = {
-        "form": form,
-    }
-
     if form.is_valid():
-
         user = form.save(commit=False)
         username = form.cleaned_data['username']
 
@@ -216,26 +210,11 @@ def register(request):
         user.save()
 
         user = authenticate(username=username, password=password)
-        if user is not None:
-            if user.is_active:
-                login(request, user)
-                albums = Person.objects.filter(user=request.user)
-                return render(request, 'core/home.html', {'albums': albums})
+        if user is not None and user.is_active:
+            login(request, user)
+            return redirect(reverse('home'))
 
-    else:
-        error = str(form.errors.as_data())
-        logging.info('here')
-        logging.info(error)
-        if error:
-
-            if 'username already exists' in error:
-                erro = "Username is already in use"
-                
-                return render(request, 'core/register.html', {'error_message': erro})
-            if 'Enter a valid email address' in error:
-                erro = "Enter a valid email address"
-                return render(request, 'core/register.html', {'error_message': erro})
-
+    context = {"form": form}
     return render(request, 'core/register.html', context)
 
 #======================edit the patient details
@@ -270,7 +249,10 @@ def edit(request, person_id):
                     else:
                         pass
 
-        return redirect(reverse('view', args=(i.id,)))
+        url = reverse('view', args=(i.id,))
+        if tab:
+            url = "{}?tab={}".format(url, tab)
+        return redirect(url)
     else:
         form = PersonForm(instance=i)
 
@@ -345,7 +327,7 @@ def calendar(request):
 
     events = request.user.event_set.filter(date=date)
 
-    return render(request, 'core/home1.html',
+    return render(request, 'core/calendar.html',
             {'persons': persons,
              'events': events,
              'date': date,
@@ -374,6 +356,6 @@ def search(request):
     elif q1:
         persons = Person.objects.filter(Q(last_name=q1))
 
-    return render(request, 'core/home.html', {'persons': persons})
+    return render(request, 'core/search.html', {'persons': persons})
 
 

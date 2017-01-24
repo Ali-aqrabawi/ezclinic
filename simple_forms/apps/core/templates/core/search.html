@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load staticfiles %}
+{% block content %}
+
+
+
+  <h2>
+    Search results
+    <a href="{% url 'add_person' %}" class="btn btn-info pull-right">
+      <span class="glyphicon glyphicon-plus"></span> {% trans  "Add Pateints" %}
+    </a>
+  </h2>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Lastname</th>
+        <th class="col-md-3">Treatment done</th>
+        <th class="col-md-3">Treatment plan</th>
+        <th>Phone</th>
+        <th>View</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for person in persons %}
+      <tr id="person-{{ person.id }}">
+        <td>{{ person.name }}</td>
+        <td>{{ person.last_name }}</td>
+        <td>{{ person.treatment_done|linebreaks }}</td>
+        <td>{{ person.treatment_plan|linebreaks }}</td>
+        <td >{{ person.phone }}</td>
+        <td><a  href="{% url 'view' person.id %}"><i  class="glyphicon glyphicon-list-alt"></i></a></td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="6" class="text-center">No result</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% include "core/patients-list.html" with cancel=False %}
+
+
+    {% if persons.has_other_pages %}
+  <ul class="pagination">
+    {% if persons.has_previous %}
+      <li><a href="?page={{ persons.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in persons.paginator.page_range %}
+      {% if persons.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if persons.has_next %}
+      <li><a href="?page={{ persons.next_page_number }}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
+{% endif %}
+  <script src="{% static 'fancybox/source/jquery.fancybox.pack.js' %}" ></script>
+   <script type="text/javascript">
+       $(document).ready(function() {
+            $(".fancybox")
+                .attr('rel', 'group')
+                .fancybox({
+                    padding: 0,
+                    closeBtn : false,
+                    fitToView: false, // avoids scaling the image to fit in the viewport
+                    nextSpeed : 0, 
+
+                    prevSpeed : 0,
+                    beforeShow: function () {
+                        // set size to (fancybox) img
+                        // $(".fancybox-image").css({
+                        //     "width": 800,
+                        //     "height": 600
+                        // });
+                        // set size for parent container
+                        this.width = 700;
+                        this.height = 500; 
+                    },
+                    helpers: {
+                        overlay: {
+                          locked: false
+                        }
+                    }
+                });
+
+
+        });
+  </script>
+
+{% endblock %}

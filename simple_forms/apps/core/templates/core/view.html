@@ -5,6 +5,20 @@
 
 {% block content %}
 
+<style>
+    .pseudo-form-control {
+        background-color: #eee;
+        opacity: 1;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        padding: 6px 12px;
+    }
+    .pseudo-label {
+        font-weight: 700;
+    }
+</style>
+
     <h2>Patient Details </h2>
 
     {% csrf_token %}
@@ -81,17 +95,23 @@
             <div class="tab-pane {% if tab == 'tab2' %}active{% endif %}" id="tab2">
                 <div class="row">
                     <div class="col-sm-4" style="padding: 0;">
-                        <div class="col-sm-12 form-group">
-                            <label for="chief_complain" >{% trans "Chief Complain:" %}</label>
-                            <input class="form-control"  value='{{ person.chief_complain|default:"." }}' readonly>
+                        <div class="col-sm-12">
+                            <h5 class="pseudo-label">{% trans "Chief Complain:" %}</h5>
+                            <div class="pseudo-form-control">
+                            {{ person.chief_complain|default:"." }}
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <h5 class="pseudo-label">{% trans "Treatment Plan:" %}</h5>
+                            <div class="pseudo-form-control">
+                                {{ person.treatment_plan|default:"."|linebreaks }}
+                            </div>
                         </div>
                         <div class="col-sm-12 form-group">
-                            <label for="treatment_plan" >{% trans "Treatment Plan:" %}</label>
-                            <textarea rows="3" class="form-control"   readonly>{{ person.treatment_plan|default:"."  }}</textarea>
-                        </div>
-                         <div class="col-sm-12 form-group">
-                            <label for="note">{% trans "Medical History:" %}</label>
-                            <input class="form-control"  value='{{ person.note|default:"."  }}' readonly>
+                            <h5 class="pseudo-label">{% trans "Treatment Done:" %}</h5>
+                            <div class="pseudo-form-control">
+                                {{ person.treatment_done|default:"."|linebreaks }}
+                            </div>
                         </div>
                     </div>
                     <div class="col-sm-4" style="padding: 0;">
@@ -110,9 +130,11 @@
                                 {% endfor %} 
                            </div>
                         </div>
-                        <div class="col-sm-12 form-group">
-                            <label for="treatment_done">{% trans "Treatment Done:" %}</label>
-                            <textarea rows="3" class="form-control"  readonly>{{ person.treatment_done|default:"."  }} </textarea>
+                         <div class="col-sm-12 form-group">
+                            <h5 class="pseudo-label">{% trans "Medical History:" %}</h5>
+                            <div class="pseudo-form-control">
+                                {{ person.note|default:"."|linebreaks }}
+                            </div>
                         </div>
                     </div>                   
                 </div>              
@@ -391,17 +413,23 @@
             <div class="tab-pane" id="tab2">
                 <div class="row">
                     <div class="col-sm-4" style="padding: 0;">
-                        <div class="col-sm-12 form-group">
-                            <label for="chief_complain" >{% trans "Chief Complain:" %}</label>
-                            <input class="form-control"  value='{{ person.chief_complain|default:"." }}' readonly>
+                        <div class="col-sm-12">
+                            <h5 class="pseudo-label">{% trans "Chief Complain:" %}</h5>
+                            <div class="pseudo-form-control">
+                            {{ person.chief_complain|default:"." }}
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <h5 class="pseudo-label">{% trans "Treatment Plan:" %}</h5>
+                            <div class="pseudo-form-control">
+                                {{ person.treatment_plan|default:"."|linebreaks }}
+                            </div>
                         </div>
                         <div class="col-sm-12 form-group">
-                            <label for="treatment_plan" >{% trans "Treatment Plan:" %}</label>
-                            <textarea rows="3" class="form-control"   readonly>{{ person.treatment_plan|default:"."  }}</textarea>
-                        </div>
-                         <div class="col-sm-12 form-group">
-                            <label for="note">{% trans "Medical History:" %}</label>
-                            <input class="form-control"  value='{{ person.note|default:"."  }}' readonly>
+                            <h5 class="pseudo-label">{% trans "Treatment Done:" %}</h5>
+                            <div class="pseudo-form-control">
+                                {{ person.treatment_done|default:"."|linebreaks }}
+                            </div>
                         </div>
                     </div>
                     <div class="col-sm-4" style="padding: 0;">
@@ -420,9 +448,11 @@
                                 {% endfor %} 
                            </div>
                         </div>
-                        <div class="col-sm-12 form-group">
-                            <label for="treatment_done">{% trans "Treatment Done:" %}</label>
-                            <textarea rows="3" class="form-control"  readonly>{{ person.treatment_done|default:"."  }} </textarea>
+                         <div class="col-sm-12 form-group">
+                            <h5 class="pseudo-label">{% trans "Medical History:" %}</h5>
+                            <div class="pseudo-form-control">
+                                {{ person.note|default:"."|linebreaks }}
+                            </div>
                         </div>
                     </div>                   
                 </div>              
