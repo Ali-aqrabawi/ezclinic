@@ -107,10 +107,10 @@
                                 {{ person.treatment_plan|default:"."|linebreaks }}
                             </div>
                         </div>
-                         <div class="col-sm-12 form-group">
-                            <h5 class="pseudo-label">{% trans "Medical History:" %}</h5>
+                        <div class="col-sm-12 form-group">
+                            <h5 class="pseudo-label">{% trans "Treatment Done:" %}</h5>
                             <div class="pseudo-form-control">
-                                {{ person.note|default:"."  }}
+                                {{ person.treatment_done|default:"."|linebreaks }}
                             </div>
                         </div>
                     </div>
@@ -130,10 +130,10 @@
                                 {% endfor %} 
                            </div>
                         </div>
-                        <div class="col-sm-12 form-group">
-                            <h5 class="pseudo-label">{% trans "Treatment Done:" %}</h5>
+                         <div class="col-sm-12 form-group">
+                            <h5 class="pseudo-label">{% trans "Medical History:" %}</h5>
                             <div class="pseudo-form-control">
-                                {{ person.treatment_done|default:"."|linebreaks }}
+                                {{ person.note|default:"."|linebreaks }}
                             </div>
                         </div>
                     </div>                   
@@ -425,10 +425,10 @@
                                 {{ person.treatment_plan|default:"."|linebreaks }}
                             </div>
                         </div>
-                         <div class="col-sm-12 form-group">
-                            <h5 class="pseudo-label">{% trans "Medical History:" %}</h5>
+                        <div class="col-sm-12 form-group">
+                            <h5 class="pseudo-label">{% trans "Treatment Done:" %}</h5>
                             <div class="pseudo-form-control">
-                                {{ person.note|default:"."  }}
+                                {{ person.treatment_done|default:"."|linebreaks }}
                             </div>
                         </div>
                     </div>
@@ -448,10 +448,10 @@
                                 {% endfor %} 
                            </div>
                         </div>
-                        <div class="col-sm-12 form-group">
-                            <h5 class="pseudo-label">{% trans "Treatment Done:" %}</h5>
+                         <div class="col-sm-12 form-group">
+                            <h5 class="pseudo-label">{% trans "Medical History:" %}</h5>
                             <div class="pseudo-form-control">
-                                {{ person.treatment_done|default:"."|linebreaks }}
+                                {{ person.note|default:"."|linebreaks }}
                             </div>
                         </div>
                     </div>                   
