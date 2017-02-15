@@ -29,7 +29,7 @@ def add_person(request):
     print 'invalid'
     if form.is_valid():
         print 'valid'
-        persons = form.save()
+        persons = form.save(commit=False)
 
         persons.user = request.user
         # to captilized the first litter so we have consistancy when
@@ -192,7 +192,6 @@ def edit(request, person_id):
           # update main BL
             form.save()
 
-            i.save()
             files = request.FILES.getlist('pictures')
             if files:
                 for f in files:

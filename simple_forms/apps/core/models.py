@@ -1,17 +1,18 @@
 from __future__ import unicode_literals
 import logging
+import json
 
 #from django.contrib.auth.models import Permission, User
+from datetime import date
+from django import forms
+from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import Permission
 from django.db import models
-from django import forms
-from datetime import date
-from django.contrib.auth.models import AbstractUser
 from django.utils.translation import ugettext_lazy as _
 
-from django_countries.fields import CountryField
-
 from djangae import fields, storage
+from djangae.db import transaction
+from django_countries.fields import CountryField
 
 STATUS_CHOICES = (
     ("Unmarried", ("Unmarried")),
@@ -59,12 +60,24 @@ class Person(models.Model):
     chief_complain = models.CharField(max_length=256, null=True, blank=True)
     treatment_plan = models.CharField(max_length=256, null=True, blank=True)
     treatment_done = models.CharField(max_length=256, null=True, blank=True)
+
     dental_chart_type = models.CharField(
             max_length=20, choices=DENTAL_CHART_CHOICES, default=("Permanent"))
     dental_chart = models.CharField(max_length=1024, null=True, blank=True)
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        super(Person, self).save(*args, **kwargs)
+        try:
+            dc = DentalChart.objects.get(person_id=self.pk)
+        except DentalChart.DoesNotExist:
+            dc = DentalChart(person_id=self.pk)
+        dc.dental_chart_type = self.dental_chart_type
+        dc.dental_chart = self.dental_chart
+        dc.save()
+
 
 
 class Picture(models.Model):
@@ -91,7 +104,35 @@ class Diagcode(models.Model):
         return self.diagcode
 
 class DentalChart(models.Model):
+    COLORS = {"x": "extraction",
+              "red": "missing",
+              "yellow": "filling",
+              "green": "rct"}
+
+
     person = models.ForeignKey(Person, related_name='dental_charts')
+    dental_chart_type = models.CharField(
+            max_length=20, choices=DENTAL_CHART_CHOICES, default=("Permanent"))
+    dental_chart = models.CharField(max_length=1024, null=True, blank=True)
+
+    extraction = models.IntegerField(default=0)
+    missing = models.IntegerField(default=0)
+    filling = models.IntegerField(default=0)
+    rct = models.IntegerField(default=0)
+
+    def save(self, *args, **kwargs):
+        data = json.loads(self.dental_chart)
+        self.extraction = 0
+        self.missing = 0
+        self.filling = 0
+        self.rct = 0
+
+        for value in data.values():
+            if value in self.COLORS:
+                field = self.COLORS[value]
+                setattr(self, field, 1 + getattr(self, field))
+        super(DentalChart, self).save(*args, **kwargs)
+
 
 class Event(models.Model):
     user = models.ForeignKey(User)
@@ -107,9 +148,10 @@ class PersonForm(forms.ModelForm):
 
     class Meta:
         model = Person
-        fields = ['name', 'last_name', 'age', 'martial_status', 'mobile', 'sex', 'dental_chart_type',
-                  'amount_paid', 'amount_left', 'note', 'address', 'date', 'time', 'treatment_done', 'treatment_plan', 'chief_complain',
-                  'dental_chart']
+        fields = ['name', 'last_name', 'age', 'martial_status', 'mobile', 'sex',
+                  'amount_paid', 'amount_left', 'note', 'address', 'date', 'time',
+                  'treatment_done', 'treatment_plan', 'chief_complain',
+                   'dental_chart_type', 'dental_chart']
         widgets = {
             'name': forms.TextInput(attrs={'required': True, 'class': 'form-control',
                                            'placeholder': 'name'}),
