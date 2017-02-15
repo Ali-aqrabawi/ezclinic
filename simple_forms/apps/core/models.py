@@ -141,6 +141,14 @@ class Event(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+class Appointment(models.Model):
+    user = models.ForeignKey(User)
+    person = models.ForeignKey(Person)
+    date = models.DateField(default=date.today, blank=True)
+    time = models.TimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
 class PersonForm(forms.ModelForm):
     pictures = forms.FileField(widget=forms.ClearableFileInput(
         attrs={'required': False, 'multiple': True, 'class': 'form-control'}), required=False)
@@ -194,6 +202,8 @@ class EventForm(forms.ModelForm):
         model = Event
         fields = ['text', 'date']
 
-class AppointmentForm(forms.Form):
-    date = forms.DateField()
+class AppointmentForm(forms.ModelForm):
     time = forms.TimeField(input_formats=["%I:%M %p"], required=False)
+    class Meta:
+        fields = ["date", "time"]
+        model = Appointment

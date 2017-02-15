@@ -52,19 +52,19 @@
             </tr>
         </thead>
         <tbody>
-            {% for person in persons %}
-            <tr id="person-{{ person.id }}">
-                <td>{{ person.name }}</td>
-                <td>{{ person.last_name }}</td>
-                <td>{{ person.treatment_done|linebreaks }}</td>
-                <td>{{ person.treatment_plan|linebreaks }}</td>
-                <td class="text-center">{{ person.time|time:"f A" }}</td>
+            {% for appointment in appointments %}
+            <tr id="appointement-{{ appointement.id }}">
+                <td>{{ appointment.person.name }}</td>
+                <td>{{ appointment.person.last_name }}</td>
+                <td>{{ appointment.person.treatment_done|linebreaks }}</td>
+                <td>{{ appointment.person.treatment_plan|linebreaks }}</td>
+                <td class="text-center">{{ appointment.time|time:"f A" }}</td>
                 <td>
-                    <button data-person-id="{{ person.id }}" type="button" class="cancel-button btn btn-xs btn-link">
+                    <button data-person-id="{{ appointment.id }}" type="button" class="cancel-button btn btn-xs btn-link">
                         <span  class="glyphicon glyphicon-minus"></span>
                     </button>
                 </td>
-                <td><a  href="{% url 'view' person.id %}"><i  class="glyphicon glyphicon-list-alt"></i></a></td>
+                <td><a  href="{% url 'view' appointment.person_id %}"><i  class="glyphicon glyphicon-list-alt"></i></a></td>
             </tr>
             {% empty %}
             <tr>
@@ -189,16 +189,16 @@
   <script>
     var hidden_persons = JSON.parse(localStorage["hidden_persons"] || "[]");
     for (var i = 0; i < hidden_persons.length; i++) {
-      $("#person-" + hidden_persons[i]).hide();
+      $("#appointement-" + hidden_persons[i]).hide();
     }
 
     $(".cancel-button").click(function () {
-      var user_id = $(this).data("person-id");
+      var user_id = $(this).data("appointement-id");
       bootbox.confirm("Are you sure you want to cancel an appointment?", function(confirmed) {
         if (confirmed) {
           hidden_persons.push(user_id);
           localStorage["hidden_persons"] = JSON.stringify(hidden_persons);
-          $("#person-" + user_id).hide();
+          $("#appointement-" + user_id).hide();
         }
       });
     });

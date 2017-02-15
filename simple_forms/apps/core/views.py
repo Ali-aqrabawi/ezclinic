@@ -16,7 +16,7 @@ from django.shortcuts import render, redirect
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 
-from simple_forms.apps.core.models import Person, Picture, Diagcode, PersonForm, UserForm, User, EventForm, AppointmentForm
+from simple_forms.apps.core.models import Person, Picture, Diagcode, PersonForm, UserForm, User, EventForm, AppointmentForm, Appointment
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
@@ -237,9 +237,10 @@ def view(request, person_id):
 
     appointment_form = AppointmentForm(request.POST)
     if appointment_form.is_valid():
-        person.date = appointment_form.cleaned_data["date"]
-        person.time = appointment_form.cleaned_data["time"]
-        person.save()
+        appointment = appointment_form.save(commit=False)
+        appointment.user = request.user
+        appointment.person = person
+        appointment.save()
 
     return render(request, 'core/view.html', {'person': person, 'pictures_tuple': pictures_tuple,
                                               'last_picture': last_picture, 'tab': tab,
@@ -256,10 +257,7 @@ def foto(request, person_id):
 @never_cache
 @login_required
 def calendar(request):
-    persons = None
-
     try:
-        logging.info(request.GET.get("appointment", "").strip())
         date = datetime.datetime.strptime(request.GET.get("appointment", "").strip(), "%Y-%m-%d").date()
     except ValueError as e:
         date = datetime.date.today()
@@ -273,13 +271,15 @@ def calendar(request):
         return redirect(request.get_full_path())
 
     # Simulate ORDER BY with NULLS LAST
-    persons = list(request.user.person_set.filter(date=date))
-    persons.sort(key=lambda p: p.time or datetime.time(23, 59, 59))
+    # persons = list(request.user.person_set.filter(date=date))
+    # persons.sort(key=lambda p: p.time or datetime.time(23, 59, 59))
+    appointments = list(Appointment.objects.filter(date=date, user=request.user).prefetch_related())
+    appointments.sort(key=lambda p: p.time or datetime.time(23, 59, 59))
 
     events = request.user.event_set.filter(date=date)
 
     return render(request, 'core/calendar.html',
-            {'persons': persons,
+            {'appointments': appointments,
              'events': events,
              'date': date,
              'today': date == datetime.date.today(),
