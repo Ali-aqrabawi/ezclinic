@@ -65,7 +65,7 @@ class Person(models.Model):
 
     dental_chart_type = models.CharField(
             max_length=20, choices=DENTAL_CHART_CHOICES, default=("Permanent"))
-    dental_chart = models.CharField(max_length=1024, null=True, blank=True)
+    dental_chart = models.CharField(max_length=1024, default="{}")
 
     def __str__(self):
         return self.name
@@ -78,8 +78,9 @@ class Person(models.Model):
                 delta = self.amount_paid - old_state.amount_paid
             else:
                 delta = self.amount_paid
-            Receipt.objects.create(user=self.user, person=self, amount=delta)
             super(Person, self).save(*args, **kwargs)
+
+        Receipt.objects.create(user=self.user, person=self, amount=delta)
 
         try:
             dc = DentalChart.objects.get(person_id=self.pk)
@@ -130,7 +131,7 @@ class DentalChart(models.Model):
     person = models.ForeignKey(Person, related_name='dental_charts')
     dental_chart_type = models.CharField(
             max_length=20, choices=DENTAL_CHART_CHOICES, default=("Permanent"))
-    dental_chart = models.CharField(max_length=1024, null=True, blank=True)
+    dental_chart = models.CharField(max_length=1024, default="{}")
 
     extraction = models.IntegerField(default=0)
     missing = models.IntegerField(default=0)

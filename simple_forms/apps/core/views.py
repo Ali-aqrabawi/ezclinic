@@ -1,6 +1,9 @@
 # coding: utf-8
 
+from collections import OrderedDict
+from itertools import groupby
 import datetime
+import json
 import logging
 
 from django.contrib.auth import authenticate, login, logout
@@ -13,7 +16,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.cache  import never_cache
 
-from .models import (User, Person, Picture, Diagcode, Appointment,
+from .models import (User, Person, Picture, Diagcode, Appointment, DentalChart,
                      UserForm, PersonForm, EventForm, AppointmentForm)
 
 IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
@@ -21,29 +24,29 @@ IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
 @login_required
 def add_person(request):
     form = PersonForm(request.POST or None,
-                        request.FILES or None, instance=Person())
+                        request.FILES or None)
     #form = PersonForm(request.POST or None,request.FILES )
     print 'invalid'
     if form.is_valid():
         print 'valid'
-        persons = form.save(commit=False)
+        person = form.save(commit=False)
 
-        persons.user = request.user
-        # to captilized the first litter so we have consistancy when
+        person.user = request.user
+        # Capitilize first letter so we have consistancy when
         # quering , this is a workarround since __iexact is not working
-        persons.name = persons.name.title()
-        persons.last_name = persons.last_name.title()
+        person.name = person.name.title()
+        person.last_name = person.last_name.title()
 
-        persons.save()
+        person.save()
         files = request.FILES.getlist('pictures')
         if files:
             for f in files:
-                Picture.objects.create(person=persons, picture=f)
+                Picture.objects.create(person=person, picture=f)
 
         diagcodes = request.POST.getlist('diagcode')
         if diagcodes:
             for diagcode in diagcodes:
-                Diagcode.objects.create(person=persons, diagcode=diagcode)
+                Diagcode.objects.create(person=person, diagcode=diagcode)
 
         appointment_form = AppointmentForm(request.POST)
         if appointment_form.is_valid():
@@ -52,7 +55,7 @@ def add_person(request):
             appointment.person = person
             appointment.save()
 
-        return redirect(reverse('view', args=(persons.id,)))
+        return redirect(reverse('view', args=(person.id,)))
     context = {
         "form": form,
     }
@@ -314,3 +317,44 @@ def search(request):
 
     return render(request, 'core/search.html', {'persons': persons})
 
+@login_required
+def charts(request):
+    data = {}
+    persons = list(request.user.person_set.all())
+    p_ids = list(person.id for person in persons)
+    data["count"] = len(persons)
+
+    ages = {0: 0, 1:0, 2: 0, 3: 0, 4:0}
+    for key, group in groupby(sorted(person.age for person in persons),
+                              key=lambda age: age // 10):
+        if key > 4:
+            ages[4] += len(list(group))
+        else:
+            ages[key] = len(list(group))
+    data["ages"] = json.dumps({"labels": ["<10", "10—19",
+                                          "20—29", "30—40", "40"],
+                               "series": [ages[k] for k in [0, 1, 2, 3, 4]]})
+
+    d_c = {"extraction": 0, "missing": 0, "filling": 0, "rct": 0}
+    dental_charts = (DentalChart.objects
+                     .filter(person__in=p_ids)
+                     .values_list("missing", "filling", "rct"))
+
+    for m, f, r in dental_charts:
+        d_c["missing"] += m
+        d_c["filling"] += f
+        d_c["rct"] += r
+
+    data["dental_charts"] = json.dumps({
+        "series": [{"name": k.title(), "value": d_c[k],
+                    "className": "charts-dental-chart__{}".format(k)}
+                   for k in ["missing", "filling", "rct"]]})
+
+    dates = sorted(request.user.appointment_set.values_list("date", flat=True))
+    dates = [(date.strftime("%Y-%d-%m"), len(list(appointments)))
+             for date, appointments
+             in groupby(dates)]
+    data["appointments"] = json.dumps({"labels": [date for date, _ in dates],
+                                       "series": [[count for _, count in dates]]})
+
+    return render(request, 'core/charts.html', data)

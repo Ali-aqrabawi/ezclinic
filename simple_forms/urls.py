@@ -22,7 +22,8 @@ urlpatterns = [
 	url(r'^(?P<person_id>\d+)/view/$', views.view, name='view'),
     url(r'^(?P<person_id>\d+)/foto/$', views.foto, name='foto'),
     url(r'^search/$', views.search, name='search'),
-	url(r'^_ah/', include('djangae.urls'))
+	url(r'^_ah/', include('djangae.urls')),
+    url(r'^charts/$', views.charts, name='charts'),
 ]
 
 if settings.DEBUG:
