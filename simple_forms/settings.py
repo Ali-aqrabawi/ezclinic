@@ -38,18 +38,14 @@ GENERATE_SPECIAL_INDEXES_DURING_TESTING = True
 # Application definition
 
 INSTALLED_APPS = [
-		
-	'djangae',
-	'djangae.contrib.security',
+    'djangae',
+    'djangae.contrib.security',
     'django.contrib.auth',
-    'django.contrib.contenttypes',	
+    'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-	
-	
-	'djangae.contrib.contenttypes',
-
+    'djangae.contrib.contenttypes',
     'widget_tweaks',
     'django.contrib.admin',
     'simple_forms.apps.core',
@@ -57,7 +53,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
-	'djangae.contrib.security.middleware.AppEngineSecurityMiddleware',
+    'djangae.contrib.security.middleware.AppEngineSecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -65,8 +61,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-	'djangae.contrib.security.middleware.AppEngineSecurityMiddleware',
-	
+    'djangae.contrib.security.middleware.AppEngineSecurityMiddleware',
 ]
 
 ROOT_URLCONF = 'simple_forms.urls'

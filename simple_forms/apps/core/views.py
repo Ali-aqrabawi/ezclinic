@@ -3,22 +3,19 @@
 import datetime
 import logging
 
-
-from django.contrib.auth import authenticate, login
-from django.contrib.auth import logout
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
-from django.views.decorators.cache  import never_cache
-from django.shortcuts import render, get_object_or_404
-from django.db.models import Q
-from django.shortcuts import render, redirect
-from django.core.urlresolvers import reverse
-from django.http import HttpResponse
-
-from simple_forms.apps.core.models import Person, Picture, Diagcode, PersonForm, UserForm, User, EventForm, AppointmentForm, Appointment
-
+from django.contrib.auth.forms import AuthenticationForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.urlresolvers import reverse
+from django.db.models import Q
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.decorators.cache  import never_cache
+
+from .models import (User, Person, Picture, Diagcode, Appointment,
+                     UserForm, PersonForm, EventForm, AppointmentForm)
+
 IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
 
 @login_required
@@ -47,6 +44,13 @@ def add_person(request):
         if diagcodes:
             for diagcode in diagcodes:
                 Diagcode.objects.create(person=persons, diagcode=diagcode)
+
+        appointment_form = AppointmentForm(request.POST)
+        if appointment_form.is_valid():
+            appointment = appointment_form.save(commit=False)
+            appointment.user = request.user
+            appointment.person = person
+            appointment.save()
 
         return redirect(reverse('view', args=(persons.id,)))
     context = {
@@ -182,11 +186,11 @@ def register(request):
 
 @login_required
 def edit(request, person_id):
-    i = get_object_or_404(Person, pk=person_id)
+    person = get_object_or_404(Person, pk=person_id)
     tab = request.GET.get('tab')
 
     if request.method == "POST":
-        form = PersonForm(request.POST, request.FILES or None, instance=i)
+        form = PersonForm(request.POST, request.FILES or None, instance=person)
 
         if form.is_valid():
           # update main BL
@@ -195,24 +199,31 @@ def edit(request, person_id):
             files = request.FILES.getlist('pictures')
             if files:
                 for f in files:
-                    Picture.objects.create(person=i, picture=f)
+                    Picture.objects.create(person=person, picture=f)
 
             diagcodes = request.POST.getlist('diagcode')
             if diagcodes:
                 for diagcode in diagcodes:
-                    if not Diagcode.objects.filter(person=i, diagcode=diagcode):
-                        Diagcode.objects.create(person=i, diagcode=diagcode)
+                    if not Diagcode.objects.filter(person=person, diagcode=diagcode):
+                        Diagcode.objects.create(person=person, diagcode=diagcode)
                     else:
                         pass
 
-        url = reverse('view', args=(i.id,))
+            appointment_form = AppointmentForm(request.POST)
+            if appointment_form.is_valid():
+                appointment = appointment_form.save(commit=False)
+                appointment.user = request.user
+                appointment.person = person
+                appointment.save()
+
+        url = reverse('view', args=(person.id,))
         if tab:
             url = "{}?tab={}".format(url, tab)
         return redirect(url)
     else:
-        form = PersonForm(instance=i)
+        form = PersonForm(instance=person)
 
-    return render(request, 'core/edit.html', {'i': i, 'form': form, 'mode': 'edit', 'person': i, 'tab': tab})
+    return render(request, 'core/edit.html', {'form': form, 'mode': 'edit', 'person': person, 'tab': tab})
 #=======================
 
 

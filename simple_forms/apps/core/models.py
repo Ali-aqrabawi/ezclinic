@@ -51,8 +51,10 @@ class Person(models.Model):
         max_length=20, choices=STATUS_CHOICES, default=("Single"))
     sex = models.CharField( max_length=20, choices=SEX_CHOICES, default=("Male"))
     mobile = models.CharField(max_length=26, default=0011)
-    amount_paid = models.CharField("money paid", max_length=256, null=True,blank=True)
-    amount_left = models.CharField("total price", max_length=256, null=True, blank=True)
+    amount_paid = models.DecimalField("money paid", max_digits=10,
+                                      decimal_places=2, null=False, default=0)
+    amount_left = models.DecimalField("total price", max_digits=10,
+                                      decimal_places=2, null=False, default=0)
     note = models.CharField(max_length=256, null=True, blank=True)
     address = models.CharField(max_length=256, null=True, blank=True)
     date = models.DateField(("Date"), default=date.today, blank=True)
@@ -69,7 +71,16 @@ class Person(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        super(Person, self).save(*args, **kwargs)
+        with transaction.atomic(xg=True):
+            delta = 0
+            if self.pk:
+                old_state = Person.objects.get(pk=self.pk)
+                delta = self.amount_paid - old_state.amount_paid
+            else:
+                delta = self.amount_paid
+            Receipt.objects.create(user=self.user, person=self, amount=delta)
+            super(Person, self).save(*args, **kwargs)
+
         try:
             dc = DentalChart.objects.get(person_id=self.pk)
         except DentalChart.DoesNotExist:
@@ -78,6 +89,12 @@ class Person(models.Model):
         dc.dental_chart = self.dental_chart
         dc.save()
 
+
+class Receipt(models.Model):
+    user = models.ForeignKey(User)
+    person = models.ForeignKey(Person)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
 
 
 class Picture(models.Model):
@@ -141,6 +158,7 @@ class Event(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+
 class Appointment(models.Model):
     user = models.ForeignKey(User)
     person = models.ForeignKey(Person)
@@ -148,6 +166,7 @@ class Appointment(models.Model):
     time = models.TimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
 
 class PersonForm(forms.ModelForm):
     pictures = forms.FileField(widget=forms.ClearableFileInput(
