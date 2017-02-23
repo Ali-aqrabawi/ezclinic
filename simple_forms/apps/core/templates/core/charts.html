@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static "chartist/chartist.min.css" %}"></link>
+<style>
+  .charts-dental-chart__missing {fill: #E00000;}
+  .charts-dental-chart__filling {fill: #FF8400;}
+  .charts-dental-chart__rct {fill: #C0FFE0;}
+
+</style>
+
+<section>
+  <h3>Patients count</h3>
+  <div>{{ count }}</div>
+</section>
+<div class="row">
+<section class="col-sm-6">
+  <h3>Dental chart stats</h3>
+  <div class="charts-dental-chart"></div>
+</section>
+<section class="col-sm-6">
+  <h3>Patients age</h3>
+  <div class="charts-ages"></div>
+</section>
+</div>
+<section>
+  <h3>Next appointments</h3>
+  <div class="charts-appointments"></div>
+  <p>Appointments next week: {{ appointment_next_week }}</p>
+  <p>Appointments the week up after next: {{ appointment_next_week2 }}</p>
+</section>
+<section>
+  <h3>Revenue</h3>
+  <div class="charts-revenue"></div>
+</section>
+<script src="{% static "chartist/chartist.min.js" %}"></script>
+<script>
+  new Chartist.Pie(".charts-ages", {{ ages|safe }}, {ignoreEmptyValues: true} );
+  new Chartist.Pie(".charts-dental-chart", {{ dental_charts|safe }}, {ignoreEmptyValues: true});
+  new Chartist.Bar(".charts-appointments", {{ appointments|safe }});
+  new Chartist.Line(".charts-revenue", {{ receipts|safe }});
+</script>
+{% endblock %}

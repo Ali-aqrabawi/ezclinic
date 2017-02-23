@@ -1,7 +1,8 @@
 # coding: utf-8
 
 from collections import OrderedDict
-from itertools import groupby
+from itertools import groupby, takewhile
+from calendar import monthrange
 import datetime
 import json
 import logging
@@ -317,6 +318,16 @@ def search(request):
 
     return render(request, 'core/search.html', {'persons': persons})
 
+
+def for_charts(data, wrap_series=True):
+    """Make data for charts"""
+    labels, series = zip(*data)
+    if wrap_series:
+        series = [series]
+    return json.dumps({"labels": labels,
+                       "series": series})
+
+
 @login_required
 def charts(request):
     data = {}
@@ -324,16 +335,16 @@ def charts(request):
     p_ids = list(person.id for person in persons)
     data["count"] = len(persons)
 
-    ages = {0: 0, 1:0, 2: 0, 3: 0, 4:0}
+    ages = [0] * 5
     for key, group in groupby(sorted(person.age for person in persons),
-                              key=lambda age: age // 10):
+                              lambda age: age // 10):
         if key > 4:
             ages[4] += len(list(group))
         else:
             ages[key] = len(list(group))
-    data["ages"] = json.dumps({"labels": ["<10", "10—19",
-                                          "20—29", "30—40", "40"],
-                               "series": [ages[k] for k in [0, 1, 2, 3, 4]]})
+    data["ages"] = for_charts(zip(["<10", "10—19", "20—29", "30—40", "40"],
+                                  ages), False)
+
 
     d_c = {"extraction": 0, "missing": 0, "filling": 0, "rct": 0}
     dental_charts = (DentalChart.objects
@@ -350,11 +361,39 @@ def charts(request):
                     "className": "charts-dental-chart__{}".format(k)}
                    for k in ["missing", "filling", "rct"]]})
 
-    dates = sorted(request.user.appointment_set.values_list("date", flat=True))
-    dates = [(date.strftime("%Y-%d-%m"), len(list(appointments)))
-             for date, appointments
-             in groupby(dates)]
-    data["appointments"] = json.dumps({"labels": [date for date, _ in dates],
-                                       "series": [[count for _, count in dates]]})
+    today = datetime.date.today()
+    days = monthrange(today.year, today.month)[1]
+    end_of_month = today.replace(day=days)
+    all_dates = (request.user.appointment_set
+                 .order_by('date')
+                 .values_list("date", flat=True))
+    dates = [(key, len(list(appointments)))
+             for key, appointments
+             in groupby(takewhile(lambda d: d < end_of_month, all_dates),
+                        lambda d: d.strftime("%b %Y"))]
+    data["appointments"] = for_charts(dates)
+
+    next_sat = (today + datetime.timedelta(days=(5 - today.weekday()) % 7))
+    next_sat2 = next_sat + datetime.timedelta(weeks=1)
+    next_sat3 = next_sat + datetime.timedelta(weeks=2)
+    data["appointment_next_week"] = len([d for d in all_dates
+                                         if next_sat <= d < next_sat2])
+    data["appointment_next_week2"] = len([d for d in all_dates
+                                          if next_sat2 <= d < next_sat3])
+
+    receipts = sorted(request.user.receipt_set.all(),
+                      key=lambda r: r.created_at)
+    month_receipts = groupby(receipts,
+                             lambda r: r.created_at.strftime("%b %Y"))
+    month_receipts = [(month, sum(r.amount for r in group))
+                      for month, group in month_receipts]
+    # I wish I could write it beautiful with reduce
+    cumulative_reciepts = []
+    s = 0
+    for month, amount in month_receipts:
+        s += amount
+        # Using floats for chart purposes is safe
+        cumulative_reciepts.append((month, float(s)))
+    data["receipts"] = for_charts(cumulative_reciepts)
 
     return render(request, 'core/charts.html', data)
