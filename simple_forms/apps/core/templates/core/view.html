@@ -71,15 +71,15 @@
                     </div>
                     <div class="col-sm-2 form-group">
                       <label for="amount paid">{% trans "Money Paid:" %}</label>
-                        <input class="form-control"  value='{{ person.amount_paid|default:"."  }}' readonly>
+                      <button type="button" class="col-sm-12 btn btn-info btn-sm" data-toggle="modal" data-target="#receipt-modal">
+                        {{ person.amount_paid }}
+                      </button>
                     </div>
                     <div class="col-sm-2 form-group">
                         <label for="amount left">{% trans "Total Price:" %}</label>
-                        <input class="form-control"  value='{{ person.amount_left|default:"."  }}' readonly>
+                        <input class="form-control"  value='{{ person.amount_left|default:"0"  }}' readonly>
                     </div>
-                    
                 </div>
-                
                 <div class="row">
                     <div class="col-sm-4 form-group">
                         <label for="mobile">{% trans "Mobile Number:" %}</label>
@@ -388,12 +388,14 @@
                         <input class="form-control"  value='{{ person.martial_status|default:"."  }}' readonly>
                     </div>
                     <div class="col-sm-2 form-group">
-                        <label for="amount paid">{% trans "Money paid:" %}</label>
-                        <input class="form-control"  value='{{ person.amount_paid|default:"."  }}' readonly>
+                      <label for="amount paid">{% trans "Money paid:" %}</label>
+                      <button type="button" class="col-sm-12 btn btn-info btn-sm" data-toggle="modal" data-target="#receipt-modal">
+                        {{ person.amount_paid }}
+                      </button>
                     </div>
                     <div class="col-sm-2 form-group">
                         <label for="amount left">{% trans "Total price:" %}</label>
-                        <input class="form-control"  value='{{ person.amount_left|default:"."  }}' readonly>
+                        <input class="form-control"  value='{{ person.amount_left|default:"0"  }}' readonly>
                     </div>
                     
                 </div>
@@ -727,7 +729,32 @@
     <script>
       $("#{{ appointment_form.time.id_for_label }}").timepicker();
     </script> 
-  
+
+    <div id="receipt-modal" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">{% trans "Add receipt" %}</h4>
+          </div>
+          <form method="POST" action="{% url "receipt" person.pk %}">
+            {% csrf_token %}
+            <div class="modal-body">
+              <div class="form-group col-sm-6">
+                <label for="{{ receipt_form.amount.id_for_label }}">{% trans "Amount" %}</label>
+                <div class="input-group date">
+                  {% render_field receipt_form.amount  class="form-control" %}
+                </div>
+              </div>
+            </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save changes</button>
+          </div>
+        </form>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
     <script src="{% static 'fancybox/source/jquery.fancybox.pack.js' %}" ></script>
     <script type="text/javascript">
       $(document).ready(function() {
