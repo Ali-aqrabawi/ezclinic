@@ -6,31 +6,55 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
+<style>
+  .charts-dental-chart {
+    border-bottom: 1px solid #888;
+    border-right: 1px solid #888;
+  }
+  .charts-ages {
+    border-bottom: 1px solid #888;
+  }
+  .charts-dental-chart--container {
+    width: 100%;
+  }
+  .charts-ages--container {
+    width: 100%;
+  }
+  .charts-appointments {
+    padding-top: 4rem;
+  }
+</style>
+
 <section>
-  <h3>Patients count — {{ count }}</h3>
-</section>
-<div class="row">
-<section class="col-sm-6">
-  <div class="charts-dental-chart"></div>
-</section>
-<section class="col-sm-6">
-  <div class="charts-ages"></div>
-</section>
-</div>
-<section>
-  <h3>Next appointments</h3>
-  <div class="charts-appointments"></div>
+  <h3>Stats</h3>
+  <p>Patients count — {{ count }}</p>
   <p>Appointments next week: {{ appointment_next_week }}</p>
   <p>Appointments the week up after next: {{ appointment_next_week2 }}</p>
 </section>
-<section>
+<div class="row">
+<section class="col-sm-6 charts-dental-chart">
+  <div class="charts-dental-chart--container"></div>
+</section>
+<section class="col-sm-6 charts-ages">
+  <div class="charts-ages--container"></div>
+</section>
+</div>
+<section class="charts-appointments">
+  <div class="charts-appointments--container"></div>
+</section>
+<section class="charts-revenue">
   <h3>Revenue</h3>
-  <div class="charts-revenue"></div>
+  <div class="charts-revenue--container"></div>
 </section>
 <script src="{% static "highcharts/highcharts.js" %}"></script>
 <script>
-  Highcharts.chart(document.querySelector(".charts-ages"), {{ ages|safe }});
-  Highcharts.chart(document.querySelector(".charts-dental-chart"), {{ dental_charts|safe }});
+  Highcharts.chart(document.querySelector(".charts-ages--container"),
+    {{ ages|safe }});
+  Highcharts.chart(document.querySelector(".charts-dental-chart--container"),
+    {{ dental_charts|safe }});
+  Highcharts.chart(document.querySelector(".charts-appointments--container"),
+    {{ appointments|safe }});
+
 
   /*
   new Chartist.Pie(".charts-ages", {{ ages|safe }}, {ignoreEmptyValues: true} );

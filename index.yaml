@@ -32,6 +32,13 @@ indexes:
 - kind: core_dentalchart
   properties:
   - name: person_id
+  - name: extraction
+  - name: filling
+  - name: rct
+
+- kind: core_dentalchart
+  properties:
+  - name: person_id
   - name: filling
   - name: missing
   - name: rct

@@ -222,7 +222,6 @@ def view(request, person_id):
         pictures_tuple = zip(it, it)
         last_picture = pictures.last()
 
-    print pictures_tuple, last_picture
 
     return render(request, 'core/view.html',
                   {'person': person, 'pictures_tuple': pictures_tuple,
@@ -308,52 +307,46 @@ def dashboard(request):
         "chart": {
             "plotBackgroundColor": None,
             "plotBorderWidth": None,
-            "plotShadow": False,
-            "type": "pie"
+            "plotShadow": False, "type": "pie",
             },
-         "title": {
-             "text": "Ages"
-         },
-         "tooltip": {
-             "pointFormat": "{series.name}: <b>{point.y} — {point.percentage:.1f}%</b>"
-             },
-         "plotOptions": {
-             "pie": {
-                 "allowPointSelect": True,
-                 "cursor": "pointer",
-                 "dataLabels": {"enabled": True},
-                 "showInLegend": True
-                 }},
-         "series": [{
-             "name": "Ages",
-             "colorByPoint": True,
-             "data": [{"name": name, "y": count}
-                 for name, count in
-                 zip(["<10", "10—19", "20—29", "30—40", "40"], ages)]
-             }]}, indent=4)
+        "title": {
+            "text": "Ages"
+            },
+        "tooltip": {
+            "pointFormat": "{series.name}: <b>{point.y} — {point.percentage:.1f}%</b>"
+            },
+        "plotOptions": {
+            "pie": {
+                "allowPointSelect": True,
+                "cursor": "pointer",
+                "dataLabels": {"enabled": False},
+                "showInLegend": True
+                }},
+            "series": [{
+                "name": "Ages",
+                "colorByPoint": True,
+                "data": [{"name": name, "y": count}
+                    for name, count in
+                    zip(["<10", "10—19", "20—29", "30—40", "40"], ages)]
+                }]}, indent=4)
 
 
-    d_c = {"extraction": 0, "missing": 0, "filling": 0, "rct": 0}
+    d_c = {"extraction": 0, "filling": 0, "rct": 0}
     dental_charts = (m.DentalChart.objects
                      .filter(person__in=p_ids)
-                     .values_list("missing", "filling", "rct"))
+                     .values_list("extraction", "filling", "rct"))
 
-    for missing, filling, rct in dental_charts:
-        d_c["missing"] += missing
+    for extraction, filling, rct in dental_charts:
+        d_c["extraction"] += extraction
         d_c["filling"] += filling
         d_c["rct"] += rct
-
-    data["dental_charts"] = json.dumps({
-        "series": [{"name": k.title(), "value": d_c[k],
-                    "className": "charts-dental-chart__{}".format(k)}
-                   for k in ["missing", "filling", "rct"]]})
 
     data["dental_charts"] = json.dumps({
         "chart": {
             "plotBackgroundColor": None,
             "plotBorderWidth": None,
             "plotShadow": False,
-            "type": "pie"
+            "type": "pie",
             },
          "title": {
              "text": "Dental charts"
@@ -365,14 +358,14 @@ def dashboard(request):
              "pie": {
                  "allowPointSelect": True,
                  "cursor": "pointer",
-                 "dataLabels": {"enabled": True},
+                 "dataLabels": {"enabled": False},
                  "showInLegend": True
                  }},
          "series": [{
              "name": "Dental charts",
              "colorByPoint": True,
              "data": [
-                 {"name": "missing", "y": d_c["missing"], "color": "#E00000"},
+                 {"name": "extraction", "y": d_c["extraction"], "color": "#4D6790"},
                  {"name": "filling", "y": d_c["filling"], "color": "#FF8400"},
                  {"name": "rct", "y": d_c["rct"], "color": "#91CEB0" }]
              }]}, indent=4)
@@ -387,7 +380,24 @@ def dashboard(request):
              for key, appointments
              in groupby(takewhile(lambda d: d < end_of_month, all_dates),
                         lambda d: d.strftime("%b %Y"))]
-    data["appointments"] = {}
+    data["appointments"] = json.dumps({
+            "chart": {
+                "type": "column",
+                },
+            "title": {
+                "text": "Appointments",
+                },
+            "yAxis": {
+                "title": {
+                    "text": "Count"
+                    }
+                },
+            "series": [{
+                "name": "Months",
+                "data": [{"name": month, "y": count}
+                         for month, count in dates]
+                }]
+            }, indent=4)
 
     next_sat = (today + datetime.timedelta(days=(5 - today.weekday()) % 7))
     next_sat2 = next_sat + datetime.timedelta(weeks=1)
@@ -420,6 +430,8 @@ class AppointmentView(View):
         person = get_object_or_404(m.Person, pk=person_id)
         appointment_form = f.AppointmentForm(request.POST or None)
         if appointment_form.is_valid():
+            logging.info(request.POST)
+            logging.info(appointment_form.cleaned_data)
             appointment = appointment_form.save(commit=False)
             appointment.user = request.user
             appointment.person = person
