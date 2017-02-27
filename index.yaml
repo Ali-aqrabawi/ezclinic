@@ -66,6 +66,11 @@ indexes:
   - name: __key__
     direction: desc
 
+- kind: core_receipt
+  properties:
+  - name: user_id
+  - name: created_at
+
 - kind: django_admin_log
   properties:
   - name: user_id

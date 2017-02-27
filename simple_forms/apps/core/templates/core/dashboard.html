@@ -23,6 +23,9 @@
   .charts-appointments {
     padding-top: 4rem;
   }
+  .charts-revenue {
+    padding-top: 4rem;
+  }
 </style>
 
 <section>
@@ -43,7 +46,6 @@
   <div class="charts-appointments--container"></div>
 </section>
 <section class="charts-revenue">
-  <h3>Revenue</h3>
   <div class="charts-revenue--container"></div>
 </section>
 <script src="{% static "highcharts/highcharts.js" %}"></script>
@@ -54,13 +56,7 @@
     {{ dental_charts|safe }});
   Highcharts.chart(document.querySelector(".charts-appointments--container"),
     {{ appointments|safe }});
-
-
-  /*
-  new Chartist.Pie(".charts-ages", {{ ages|safe }}, {ignoreEmptyValues: true} );
-  new Chartist.Pie(".charts-dental-chart", {{ dental_charts|safe }}, {ignoreEmptyValues: true});
-  new Chartist.Bar(".charts-appointments", {{ appointments|safe }});
-  new Chartist.Line(".charts-revenue", {{ receipts|safe }});
-  */
+  Highcharts.chart(document.querySelector(".charts-revenue--container"),
+    {{ revenue|safe }});
 </script>
 {% endblock %}

@@ -1,7 +1,7 @@
 # coding: utf-8
 
 from collections import OrderedDict
-from itertools import groupby, takewhile
+from itertools import groupby, takewhile, dropwhile
 from calendar import monthrange
 import datetime
 import json
@@ -373,19 +373,25 @@ def dashboard(request):
     today = datetime.date.today()
     days = monthrange(today.year, today.month)[1]
     end_of_month = today.replace(day=days)
+    year_ago = today.replace(year=(today.year - 1), day=1)
     all_dates = (request.user.appointment_set
+                 .filter(date__gte=year_ago, date__lte=end_of_month)
                  .order_by('date')
                  .values_list("date", flat=True))
     dates = [(key, len(list(appointments)))
              for key, appointments
-             in groupby(takewhile(lambda d: d < end_of_month, all_dates),
-                        lambda d: d.strftime("%b %Y"))]
+             in groupby(all_dates, lambda d: d.strftime("%b %Y"))]
+
     data["appointments"] = json.dumps({
             "chart": {
                 "type": "column",
                 },
             "title": {
                 "text": "Appointments",
+                },
+            "xAxis": {
+                "categories": [month for month, _ in dates],
+                "crosshair": True
                 },
             "yAxis": {
                 "title": {
@@ -398,6 +404,7 @@ def dashboard(request):
                          for month, count in dates]
                 }]
             }, indent=4)
+
 
     next_sat = (today + datetime.timedelta(days=(5 - today.weekday()) % 7))
     next_sat2 = next_sat + datetime.timedelta(weeks=1)
@@ -420,7 +427,15 @@ def dashboard(request):
         s += amount
         # Using floats for chart purposes is safe
         cumulative_reciepts.append((month, float(s)))
-    data["receipts"] = {}
+    data["revenue"] = json.dumps({
+        "title": {"text": "Revenue"},
+        "xAxis": {"categories": [month for month, _ in cumulative_reciepts]},
+        "series": [{
+            "name": "Months",
+            "data": [{"name": month, "y": value}
+                     for month, value in cumulative_reciepts]
+            }]
+        }, indent=2)
 
     return render(request, 'core/dashboard.html', data)
 
