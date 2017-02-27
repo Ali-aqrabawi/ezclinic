@@ -29,7 +29,7 @@ urlpatterns = [
         name='receipt'),
     url(r'^search/$', views.search, name='search'),
 	url(r'^_ah/', include('djangae.urls')),
-    url(r'^charts/$', views.charts, name='charts'),
+    url(r'^dashboard/$', views.dashboard, name='charts'),
 ]
 
 if settings.DEBUG:

@@ -3,26 +3,17 @@
 {% load staticfiles %}
 {% load i18n %}
 
+{% block title %}Dashboard{% endblock %}
+
 {% block content %}
-<link rel="stylesheet" href="{% static "chartist/chartist.min.css" %}"></link>
-<style>
-  .charts-dental-chart__missing {fill: #E00000;}
-  .charts-dental-chart__filling {fill: #FF8400;}
-  .charts-dental-chart__rct {fill: #C0FFE0;}
-
-</style>
-
 <section>
-  <h3>Patients count</h3>
-  <div>{{ count }}</div>
+  <h3>Patients count — {{ count }}</h3>
 </section>
 <div class="row">
 <section class="col-sm-6">
-  <h3>Dental chart stats</h3>
   <div class="charts-dental-chart"></div>
 </section>
 <section class="col-sm-6">
-  <h3>Patients age</h3>
   <div class="charts-ages"></div>
 </section>
 </div>
@@ -36,11 +27,16 @@
   <h3>Revenue</h3>
   <div class="charts-revenue"></div>
 </section>
-<script src="{% static "chartist/chartist.min.js" %}"></script>
+<script src="{% static "highcharts/highcharts.js" %}"></script>
 <script>
+  Highcharts.chart(document.querySelector(".charts-ages"), {{ ages|safe }});
+  Highcharts.chart(document.querySelector(".charts-dental-chart"), {{ dental_charts|safe }});
+
+  /*
   new Chartist.Pie(".charts-ages", {{ ages|safe }}, {ignoreEmptyValues: true} );
   new Chartist.Pie(".charts-dental-chart", {{ dental_charts|safe }}, {ignoreEmptyValues: true});
   new Chartist.Bar(".charts-appointments", {{ appointments|safe }});
   new Chartist.Line(".charts-revenue", {{ receipts|safe }});
+  */
 </script>
 {% endblock %}

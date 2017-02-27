@@ -290,17 +290,8 @@ def search(request):
     return render(request, 'core/search.html', {'persons': persons})
 
 
-def for_charts(data, wrap_series=True):
-    """Make data for charts"""
-    labels, series = zip(*data)
-    if wrap_series:
-        series = [series]
-    return json.dumps({"labels": labels,
-                       "series": series})
-
-
 @login_required
-def charts(request):
+def dashboard(request):
     data = {}
     persons = list(request.user.person_set.all())
     p_ids = list(person.id for person in persons)
@@ -313,8 +304,33 @@ def charts(request):
             ages[4] += len(list(group))
         else:
             ages[key] = len(list(group))
-    data["ages"] = for_charts(zip(["<10", "10—19", "20—29", "30—40", "40"],
-                                  ages), False)
+    data["ages"] = json.dumps({
+        "chart": {
+            "plotBackgroundColor": None,
+            "plotBorderWidth": None,
+            "plotShadow": False,
+            "type": "pie"
+            },
+         "title": {
+             "text": "Ages"
+         },
+         "tooltip": {
+             "pointFormat": "{series.name}: <b>{point.y} — {point.percentage:.1f}%</b>"
+             },
+         "plotOptions": {
+             "pie": {
+                 "allowPointSelect": True,
+                 "cursor": "pointer",
+                 "dataLabels": {"enabled": True},
+                 "showInLegend": True
+                 }},
+         "series": [{
+             "name": "Ages",
+             "colorByPoint": True,
+             "data": [{"name": name, "y": count}
+                 for name, count in
+                 zip(["<10", "10—19", "20—29", "30—40", "40"], ages)]
+             }]}, indent=4)
 
 
     d_c = {"extraction": 0, "missing": 0, "filling": 0, "rct": 0}
@@ -332,6 +348,35 @@ def charts(request):
                     "className": "charts-dental-chart__{}".format(k)}
                    for k in ["missing", "filling", "rct"]]})
 
+    data["dental_charts"] = json.dumps({
+        "chart": {
+            "plotBackgroundColor": None,
+            "plotBorderWidth": None,
+            "plotShadow": False,
+            "type": "pie"
+            },
+         "title": {
+             "text": "Dental charts"
+         },
+         "tooltip": {
+             "pointFormat": "{series.name}: <b>{point.y} — {point.percentage:.1f}%</b>"
+             },
+         "plotOptions": {
+             "pie": {
+                 "allowPointSelect": True,
+                 "cursor": "pointer",
+                 "dataLabels": {"enabled": True},
+                 "showInLegend": True
+                 }},
+         "series": [{
+             "name": "Dental charts",
+             "colorByPoint": True,
+             "data": [
+                 {"name": "missing", "y": d_c["missing"], "color": "#E00000"},
+                 {"name": "filling", "y": d_c["filling"], "color": "#FF8400"},
+                 {"name": "rct", "y": d_c["rct"], "color": "#91CEB0" }]
+             }]}, indent=4)
+
     today = datetime.date.today()
     days = monthrange(today.year, today.month)[1]
     end_of_month = today.replace(day=days)
@@ -342,7 +387,7 @@ def charts(request):
              for key, appointments
              in groupby(takewhile(lambda d: d < end_of_month, all_dates),
                         lambda d: d.strftime("%b %Y"))]
-    data["appointments"] = for_charts(dates)
+    data["appointments"] = {}
 
     next_sat = (today + datetime.timedelta(days=(5 - today.weekday()) % 7))
     next_sat2 = next_sat + datetime.timedelta(weeks=1)
@@ -365,9 +410,9 @@ def charts(request):
         s += amount
         # Using floats for chart purposes is safe
         cumulative_reciepts.append((month, float(s)))
-    data["receipts"] = for_charts(cumulative_reciepts)
+    data["receipts"] = {}
 
-    return render(request, 'core/charts.html', data)
+    return render(request, 'core/dashboard.html', data)
 
 
 class AppointmentView(View):
