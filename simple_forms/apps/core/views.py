@@ -16,9 +16,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.cache  import never_cache
 from django.views import View
 
+from djangae.utils import get_in_batches
+
 from . import models as m
 from . import forms as f
 from . import charts_data
+
+# Appengine Datastore magic limit
+CHUNK_SIZE = 30
 
 IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
 
@@ -292,18 +297,19 @@ def search(request):
 @login_required
 def dashboard(request):
     data = {}
-    persons = list(request.user.person_set.all())
+    persons = list(get_in_batches(request.user.person_set.all(), CHUNK_SIZE))
     p_ids = list(person.id for person in persons)
     data["count"] = len(persons)
 
     data["ages"] = charts_data.ages(persons)
 
-    dental_charts_records = (m.DentalChart.objects
-                     .filter(person__in=p_ids)
-                     .values_list("extraction", "filling", "rct"))
-
+    dental_charts_records = []
+    for i in range(0, len(persons), CHUNK_SIZE):
+        dental_charts_records.extend(
+                m.DentalChart.objects
+                    .filter(person__in=p_ids[i: i + CHUNK_SIZE])
+                    .values_list("extraction", "filling", "rct"))
     data["dental_charts"] = charts_data.dental_charts(dental_charts_records)
-
 
     year_ago, end_of_month = charts_data.year_range()
     appointment_records = (request.user.appointment_set
@@ -313,7 +319,6 @@ def dashboard(request):
 
     data["appointments"] = charts_data.appointments(appointment_records,
                                                     year_ago, end_of_month)
-
 
     today = datetime.date.today()
     next_sat = (today + datetime.timedelta(days=(5 - today.weekday()) % 7))
@@ -334,6 +339,7 @@ def dashboard(request):
                         .order_by("created_at"))
     data["revenue"] = charts_data.revenue(receipts_records,
                                           year_ago, end_of_month)
+
 
     return render(request, 'core/dashboard.html', data)
 
