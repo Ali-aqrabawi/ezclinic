@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<style>
+  .charts-dental-chart {
+    border-bottom: 1px solid #888;
+    border-right: 1px solid #888;
+  }
+  .charts-ages {
+    border-bottom: 1px solid #888;
+  }
+  .charts-dental-chart--container {
+    width: 100%;
+  }
+  .charts-ages--container {
+    width: 100%;
+  }
+  .charts-appointments {
+    padding-top: 4rem;
+  }
+  .charts-revenue {
+    padding-top: 4rem;
+  }
+</style>
+
+<section>
+  <h3>General statistics:</h3>
+  <p>Total number of patients: {{ count }}</p>
+  <p>Number of appointments in the next week: {{ appointment_next_week }}</p>
+  <p>Number of appointments in the week after next: {{ appointment_next_week2 }}</p>
+</section>
+<div class="row">
+<section class="col-sm-6 charts-dental-chart">
+  <div class="charts-dental-chart--container"></div>
+</section>
+<section class="col-sm-6 charts-ages">
+  <div class="charts-ages--container"></div>
+</section>
+</div>
+<section class="charts-appointments">
+  <div class="charts-appointments--container"></div>
+</section>
+<section class="charts-revenue">
+  <div class="charts-revenue--container"></div>
+</section>
+<script src="{% static "highcharts/highcharts.js" %}"></script>
+<script>
+  Highcharts.chart(document.querySelector(".charts-ages--container"),
+    {{ ages|safe }});
+  Highcharts.chart(document.querySelector(".charts-dental-chart--container"),
+    {{ dental_charts|safe }});
+  Highcharts.chart(document.querySelector(".charts-appointments--container"),
+    {{ appointments|safe }});
+  Highcharts.chart(document.querySelector(".charts-revenue--container"),
+    {{ revenue|safe }});
+</script>
+{% endblock %}

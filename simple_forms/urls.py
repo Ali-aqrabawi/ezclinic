@@ -19,10 +19,17 @@ urlpatterns = [
     url(r'^(?P<person_id>\d+)/image/(?P<image_id>\d+)/delete/$', views.delete_person_image, name='delete_person_image'),
     url(r'^(?P<person_id>\d+)/diagcode/(?P<diagcode_id>\d+)/delete/$', views.delete_person_diagcode, name='delete_person_diagcode'),
     url(r'^(?P<person_id>\d+)/edit/$', views.edit, name='edit'),
-	url(r'^(?P<person_id>\d+)/view/$', views.view, name='view'),
+    url(r'^(?P<person_id>\d+)/view/$', views.view, name='view'),
     url(r'^(?P<person_id>\d+)/foto/$', views.foto, name='foto'),
+    url(r'^(?P<person_id>\d+)/appointment/$',
+        views.AppointmentView.as_view(),
+        name='appointment'),
+    url(r'^(?P<person_id>\d+)/receipt/$',
+        views.ReceiptView.as_view(),
+        name='receipt'),
     url(r'^search/$', views.search, name='search'),
-	url(r'^_ah/', include('djangae.urls'))
+	url(r'^_ah/', include('djangae.urls')),
+    url(r'^dashboard/$', views.dashboard, name='dashboard'),
 ]
 
 if settings.DEBUG:
