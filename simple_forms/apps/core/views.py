@@ -1,6 +1,5 @@
 # coding: utf-8
 
-from collections import OrderedDict
 from itertools import groupby, takewhile, dropwhile
 from calendar import monthrange
 import datetime
@@ -19,6 +18,7 @@ from django.views import View
 
 from . import models as m
 from . import forms as f
+from . import charts_data
 
 IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
 
@@ -370,48 +370,27 @@ def dashboard(request):
                  {"name": "rct", "y": d_c["rct"], "color": "#91CEB0" }]
              }]}, indent=4)
 
+    year_ago, end_of_month = charts_data.year_range()
+    appointment_records = (request.user.appointment_set
+                           .filter(date__gte=year_ago, date__lte=end_of_month)
+                           .order_by('date')
+                           .values_list("date", flat=True))
+
+    data["appointments"] = charts_data.appointments(appointment_records,
+                                                    year_ago, end_of_month)
+
+
     today = datetime.date.today()
-    days = monthrange(today.year, today.month)[1]
-    end_of_month = today.replace(day=days)
-    year_ago = today.replace(year=(today.year - 1), day=1)
-    all_dates = (request.user.appointment_set
-                 .filter(date__gte=year_ago, date__lte=end_of_month)
-                 .order_by('date')
-                 .values_list("date", flat=True))
-    dates = [(key, len(list(appointments)))
-             for key, appointments
-             in groupby(all_dates, lambda d: d.strftime("%b %Y"))]
-
-    data["appointments"] = json.dumps({
-            "chart": {
-                "type": "column",
-                },
-            "title": {
-                "text": "Appointments",
-                },
-            "xAxis": {
-                "categories": [month for month, _ in dates],
-                "crosshair": True
-                },
-            "yAxis": {
-                "title": {
-                    "text": "Count"
-                    }
-                },
-            "series": [{
-                "name": "Months",
-                "data": [{"name": month, "y": count}
-                         for month, count in dates]
-                }]
-            }, indent=4)
-
-
     next_sat = (today + datetime.timedelta(days=(5 - today.weekday()) % 7))
     next_sat2 = next_sat + datetime.timedelta(weeks=1)
     next_sat3 = next_sat + datetime.timedelta(weeks=2)
-    data["appointment_next_week"] = len([d for d in all_dates
+    next_appointments = (request.user.appointment_set
+                         .filter(date__gte=next_sat, date__lte=next_sat3)
+                         .order_by("date")
+                         .values_list("date", flat=True))
+    data["appointment_next_week"] = len([d for d in next_appointments
                                          if next_sat <= d < next_sat2])
-    data["appointment_next_week2"] = len([d for d in all_dates
+    data["appointment_next_week2"] = len([d for d in next_appointments
                                           if next_sat2 <= d < next_sat3])
 
     receipts = sorted(request.user.receipt_set.all(),
