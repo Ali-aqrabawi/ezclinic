@@ -330,45 +330,12 @@ def dashboard(request):
                     zip(["<10", "10—19", "20—29", "30—40", "40"], ages)]
                 }]}, indent=4)
 
-
-    d_c = {"extraction": 0, "filling": 0, "rct": 0}
-    dental_charts = (m.DentalChart.objects
+    dental_charts_records = (m.DentalChart.objects
                      .filter(person__in=p_ids)
                      .values_list("extraction", "filling", "rct"))
 
-    for extraction, filling, rct in dental_charts:
-        d_c["extraction"] += extraction
-        d_c["filling"] += filling
-        d_c["rct"] += rct
+    data["dental_charts"] = charts_data.dental_charts(dental_charts_records)
 
-    data["dental_charts"] = json.dumps({
-        "chart": {
-            "plotBackgroundColor": None,
-            "plotBorderWidth": None,
-            "plotShadow": False,
-            "type": "pie",
-            },
-         "title": {
-             "text": "Dental charts"
-         },
-         "tooltip": {
-             "pointFormat": "{series.name}: <b>{point.y} — {point.percentage:.1f}%</b>"
-             },
-         "plotOptions": {
-             "pie": {
-                 "allowPointSelect": True,
-                 "cursor": "pointer",
-                 "dataLabels": {"enabled": False},
-                 "showInLegend": True
-                 }},
-         "series": [{
-             "name": "Dental charts",
-             "colorByPoint": True,
-             "data": [
-                 {"name": "extraction", "y": d_c["extraction"], "color": "#4D6790"},
-                 {"name": "filling", "y": d_c["filling"], "color": "#FF8400"},
-                 {"name": "rct", "y": d_c["rct"], "color": "#91CEB0" }]
-             }]}, indent=4)
 
     year_ago, end_of_month = charts_data.year_range()
     appointment_records = (request.user.appointment_set

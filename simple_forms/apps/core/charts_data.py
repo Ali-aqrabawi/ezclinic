@@ -1,4 +1,4 @@
-# charset: utf-8
+# coding: utf-8
 
 from calendar import monthrange
 from itertools import groupby, takewhile, dropwhile
@@ -95,3 +95,43 @@ def revenue(records, start=None, stop=None):
             }]
         }, indent=2)
 
+
+def pie_chart(title, data):
+    return {"chart": {
+                "plotBackgroundColor": None,
+                "plotBorderWidth": None,
+                "plotShadow": False,
+                "type": "pie",
+                },
+            "title": {
+                "text": title,
+                },
+            "tooltip": {
+                "pointFormat": "{series.name}: <b>{point.y} — {point.percentage:.1f}%</b>"
+                },
+            "plotOptions": {
+                "pie": {
+                    "allowPointSelect": True,
+                    "cursor": "pointer",
+                    "dataLabels": {"enabled": False},
+                    "showInLegend": True
+                    }},
+                "series": [{
+                    "name": title,
+                    "colorByPoint": True,
+                    "data": data
+                    }]
+                }
+
+def dental_charts(records):
+    d_c = {"extraction": 0, "filling": 0, "rct": 0}
+    for extraction, filling, rct in records:
+        d_c["extraction"] += extraction
+        d_c["filling"] += filling
+        d_c["rct"] += rct
+
+    return json.dumps(
+            pie_chart("Dental charts",
+            [{"name": "extraction", "y": d_c["extraction"], "color": "#4D6790"},
+             {"name": "filling", "y": d_c["filling"], "color": "#FF8400"},
+             {"name": "rct", "y": d_c["rct"], "color": "#91CEB0"}]))
