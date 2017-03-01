@@ -18,6 +18,12 @@ def year_range(day=None):
     return year_ago, end_of_month
 
 def months_iterator(start, stop=None):
+    """Iterate by month starting with start month.
+    If stop is not None, then iterate until reaching
+    stop month not including it
+
+    Returns first day of month
+    """
     current = start.replace(day=1)
     stop_m = stop.replace(day=1) if stop else None
     while True:
@@ -35,6 +41,7 @@ def appointments_count(records, start, stop):
 
     pretty_dates = []
     for m in months_iterator(start, stop + dt.timedelta(days=2)):
+        # Fill gaps with zeroes
         pretty_dates.append((m.strftime("%b %Y"),
                              dates.get((m.year, m.month), 0)))
 
@@ -58,12 +65,11 @@ def appointments(records, start=None, stop=None):
         "series": [{
             "name": "Appointments",
             "data": [{"name": month, "y": count}
-                for month, count in dates]
+                     for month, count in dates]
             }]
         }, indent=2)
 
 def revenue_cumulative_sums(records, start, stop):
-
     month_receipts = groupby(records, lambda r: (r.created_at.year,
                                                  r.created_at.month))
     month_receipts = dict((month, sum(r.amount for r in group))
@@ -72,12 +78,14 @@ def revenue_cumulative_sums(records, start, stop):
     s = 0
     cumulative_sums = []
     for m in months_iterator(start, stop + dt.timedelta(days=2)):
+        # Fill gaps with zeroes
         s += month_receipts.get((m.year, m.month), 0)
         cumulative_sums.append((m.strftime("%b %Y"), float(s)))
 
     return cumulative_sums
 
 def revenue(records, start=None, stop=None):
+    """Cumulative revenue amounts by months"""
     if not start:
         start, stop = year_range()
 
@@ -94,7 +102,6 @@ def revenue(records, start=None, stop=None):
                      for month, value in cumulative_sums]
             }]
         }, indent=2)
-
 
 def pie_chart(title, data):
     return {"chart": {
@@ -135,3 +142,20 @@ def dental_charts(records):
             [{"name": "extraction", "y": d_c["extraction"], "color": "#4D6790"},
              {"name": "filling", "y": d_c["filling"], "color": "#FF8400"},
              {"name": "rct", "y": d_c["rct"], "color": "#91CEB0"}]))
+
+
+def ages(records):
+    # We have 5 groups for ages sliced by 10, and the last group is for
+    # all ages greather than 40
+    groups = [0] * 5
+    for key, group in groupby(sorted(person.age for person in records),
+                              lambda age: age // 10):
+        if key > 4:
+            groups[4] += len(list(group))
+        else:
+            groups[key] = len(list(group))
+    return json.dumps(
+            pie_chart("Patients Ages Chart",
+                      [{"name": name, "y": count}
+                       for name, count in
+                       zip(["<10", "10—19", "20—29", "30—40", "40"], groups)]))

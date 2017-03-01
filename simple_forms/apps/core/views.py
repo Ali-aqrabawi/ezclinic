@@ -296,39 +296,7 @@ def dashboard(request):
     p_ids = list(person.id for person in persons)
     data["count"] = len(persons)
 
-    ages = [0] * 5
-    for key, group in groupby(sorted(person.age for person in persons),
-                              lambda age: age // 10):
-        if key > 4:
-            ages[4] += len(list(group))
-        else:
-            ages[key] = len(list(group))
-    data["ages"] = json.dumps({
-        "chart": {
-            "plotBackgroundColor": None,
-            "plotBorderWidth": None,
-            "plotShadow": False, "type": "pie",
-            },
-        "title": {
-            "text": "Patients Ages Chart"
-            },
-        "tooltip": {
-            "pointFormat": "{series.name}: <b>{point.y} — {point.percentage:.1f}%</b>"
-            },
-        "plotOptions": {
-            "pie": {
-                "allowPointSelect": True,
-                "cursor": "pointer",
-                "dataLabels": {"enabled": False},
-                "showInLegend": True
-                }},
-            "series": [{
-                "name": "Ages",
-                "colorByPoint": True,
-                "data": [{"name": name, "y": count}
-                    for name, count in
-                    zip(["<10", "10—19", "20—29", "30—40", "40"], ages)]
-                }]}, indent=4)
+    data["ages"] = charts_data.ages(persons)
 
     dental_charts_records = (m.DentalChart.objects
                      .filter(person__in=p_ids)
