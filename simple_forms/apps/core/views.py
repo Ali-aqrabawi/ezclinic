@@ -373,7 +373,7 @@ def dashboard(request):
     year_ago, end_of_month = charts_data.year_range()
     appointment_records = (request.user.appointment_set
                            .filter(date__gte=year_ago, date__lte=end_of_month)
-                           .order_by('date')
+                           .order_by("date")
                            .values_list("date", flat=True))
 
     data["appointments"] = charts_data.appointments(appointment_records,
@@ -393,30 +393,12 @@ def dashboard(request):
     data["appointment_next_week2"] = len([d for d in next_appointments
                                           if next_sat2 <= d < next_sat3])
 
-    receipts = sorted(request.user.receipt_set.all(),
-                      key=lambda r: r.created_at)
-    month_receipts = groupby(receipts,
-                             lambda r: r.created_at.strftime("%b %Y"))
-    month_receipts = [(month, sum(r.amount for r in group))
-                      for month, group in month_receipts]
-    # I wish I could write it beautiful with reduce
-    cumulative_reciepts = []
-    s = 0
-    for month, amount in month_receipts:
-        s += amount
-        # Using floats for chart purposes is safe
-        cumulative_reciepts.append((month, float(s)))
-    data["revenue"] = json.dumps({
-        "title": {"text": "Revenue"},
-        "xAxis": {
-            "categories": [month for month, _ in cumulative_reciepts]},
-        "yAxis": {"title": {"text": "Amount"}},
-        "series": [{
-            "name": "Revenue",
-            "data": [{"name": month, "y": value}
-                     for month, value in cumulative_reciepts]
-            }]
-        }, indent=2)
+    receipts_records = (request.user.receipt_set
+                        .filter(created_at__gte=year_ago,
+                                created_at__lte=end_of_month)
+                        .order_by("created_at"))
+    data["revenue"] = charts_data.revenue(receipts_records,
+                                          year_ago, end_of_month)
 
     return render(request, 'core/dashboard.html', data)
 
