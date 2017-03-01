@@ -60,6 +60,11 @@ indexes:
   - name: user_id
   - name: time
 
+- kind: core_person
+  properties:
+  - name: user_id
+  - name: age
+
 - kind: core_picture
   properties:
   - name: person_id

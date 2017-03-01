@@ -297,11 +297,13 @@ def search(request):
 @login_required
 def dashboard(request):
     data = {}
-    persons = list(get_in_batches(request.user.person_set.all(), CHUNK_SIZE))
-    p_ids = list(person.id for person in persons)
+    persons = list(get_in_batches(
+        request.user.person_set.values("id", "age"),
+        CHUNK_SIZE))
+    p_ids = list(person["id"] for person in persons)
     data["count"] = len(persons)
 
-    data["ages"] = charts_data.ages(persons)
+    data["ages"] = charts_data.ages(p["age"] for p in persons)
 
     dental_charts_records = []
     for i in range(0, len(persons), CHUNK_SIZE):

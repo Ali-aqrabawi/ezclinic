@@ -151,7 +151,7 @@ def ages(records):
     # We have 5 groups for ages sliced by 10, and the last group is for
     # all ages greather than 40
     groups = [0] * 5
-    for key, group in groupby(sorted(person.age for person in records),
+    for key, group in groupby(sorted(records),
                               lambda age: age // 10):
         if key > 4:
             groups[4] += len(list(group))
