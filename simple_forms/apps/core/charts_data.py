@@ -56,6 +56,7 @@ def appointments(records, start=None, stop=None):
 
     return json.dumps({
         "chart": {"type": "column"},
+        "credits": False,
         "title": {"text": "Appointments" },
         "xAxis": {
             "categories": [month for month, _ in dates],
@@ -93,6 +94,7 @@ def revenue(records, start=None, stop=None):
 
     return json.dumps({
         "title": {"text": "Revenue"},
+        "credits": False,
         "xAxis": {
             "categories": [month for month, _ in revenue_by_month]},
         "yAxis": {"title": {"text": "Amount"}},
@@ -110,6 +112,7 @@ def pie_chart(title, data):
                 "plotShadow": False,
                 "type": "pie",
                 },
+            "credits": False,
             "title": {
                 "text": title,
                 },
