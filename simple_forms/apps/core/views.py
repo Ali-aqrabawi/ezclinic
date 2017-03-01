@@ -310,7 +310,7 @@ def dashboard(request):
             "plotShadow": False, "type": "pie",
             },
         "title": {
-            "text": "Ages"
+            "text": "Patients Ages Chart"
             },
         "tooltip": {
             "pointFormat": "{series.name}: <b>{point.y} — {point.percentage:.1f}%</b>"
