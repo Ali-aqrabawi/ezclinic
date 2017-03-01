@@ -69,37 +69,37 @@ def appointments(records, start=None, stop=None):
             }]
         }, indent=2)
 
-def revenue_cumulative_sums(records, start, stop):
+def revenue_sums(records, start, stop):
     month_receipts = groupby(records, lambda r: (r.created_at.year,
                                                  r.created_at.month))
     month_receipts = dict((month, sum(r.amount for r in group))
                           for month, group in month_receipts)
 
     s = 0
-    cumulative_sums = []
+    revenue_by_month = []
     for m in months_iterator(start, stop + dt.timedelta(days=2)):
         # Fill gaps with zeroes
-        s += month_receipts.get((m.year, m.month), 0)
-        cumulative_sums.append((m.strftime("%b %Y"), float(s)))
+        amount = float(month_receipts.get((m.year, m.month), 0))
+        revenue_by_month.append((m.strftime("%b %Y"), amount))
 
-    return cumulative_sums
+    return revenue_by_month
 
 def revenue(records, start=None, stop=None):
     """Cumulative revenue amounts by months"""
     if not start:
         start, stop = year_range()
 
-    cumulative_sums = revenue_cumulative_sums(records, start, stop)
+    revenue_by_month = revenue_sums(records, start, stop)
 
     return json.dumps({
         "title": {"text": "Revenue"},
         "xAxis": {
-            "categories": [month for month, _ in cumulative_sums]},
+            "categories": [month for month, _ in revenue_by_month]},
         "yAxis": {"title": {"text": "Amount"}},
         "series": [{
             "name": "Revenue",
             "data": [{"name": month, "y": value}
-                     for month, value in cumulative_sums]
+                     for month, value in revenue_by_month]
             }]
         }, indent=2)
 
