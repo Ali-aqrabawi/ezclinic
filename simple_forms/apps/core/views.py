@@ -318,6 +318,7 @@ def dashboard(request):
                            .filter(date__gte=year_ago, date__lte=end_of_month)
                            .order_by("date")
                            .values_list("date", flat=True))
+    appointment_records = get_in_batches(appointment_records, 30)
 
     data["appointments"] = charts_data.appointments(appointment_records,
                                                     year_ago, end_of_month)
@@ -330,6 +331,7 @@ def dashboard(request):
                          .filter(date__gte=next_sat, date__lte=next_sat3)
                          .order_by("date")
                          .values_list("date", flat=True))
+    next_appointments = get_in_batches(next_appointments, 30)
     data["appointment_next_week"] = len([d for d in next_appointments
                                          if next_sat <= d < next_sat2])
     data["appointment_next_week2"] = len([d for d in next_appointments
@@ -339,6 +341,7 @@ def dashboard(request):
                         .filter(created_at__gte=year_ago,
                                 created_at__lte=end_of_month)
                         .order_by("created_at"))
+    receipts_records = get_in_batches(receipts_records, 30)
     data["revenue"] = charts_data.revenue(receipts_records,
                                           year_ago, end_of_month)
 
