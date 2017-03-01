@@ -48,23 +48,15 @@ def appointments(records, start=None, stop=None):
     dates = appointments_count(records, start, stop)
 
     return json.dumps({
-        "chart": {
-            "type": "column",
-            },
-        "title": {
-            "text": "Appointments",
-            },
+        "chart": {"type": "column"},
+        "title": {"text": "Appointments" },
         "xAxis": {
             "categories": [month for month, _ in dates],
             "crosshair": True
             },
-        "yAxis": {
-            "title": {
-                "text": "Count"
-                }
-            },
+        "yAxis": {"title": {"text": "Count"}},
         "series": [{
-            "name": "Months",
+            "name": "Revenue",
             "data": [{"name": month, "y": count}
                 for month, count in dates]
             }]

@@ -408,9 +408,11 @@ def dashboard(request):
         cumulative_reciepts.append((month, float(s)))
     data["revenue"] = json.dumps({
         "title": {"text": "Revenue"},
-        "xAxis": {"categories": [month for month, _ in cumulative_reciepts]},
+        "xAxis": {
+            "categories": [month for month, _ in cumulative_reciepts]},
+        "yAxis": {"title": {"text": "Amount"}},
         "series": [{
-            "name": "Months",
+            "name": "Revenue",
             "data": [{"name": month, "y": value}
                      for month, value in cumulative_reciepts]
             }]
