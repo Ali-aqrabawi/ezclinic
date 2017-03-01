@@ -56,7 +56,7 @@ def appointments(records, start=None, stop=None):
             },
         "yAxis": {"title": {"text": "Count"}},
         "series": [{
-            "name": "Revenue",
+            "name": "Appointments",
             "data": [{"name": month, "y": count}
                 for month, count in dates]
             }]
