@@ -161,4 +161,4 @@ def ages(records):
             pie_chart("Patients Ages Chart",
                       [{"name": name, "y": count}
                        for name, count in
-                       zip(["<10", "10—19", "20—29", "30—40", "40"], groups)]))
+                       zip(["<10", "10—19", "20—29", "30—40", ">40"], groups)]))

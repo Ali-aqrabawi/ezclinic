@@ -69,6 +69,7 @@
         </div>
         <div class="collapse navbar-collapse" id="topNavBar">
             <ul class="nav navbar-nav">
+                <li><a href="{% url 'dashboard' %}"><span class="glyphicon glyphicon-dashboard" aria-hidden="true"></span>&nbsp;Dashboard</a></li>
                 <li><a href="{% url 'home' %}"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span>&nbsp;Calendar</a></li>
                 <li class="{% block dashboard %}{% endblock %}"><a href="{% url 'patients' %}"><span class="glyphicon glyphicon-cd" aria-hidden="true"></span>&nbsp;Patients</a></li>
             </ul>
