@@ -20,6 +20,7 @@ urlpatterns = [
     url(r'^logout_user/$', views.logout_user, name='logout_user'),
     url(r'^password_reset/$', auth_views.password_reset,
         {'template_name': "core/password_reset.html",
+         'from_email': 'Password_reset@ezclinic16.appspotmail.com',
          'password_reset_form': forms.AppEnginePasswordResetForm},
         name='password_reset'),
     url(r'^password_reset/done/$', auth_views.password_reset_done,
