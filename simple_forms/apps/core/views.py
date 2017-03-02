@@ -331,7 +331,7 @@ def dashboard(request):
                          .filter(date__gte=next_sat, date__lte=next_sat3)
                          .order_by("date")
                          .values_list("date", flat=True))
-    next_appointments = get_in_batches(next_appointments, 30)
+    next_appointments = list(get_in_batches(next_appointments, 30))
     data["appointment_next_week"] = len([d for d in next_appointments
                                          if next_sat <= d < next_sat2])
     data["appointment_next_week2"] = len([d for d in next_appointments
