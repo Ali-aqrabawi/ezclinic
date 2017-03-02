@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseNotAllowed
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.views.decorators.cache  import never_cache
@@ -91,12 +91,12 @@ def patients(request):
 #===========delete a prson==================
 @login_required
 def delete_person(request, person_id):
-    if request.method == "GET":
+    if request.method == "POST":
         c = get_object_or_404(m.Person, pk=person_id)
         c.delete()
-        return redirect(reverse('home'))
+        return redirect(reverse('patients'))
     else:
-        return redirect(reverse('home'))
+        return HttpResponseNotAllowed("Use POST")
 
 
 @login_required
