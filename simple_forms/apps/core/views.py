@@ -74,7 +74,7 @@ def patients(request):
     paginator = Paginator(persons, 6)
     # to avoid unsppuorted query by datastore
     if not persons:
-        return render(request, 'core/home.html', {'persons': persons})
+        return render(request, 'core/patients.html', {'persons': persons})
 
     try:
         persons = paginator.page(page)
@@ -85,7 +85,7 @@ def patients(request):
 
         persons = paginator.page(paginator.num_pages)
 
-    return render(request, 'core/home.html', {'persons': persons})
+    return render(request, 'core/patients.html', {'persons': persons})
 
 
 #===========delete a prson==================
