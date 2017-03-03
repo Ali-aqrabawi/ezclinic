@@ -23,6 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '(_x%ddeemso%6ur5@d_z*ngdd3=yu0x4v^5#l4##7f2gwm7nhu'
 
+# CSRF_COOKIE_SECURE = True
+# SESSION_COOKIE_SECURE = True
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -38,26 +41,26 @@ GENERATE_SPECIAL_INDEXES_DURING_TESTING = True
 # Application definition
 
 INSTALLED_APPS = [
-		
-	'djangae',
-	'djangae.contrib.security',
+    'djangae',
+    'djangae.contrib.security',
     'django.contrib.auth',
-    'django.contrib.contenttypes',	
+    'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-	
-	
-	'djangae.contrib.contenttypes',
-
+    'djangae.contrib.contenttypes',
     'widget_tweaks',
     'django.contrib.admin',
     'simple_forms.apps.core',
 ]
 
+EMAIL_BACKEND = 'djangae.mail.EmailBackend'
+# Uncomment to show email body in console
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
-	'djangae.contrib.security.middleware.AppEngineSecurityMiddleware',
+    'djangae.contrib.security.middleware.AppEngineSecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -65,8 +68,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-	'djangae.contrib.security.middleware.AppEngineSecurityMiddleware',
-	
+    'djangae.contrib.security.middleware.AppEngineSecurityMiddleware',
 ]
 
 ROOT_URLCONF = 'simple_forms.urls'

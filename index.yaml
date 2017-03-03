@@ -16,6 +16,33 @@ indexes:
   - name: __key__
     direction: desc
 
+- kind: core_appointment
+  properties:
+  - name: user_id
+  - name: date
+
+- kind: core_dentalchart
+  properties:
+  - name: person_id
+  - name: extraction
+  - name: filling
+  - name: missing
+  - name: rct
+
+- kind: core_dentalchart
+  properties:
+  - name: person_id
+  - name: extraction
+  - name: filling
+  - name: rct
+
+- kind: core_dentalchart
+  properties:
+  - name: person_id
+  - name: filling
+  - name: missing
+  - name: rct
+
 - kind: core_event
   properties:
   - name: date
@@ -33,11 +60,21 @@ indexes:
   - name: user_id
   - name: time
 
+- kind: core_person
+  properties:
+  - name: user_id
+  - name: age
+
 - kind: core_picture
   properties:
   - name: person_id
   - name: __key__
     direction: desc
+
+- kind: core_receipt
+  properties:
+  - name: user_id
+  - name: created_at
 
 - kind: django_admin_log
   properties:

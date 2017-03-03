@@ -22,7 +22,7 @@
     .dental-chart--menu-variant__yellow:before {
       color: #FF8400; }
     .dental-chart--menu-variant__green:before {
-      color: #C0FFE0; }
+      color: #91CEB0; }
   .dental-chart--info {
     margin: 2em auto; }
   .dental-chart--info-color {
@@ -41,7 +41,7 @@
   .dental-chart--info-color__yellow {
     background-color: #FF8400; }
   .dental-chart--info-color__green {
-    background-color: #C0FFE0; }
+    background-color: #91CEB0; }
   .dental-chart--image {
     height: 60vh; }
 
@@ -60,7 +60,7 @@
   .tooth__yellow {
     fill: #FF8400; }
   .tooth__green {
-    fill: #C0FFE0; }
+    fill: #91CEB0; }
   .tooth-x {
     fill-opacity: 0; }
   .tooth__x {
