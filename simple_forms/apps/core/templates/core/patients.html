@@ -9,7 +9,7 @@ $(document).ready(function(){
 $("form#form1").submit(function(e) {
     e.preventDefault();
     var lHref = $(this).attr('action');
-    bootbox.confirm("Are you sure you want to delete a Pateint?", function(confirmed) {
+    bootbox.confirm("Are you sure you want to delete a Patient?", function(confirmed) {
         if(confirmed) {
             $("form#form1").off("submit").submit();
         }
@@ -30,58 +30,23 @@ $("form#form1").submit(function(e) {
       <tr>
         <th>Name</th>
         <th>Lastname</th>
-        
+        <th>Chief complain</th>
         <th>Age</th>
-        <th>Sex</th>
-          <th>Mobile</th>
-          <th style="width:6%"><i class="fa fa-money"></i> Paid</th>
-          <th style="width:6%"><i class="fa fa-money" style='text-align:center;'></i> Left</th>
-          <th>Medical History</th>
-		  <th class="col-md-4" style="text-align: center;">picture</th>
-          <th>Address</th>            
-          <th>Delete</th>
-          <th>View</th>
-
+        <th>Mobile</th>
+        <th>Delete</th>
+        <th>View</th>
       </tr>
     </thead>
     <tbody>
-	
-
-	
       {% for person in persons %}
         <tr id="person-{{ person.id }}">
           <td>{{ person.name }}</td>
           <td>{{ person.last_name }}</td>
-          
+          <td>{{ person.chief_complain }}</td>
           <td>{{ person.age }}</td>
-          <td>{{ person.sex }}</td>
           <td>{{ person.mobile}}</td>
-            <td>{{ person.amount_paid }}</td>
-          <td>{{ person.amount_left}}</td>
-            <td>{{ person.note}}</td>
-			   <td class="col-md-4">  {% if person.pictures %} 
-
-            			{% for picture in person.pictures.all %}
-                    <div class="col-md-2">
-                        <div class="thumbnail">
-                            
-                                
-                                    <a class="fancybox" rel="group" href="{{ picture.picture.url }}">
-                                    <img src="{{ picture.picture.url }}" style="height:30px;width:100%" alt="" />
-                                    </a>
-                        </div>
-                    </div>
-                  {% endfor %}
-      			{% endif %}
-          </td>
-          <td>{{ person.address }}</td>
-          
-
-
         <td><form id='form1'  name='delete'  action="{% url 'delete_person' person.id %}"
               method='POST'>
-
-
         {% csrf_token %}
 		<button type='submit'  id='form1'  class='btn btn-xs btn-link icon'><i  class='glyphicon glyphicon-remove'></i></button>
 	</form></td>
