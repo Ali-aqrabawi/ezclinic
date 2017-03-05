@@ -6,12 +6,11 @@
 
   <script type="text/javascript">
 $(document).ready(function(){
-$("form#form1").submit(function(e) {
+$(".delete-person").submit(function(e) {
     e.preventDefault();
-    var lHref = $(this).attr('action');
     bootbox.confirm("Are you sure you want to delete a Patient?", function(confirmed) {
         if(confirmed) {
-            $("form#form1").off("submit").submit();
+          $(e.target).parent("form").off("submit").submit();
         }
     });
 });
@@ -45,13 +44,13 @@ $("form#form1").submit(function(e) {
           <td>{{ person.chief_complain }}</td>
           <td>{{ person.age }}</td>
           <td>{{ person.mobile}}</td>
-        <td><form id='form1'  name='delete'  action="{% url 'delete_person' person.id %}"
-              method='POST'>
-        {% csrf_token %}
-		<button type='submit'  id='form1'  class='btn btn-xs btn-link icon'><i  class='glyphicon glyphicon-remove'></i></button>
-	</form></td>
-        <td><a  href="{% url 'view' person.id %}"><i  class="glyphicon glyphicon-list-alt"></i></a></td>
-
+          <td>
+            <form action="{% url 'delete_person' person.id %}" method='POST'>
+              {% csrf_token %}
+              <button type='submit' class='delete-person btn btn-xs btn-link icon'><i class='glyphicon glyphicon-remove'></i></button>
+            </form>
+          </td>
+          <td><a  href="{% url 'view' person.id %}"><i  class="glyphicon glyphicon-list-alt"></i></a></td>
         </tr>
 	  {% empty %}
         <tr>
