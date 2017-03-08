@@ -77,11 +77,11 @@
 
   {% if events %}
   <h2> {% if today %}
-        Today's Events
+        Today's Reminders
         {% else %}
-        Events of {{ date|date:"F d"}}
+        Reminders of {{ date|date:"F d"}}
         {% endif %}
-    <button id="hide-events" class="btn btn-info pull-right" type="button">{% trans "Hide Events" %}</button>
+    <button id="hide-events" class="btn btn-info pull-right" type="button">{% trans "Hide Reminders" %}</button>
   </h2>
 
   <div id="events-table" class="hidden">
