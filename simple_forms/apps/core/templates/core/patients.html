@@ -5,17 +5,18 @@
 
 
   <script type="text/javascript">
-$(document).ready(function(){
-$(".delete-person").submit(function(e) {
-    e.preventDefault();
-    bootbox.confirm("Are you sure you want to delete a Patient?", function(confirmed) {
-        if(confirmed) {
-          $(e.target).parent("form").off("submit").submit();
-        }
+    $(document).ready(function(){
+      $(".delete-person").submit(function(e) {
+        var form = $(this);
+        e.preventDefault();
+        bootbox.confirm("Are you sure you want to delete a Pateint?", function(confirmed) {
+          if(confirmed) {
+            form.off("submit").submit();
+          }
+        });
+      });
     });
-});
-})
-</script>
+  </script>
 
   <h2>
     All patients
@@ -45,9 +46,11 @@ $(".delete-person").submit(function(e) {
           <td>{{ person.age }}</td>
           <td>{{ person.mobile}}</td>
           <td>
-            <form action="{% url 'delete_person' person.id %}" method='POST'>
+            <form class="delete-person" action="{% url 'delete_person' person.id %}" method='POST'>
               {% csrf_token %}
-              <button type='submit' class='delete-person btn btn-xs btn-link icon'><i class='glyphicon glyphicon-remove'></i></button>
+              <button type='submit' class='btn btn-xs btn-link icon'>
+                <i class='glyphicon glyphicon-remove'></i>
+              </button>
             </form>
           </td>
           <td><a  href="{% url 'view' person.id %}"><i  class="glyphicon glyphicon-list-alt"></i></a></td>

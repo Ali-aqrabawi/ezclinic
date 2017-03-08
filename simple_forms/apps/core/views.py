@@ -16,11 +16,15 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.views.decorators.cache  import never_cache
 
+from djangae.contrib.consistency.signals import connect_signals;
+from djangae.contrib.consistency.consistency import improve_queryset_consistency
 from djangae.utils import get_in_batches
 
 from . import models as m
 from . import forms as f
 from . import charts_data
+
+connect_signals()
 
 # Appengine Datastore magic limit
 CHUNK_SIZE = 30
@@ -63,7 +67,8 @@ def add_person(request):
 @login_required
 def patients(request):
     page = request.GET.get('page', 1)
-    persons = request.user.person_set.all()
+    persons = improve_queryset_consistency(
+            request.user.person_set.order_by("pk")) # Default ordering
     paginator = Paginator(persons, 6)
     # to avoid unsppuorted query by datastore
     if not persons:
