@@ -71,9 +71,9 @@ def patients(records, start=None, stop=None):
         }, indent=2)
 
 def revenue_sums(records, start, stop):
-    month_receipts = groupby(records, lambda r: (r.created_at.year,
-                                                 r.created_at.month))
-    month_receipts = dict((month, sum(r.amount for r in group))
+    month_receipts = groupby(records, lambda r: (r["created_at"].year,
+                                                 r["created_at"].month))
+    month_receipts = dict((month, sum(r["amount"] for r in group))
                           for month, group in month_receipts)
 
     s = 0

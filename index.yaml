@@ -84,6 +84,12 @@ indexes:
 - kind: core_receipt
   properties:
   - name: user_id
+  - name: amount
+  - name: created_at
+
+- kind: core_receipt
+  properties:
+  - name: user_id
   - name: created_at
 
 - kind: django_admin_log

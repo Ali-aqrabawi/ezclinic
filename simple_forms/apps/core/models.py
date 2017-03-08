@@ -81,7 +81,8 @@ class Person(models.Model):
                 delta = self.amount_paid
             super(Person, self).save(*args, **kwargs)
 
-        Receipt.objects.create(user=self.user, person=self, amount=delta)
+        if delta > 0:
+            Receipt.objects.create(user=self.user, person=self, amount=delta)
 
         try:
             dc = DentalChart.objects.get(person_id=self.pk)
