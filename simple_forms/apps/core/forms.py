@@ -66,11 +66,9 @@ class EventForm(forms.ModelForm):
         fields = ['text', 'date']
 
 
-class AppointmentForm(forms.ModelForm):
+class AppointmentForm(forms.Form):
+    date = forms.DateField()
     time = forms.TimeField(input_formats=["%I:%M %p"], required=False)
-    class Meta:
-        model = m.Appointment
-        fields = ["date", "time"]
 
 
 class ReceiptForm(forms.ModelForm):

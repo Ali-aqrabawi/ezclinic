@@ -52,13 +52,6 @@ def add_person(request):
             for diagcode in diagcodes:
                 m.Diagcode.objects.create(person=person, diagcode=diagcode)
 
-        appointment_form = f.AppointmentForm(request.POST)
-        if appointment_form.is_valid():
-            appointment = appointment_form.save(commit=False)
-            appointment.user = request.user
-            appointment.person = person
-            appointment.save()
-
         return redirect(reverse('view', args=(person.id,)))
     context = {
         "form": form,
@@ -194,12 +187,6 @@ def edit(request, person_id):
                     else:
                         pass
 
-            appointment_form = f.AppointmentForm(request.POST)
-            if appointment_form.is_valid():
-                appointment = appointment_form.save(commit=False)
-                appointment.user = request.user
-                appointment.person = person
-                appointment.save()
 
         url = reverse('view', args=(person.id,))
         if tab:
@@ -259,17 +246,13 @@ def calendar(request):
         return redirect(request.get_full_path())
 
     # Simulate ORDER BY with NULLS LAST
-    # persons = list(request.user.person_set.filter(date=date))
-    # persons.sort(key=lambda p: p.time or datetime.time(23, 59, 59))
-    appointments = list(m.Appointment.objects
-                        .filter(date=date, user=request.user)
-                        .prefetch_related())
-    appointments.sort(key=lambda p: p.time or datetime.time(23, 59, 59))
+    persons = list(request.user.person_set.filter(date=date))
+    persons.sort(key=lambda p: p.time or datetime.time(23, 59, 59))
 
     events = request.user.event_set.filter(date=date)
 
     return render(request, 'core/calendar.html',
-            {'appointments': appointments,
+            {'persons': persons,
              'events': events,
              'date': date,
              'today': date == datetime.date.today(),
@@ -314,20 +297,28 @@ def dashboard(request):
     data["dental_charts"] = charts_data.dental_charts(dental_charts_records)
 
     year_ago, end_of_month = charts_data.year_range()
-    appointment_records = (request.user.appointment_set
-                           .filter(date__gte=year_ago, date__lte=end_of_month)
-                           .order_by("date")
-                           .values_list("date", flat=True))
-    appointment_records = get_in_batches(appointment_records, 30)
 
-    data["appointments"] = charts_data.appointments(appointment_records,
-                                                    year_ago, end_of_month)
+
+    # Pseudomigration
+    for patient in get_in_batches(request.user.person_set.all()):
+        if patient.created_at is None:
+            patient.created_at = datetime.datetime.utcnow()
+        patient.save()
+
+    patients_records = (request.user.person_set
+                        .filter(created_at__gte=year_ago)
+                        .order_by("created_at")
+                        .values_list("created_at", flat=True))
+    patients_records = get_in_batches(patients_records, 30)
+
+    data["patients"] = charts_data.patients(patients_records,
+                                            year_ago, end_of_month)
 
     today = datetime.date.today()
     next_sat = (today + datetime.timedelta(days=(5 - today.weekday()) % 7))
     next_sat2 = next_sat + datetime.timedelta(weeks=1)
     next_sat3 = next_sat + datetime.timedelta(weeks=2)
-    next_appointments = (request.user.appointment_set
+    next_appointments = (request.user.person_set
                          .filter(date__gte=next_sat, date__lte=next_sat3)
                          .order_by("date")
                          .values_list("date", flat=True))
@@ -354,12 +345,9 @@ class AppointmentView(View):
         person = get_object_or_404(m.Person, pk=person_id)
         appointment_form = f.AppointmentForm(request.POST or None)
         if appointment_form.is_valid():
-            logging.info(request.POST)
-            logging.info(appointment_form.cleaned_data)
-            appointment = appointment_form.save(commit=False)
-            appointment.user = request.user
-            appointment.person = person
-            appointment.save()
+            person.date = appointment_form.cleaned_data["date"]
+            person.time = appointment_form.cleaned_data["time"]
+            person.save()
         return redirect(reverse('view', args=(person.id,)))
 
 

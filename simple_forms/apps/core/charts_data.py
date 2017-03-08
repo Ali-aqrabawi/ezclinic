@@ -32,11 +32,11 @@ def months_iterator(start, stop=None):
         yield current
         current = (current + dt.timedelta(days=33)).replace(day=1)
 
-def appointments_count(records, start, stop):
-    """Return appointments count by month from start to stop inclusively.
-    Month without appointments counts as zero"""
-    dates = dict((key, len(list(appointments)))
-                 for key, appointments
+def patients_count(records, start, stop):
+    """Return patient registrations count by month from start to stop
+    inclusively. Month without patient registrations counts as zero"""
+    dates = dict((key, len(list(patients)))
+                 for key, patients
                  in groupby(records, lambda d: (d.year, d.month)))
 
     pretty_dates = []
@@ -48,23 +48,23 @@ def appointments_count(records, start, stop):
     return pretty_dates
 
 
-def appointments(records, start=None, stop=None):
+def patients(records, start=None, stop=None):
     if not start:
         start, stop = year_range()
 
-    dates = appointments_count(records, start, stop)
+    dates = patients_count(records, start, stop)
 
     return json.dumps({
         "chart": {"type": "column"},
         "credits": False,
-        "title": {"text": "Appointments" },
+        "title": {"text": "Patients" },
         "xAxis": {
             "categories": [month for month, _ in dates],
             "crosshair": True
             },
         "yAxis": {"title": {"text": "Count"}},
         "series": [{
-            "name": "Appointments",
+            "name": "Patients",
             "data": [{"name": month, "y": count}
                      for month, count in dates]
             }]

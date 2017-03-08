@@ -66,6 +66,8 @@ class Person(models.Model):
             max_length=20, choices=DENTAL_CHART_CHOICES, default=("Permanent"))
     dental_chart = models.CharField(max_length=1024, default="{}")
 
+    created_at = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
         return self.name
 
@@ -157,14 +159,4 @@ class Event(models.Model):
     date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-
-class Appointment(models.Model):
-    user = models.ForeignKey(User)
-    person = models.ForeignKey(Person)
-    date = models.DateField(default=date.today, blank=True)
-    time = models.TimeField(null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
 
