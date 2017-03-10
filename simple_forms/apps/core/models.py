@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 import logging
 import json
+from decimal import Decimal
 
 #from django.contrib.auth.models import Permission, User
 from datetime import date
@@ -72,11 +73,13 @@ class Person(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
+        if not isinstance(self.amount_paid, Decimal):
+            self.amount_paid = Decimal(self.paid)
         with transaction.atomic(xg=True):
             delta = 0
             if self.pk:
                 old_state = Person.objects.get(pk=self.pk)
-                delta = self.amount_paid - old_state.amount_paid
+                delta = self.amount_paid - Decimal(old_state.amount_paid)
             else:
                 delta = self.amount_paid
             super(Person, self).save(*args, **kwargs)
