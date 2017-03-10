@@ -74,12 +74,12 @@ class Person(models.Model):
 
     def save(self, *args, **kwargs):
         if not isinstance(self.amount_paid, Decimal):
-            self.amount_paid = Decimal(self.amount_paid)
+            self.amount_paid = Decimal(self.amount_paid or "0")
         with transaction.atomic(xg=True):
             delta = 0
             if self.pk:
                 old_state = Person.objects.get(pk=self.pk)
-                delta = self.amount_paid - Decimal(old_state.amount_paid)
+                delta = self.amount_paid - Decimal(old_state.amount_paid or "0")
             else:
                 delta = self.amount_paid
             super(Person, self).save(*args, **kwargs)
