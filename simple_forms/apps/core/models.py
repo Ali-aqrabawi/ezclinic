@@ -75,6 +75,8 @@ class Person(models.Model):
     def save(self, *args, **kwargs):
         if not isinstance(self.amount_paid, Decimal):
             self.amount_paid = Decimal(self.amount_paid or "0")
+        if not isinstance(self.amount_left, Decimal):
+            self.amount_left = Decimal(self.amount_left or "0")
         with transaction.atomic(xg=True):
             delta = 0
             if self.pk:
