@@ -64,7 +64,7 @@ def patients(records, start=None, stop=None):
             },
         "yAxis": {"title": {"text": "Count"}},
         "series": [{
-            "name": "Number of registered patients",
+            "name": "Patients",
             "data": [{"name": month, "y": count}
                      for month, count in dates]
             }]
