@@ -57,14 +57,14 @@ def patients(records, start=None, stop=None):
     return json.dumps({
         "chart": {"type": "column"},
         "credits": False,
-        "title": {"text": "Patients" },
+        "title": {"text": "Number of registered patients" },
         "xAxis": {
             "categories": [month for month, _ in dates],
             "crosshair": True
             },
         "yAxis": {"title": {"text": "Count"}},
         "series": [{
-            "name": "Patients",
+            "name": "Number of registered patients",
             "data": [{"name": month, "y": count}
                      for month, count in dates]
             }]
