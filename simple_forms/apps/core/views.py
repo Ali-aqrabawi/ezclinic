@@ -16,11 +16,15 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.views.decorators.cache  import never_cache
 
+from djangae.contrib.consistency.signals import connect_signals;
+from djangae.contrib.consistency.consistency import improve_queryset_consistency
 from djangae.utils import get_in_batches
 
 from . import models as m
 from . import forms as f
 from . import charts_data
+
+connect_signals()
 
 # Appengine Datastore magic limit
 CHUNK_SIZE = 30
@@ -52,13 +56,6 @@ def add_person(request):
             for diagcode in diagcodes:
                 m.Diagcode.objects.create(person=person, diagcode=diagcode)
 
-        appointment_form = f.AppointmentForm(request.POST)
-        if appointment_form.is_valid():
-            appointment = appointment_form.save(commit=False)
-            appointment.user = request.user
-            appointment.person = person
-            appointment.save()
-
         return redirect(reverse('view', args=(person.id,)))
     context = {
         "form": form,
@@ -70,7 +67,8 @@ def add_person(request):
 @login_required
 def patients(request):
     page = request.GET.get('page', 1)
-    persons = request.user.person_set.all()
+    persons = improve_queryset_consistency(
+            request.user.person_set.order_by("pk")) # Default ordering
     paginator = Paginator(persons, 6)
     # to avoid unsppuorted query by datastore
     if not persons:
@@ -194,12 +192,6 @@ def edit(request, person_id):
                     else:
                         pass
 
-            appointment_form = f.AppointmentForm(request.POST)
-            if appointment_form.is_valid():
-                appointment = appointment_form.save(commit=False)
-                appointment.user = request.user
-                appointment.person = person
-                appointment.save()
 
         url = reverse('view', args=(person.id,))
         if tab:
@@ -259,17 +251,13 @@ def calendar(request):
         return redirect(request.get_full_path())
 
     # Simulate ORDER BY with NULLS LAST
-    # persons = list(request.user.person_set.filter(date=date))
-    # persons.sort(key=lambda p: p.time or datetime.time(23, 59, 59))
-    appointments = list(m.Appointment.objects
-                        .filter(date=date, user=request.user)
-                        .prefetch_related())
-    appointments.sort(key=lambda p: p.time or datetime.time(23, 59, 59))
+    persons = list(request.user.person_set.filter(date=date))
+    persons.sort(key=lambda p: p.time or datetime.time(23, 59, 59))
 
     events = request.user.event_set.filter(date=date)
 
     return render(request, 'core/calendar.html',
-            {'appointments': appointments,
+            {'persons': persons,
              'events': events,
              'date': date,
              'today': date == datetime.date.today(),
@@ -296,15 +284,39 @@ def search(request):
 
 @login_required
 def dashboard(request):
+    # You can use it for preseeding database with users
+
+    # import random
+    # for i in range(100):
+    #     p = m.Person.objects.create(
+    #         name="test_{}".format(i),
+    #         last_name="test_{}".format(i),
+    #         amount_paid=0,
+    #         age=random.randint(8, 88))
+    #     p.created_at = datetime.datetime(2016, random.randint(1, 12), random.randint(1, 20))
+    #     p.save()
+    #     for j in range(random.randint(3, 20)):
+    #         r = m.Receipt.objects.create(
+    #             user=request.user,
+    #             person=p,
+    #             amount=random.randint(20, 600))
+    #         r.created_at=datetime.datetime(2016, random.randint(1, 12), random.randint(1, 20))
+    #         r.save()
+
+    persons = list(get_in_batches(request.user.person_set.all(), CHUNK_SIZE))
+
+    # Pseudomigration
+    for patient in persons:
+        if patient.created_at is None:
+            patient.created_at = datetime.datetime.utcnow()
+            patient.save()
+
     data = {}
-    persons = list(get_in_batches(
-        request.user.person_set.values("id", "age"),
-        CHUNK_SIZE))
-    p_ids = list(person["id"] for person in persons)
     data["count"] = len(persons)
 
-    data["ages"] = charts_data.ages(p["age"] for p in persons)
+    data["ages"] = charts_data.ages([p.age for p in persons])
 
+    p_ids = list(person.pk for person in persons)
     dental_charts_records = []
     for i in range(0, len(persons), CHUNK_SIZE):
         dental_charts_records.extend(
@@ -314,37 +326,29 @@ def dashboard(request):
     data["dental_charts"] = charts_data.dental_charts(dental_charts_records)
 
     year_ago, end_of_month = charts_data.year_range()
-    appointment_records = (request.user.appointment_set
-                           .filter(date__gte=year_ago, date__lte=end_of_month)
-                           .order_by("date")
-                           .values_list("date", flat=True))
-    appointment_records = get_in_batches(appointment_records, 30)
 
-    data["appointments"] = charts_data.appointments(appointment_records,
-                                                    year_ago, end_of_month)
+    patients_records = [patient.created_at for patient in persons]
+    patients_records.sort()
+    data["patients"] = charts_data.patients(patients_records,
+                                            year_ago, end_of_month)
 
     today = datetime.date.today()
     next_sat = (today + datetime.timedelta(days=(5 - today.weekday()) % 7))
     next_sat2 = next_sat + datetime.timedelta(weeks=1)
     next_sat3 = next_sat + datetime.timedelta(weeks=2)
-    next_appointments = (request.user.appointment_set
-                         .filter(date__gte=next_sat, date__lte=next_sat3)
-                         .order_by("date")
-                         .values_list("date", flat=True))
-    next_appointments = list(get_in_batches(next_appointments, 30))
+    next_appointments = [person.date for person in persons
+                         if next_sat <= person.date < next_sat3]
+    next_appointments.sort()
     data["appointment_next_week"] = len([d for d in next_appointments
                                          if next_sat <= d < next_sat2])
     data["appointment_next_week2"] = len([d for d in next_appointments
                                           if next_sat2 <= d < next_sat3])
 
-    receipts_records = (request.user.receipt_set
-                        .filter(created_at__gte=year_ago,
-                                created_at__lte=end_of_month)
-                        .order_by("created_at"))
-    receipts_records = get_in_batches(receipts_records, 30)
+    receipts_records = request.user.receipt_set.values("amount", "created_at")
+    receipts_records = list(get_in_batches(receipts_records, CHUNK_SIZE))
+    receipts_records.sort()
     data["revenue"] = charts_data.revenue(receipts_records,
                                           year_ago, end_of_month)
-
 
     return render(request, 'core/dashboard.html', data)
 
@@ -354,12 +358,9 @@ class AppointmentView(View):
         person = get_object_or_404(m.Person, pk=person_id)
         appointment_form = f.AppointmentForm(request.POST or None)
         if appointment_form.is_valid():
-            logging.info(request.POST)
-            logging.info(appointment_form.cleaned_data)
-            appointment = appointment_form.save(commit=False)
-            appointment.user = request.user
-            appointment.person = person
-            appointment.save()
+            person.date = appointment_form.cleaned_data["date"]
+            person.time = appointment_form.cleaned_data["time"]
+            person.save()
         return redirect(reverse('view', args=(person.id,)))
 
 

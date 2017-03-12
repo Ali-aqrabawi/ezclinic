@@ -65,11 +65,27 @@ indexes:
   - name: user_id
   - name: age
 
+- kind: core_person
+  properties:
+  - name: user_id
+  - name: created_at
+
+- kind: core_person
+  properties:
+  - name: user_id
+  - name: date
+
 - kind: core_picture
   properties:
   - name: person_id
   - name: __key__
     direction: desc
+
+- kind: core_receipt
+  properties:
+  - name: user_id
+  - name: amount
+  - name: created_at
 
 - kind: core_receipt
   properties:

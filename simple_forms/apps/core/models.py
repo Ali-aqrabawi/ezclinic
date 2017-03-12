@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 import logging
 import json
+from decimal import Decimal
 
 #from django.contrib.auth.models import Permission, User
 from datetime import date
@@ -66,20 +67,27 @@ class Person(models.Model):
             max_length=20, choices=DENTAL_CHART_CHOICES, default=("Permanent"))
     dental_chart = models.CharField(max_length=1024, default="{}")
 
+    created_at = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
         return self.name
 
     def save(self, *args, **kwargs):
+        if not isinstance(self.amount_paid, Decimal):
+            self.amount_paid = Decimal(self.amount_paid or "0")
+        if not isinstance(self.amount_left, Decimal):
+            self.amount_left = Decimal(self.amount_left or "0")
         with transaction.atomic(xg=True):
             delta = 0
             if self.pk:
                 old_state = Person.objects.get(pk=self.pk)
-                delta = self.amount_paid - old_state.amount_paid
+                delta = self.amount_paid - Decimal(old_state.amount_paid or "0")
             else:
                 delta = self.amount_paid
             super(Person, self).save(*args, **kwargs)
 
-        Receipt.objects.create(user=self.user, person=self, amount=delta)
+        if delta > 0:
+            Receipt.objects.create(user=self.user, person=self, amount=delta)
 
         try:
             dc = DentalChart.objects.get(person_id=self.pk)
@@ -157,14 +165,4 @@ class Event(models.Model):
     date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-
-class Appointment(models.Model):
-    user = models.ForeignKey(User)
-    person = models.ForeignKey(Person)
-    date = models.DateField(default=date.today, blank=True)
-    time = models.TimeField(null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
 

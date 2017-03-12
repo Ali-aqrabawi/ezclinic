@@ -32,11 +32,11 @@ def months_iterator(start, stop=None):
         yield current
         current = (current + dt.timedelta(days=33)).replace(day=1)
 
-def appointments_count(records, start, stop):
-    """Return appointments count by month from start to stop inclusively.
-    Month without appointments counts as zero"""
-    dates = dict((key, len(list(appointments)))
-                 for key, appointments
+def patients_count(records, start, stop):
+    """Return patient registrations count by month from start to stop
+    inclusively. Month without patient registrations counts as zero"""
+    dates = dict((key, len(list(patients)))
+                 for key, patients
                  in groupby(records, lambda d: (d.year, d.month)))
 
     pretty_dates = []
@@ -48,32 +48,32 @@ def appointments_count(records, start, stop):
     return pretty_dates
 
 
-def appointments(records, start=None, stop=None):
+def patients(records, start=None, stop=None):
     if not start:
         start, stop = year_range()
 
-    dates = appointments_count(records, start, stop)
+    dates = patients_count(records, start, stop)
 
     return json.dumps({
         "chart": {"type": "column"},
         "credits": False,
-        "title": {"text": "Appointments" },
+        "title": {"text": "Number of registered patients" },
         "xAxis": {
             "categories": [month for month, _ in dates],
             "crosshair": True
             },
         "yAxis": {"title": {"text": "Count"}},
         "series": [{
-            "name": "Appointments",
+            "name": "Patients",
             "data": [{"name": month, "y": count}
                      for month, count in dates]
             }]
         }, indent=2)
 
 def revenue_sums(records, start, stop):
-    month_receipts = groupby(records, lambda r: (r.created_at.year,
-                                                 r.created_at.month))
-    month_receipts = dict((month, sum(r.amount for r in group))
+    month_receipts = groupby(records, lambda r: (r["created_at"].year,
+                                                 r["created_at"].month))
+    month_receipts = dict((month, sum(r["amount"] for r in group))
                           for month, group in month_receipts)
 
     s = 0
@@ -161,4 +161,4 @@ def ages(records):
             pie_chart("Patients Ages Chart",
                       [{"name": name, "y": count}
                        for name, count in
-                       zip(["<10", "10—19", "20—29", "30—40", ">40"], groups)]))
+                       zip(["&lt;10", "10—19", "20—29", "30—40", ">40"], groups)]))
