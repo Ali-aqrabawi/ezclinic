@@ -273,11 +273,11 @@ def search(request):
     if not q and not q1:
         return redirect("home")
     if q and q1:
-        persons = m.Person.objects.filter(name=q, last_name=q1)
+        persons = m.Person.objects.filter(name=q, last_name=q1,user=request.user)
     elif q:
-        persons = m.Person.objects.filter(name=q)
+        persons = m.Person.objects.filter(name=q,user=request.user)
     elif q1:
-        persons = m.Person.objects.filter(last_name=q1)
+        persons = m.Person.objects.filter(last_name=q1,user=request.user)
 
     return render(request, 'core/search.html', {'persons': persons})
 
