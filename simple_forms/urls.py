@@ -47,7 +47,7 @@ urlpatterns = [
     url(r'^search/$', views.search, name='search'),
 	url(r'^_ah/', include('djangae.urls')),
     url(r'^dashboard/$', views.dashboard, name='dashboard'),
-	url(r'^google323523d1a2bbb38c\.html$', lambda r: HttpResponse("google-site-verification: google323523d1a2bbb38c.html", mimetype="text/plain")),
+    url(r'^google323523d1a2bbb38c\.html$', lambda r: HttpResponse("google-site-verification: google323523d1a2bbb38c.html", mimetype="text/plain")),
 ]
 
 if settings.DEBUG:
