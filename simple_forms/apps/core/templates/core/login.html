@@ -3,16 +3,30 @@
 {% block login_active %}active{% endblock %}
 {% load staticfiles %}
 {% load i18n %}
+{% load cache %}
 {% load widget_tweaks %}
 {% block body %}
+<style>
+#page-preloader {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    background: lightskyblue;
+    z-index: 100500;
+}
+</style>
+<div id="page-preloader"></div>
 <div class="container-fluid">
-
     <div class="row">
         <div class="col-sm-4 col-sm-offset-4 col-xs-12 col-xs-offset-0">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <img class="img-responsive" style="margin-left: auto; margin-right:" src="{% static "img/logo22.jpg" %}" alt="Logo" />
-
+                {% cache 40000 img %}
+                    <img class="img-responsive" style="margin-left: auto;" src="{% static "img/logo22.jpg" %}" alt="Logo" />
+                {% endcache %}
                     <form class="form-horizontal" role="form" action="{% url 'login_user'%}" method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                            <h3 class="text-center">Login here</h3>
@@ -37,17 +51,13 @@
                             </div>
                         </div>
 
-
                         <div class="form-group">
                             <div class="col-sm-offset-4 col-sm-4">
                                 <button type="submit" class="btn btn-info">Login</button>
                             </div>
                         </div>
-						
-						
+
                     </form>
-					
-					
                 </div>
                 <div class="panel-footer">
                     <p>Forgot password? <a href="{% url 'password_reset' %}">Click to reset</a></p>
@@ -56,8 +66,11 @@
             </div>
         </div>
     </div>
-
 </div>
-
+<script>
+    window.onload = function (){
+    document.getElementById("page-preloader").style.display = "none";
+    };
+</script>
 {% endblock %}
 
