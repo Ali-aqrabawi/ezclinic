@@ -5,6 +5,7 @@ from django.conf.urls import url ,include
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
+from django.http import HttpResponse
 
 from simple_forms.apps.core import views
 from simple_forms.apps.core import forms
