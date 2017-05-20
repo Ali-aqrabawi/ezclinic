@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.http import HttpResponse
-
+from django.views.generic.simple import direct_to_template
 from simple_forms.apps.core import views
 from simple_forms.apps.core import forms
 
