@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.http import HttpResponse
-from django.views.generic.simple import direct_to_template
+
 from simple_forms.apps.core import views
 from simple_forms.apps.core import forms
 
@@ -49,7 +49,7 @@ urlpatterns = [
 	url(r'^_ah/', include('djangae.urls')),
     url(r'^dashboard/$', views.dashboard, name='dashboard'),
     url(r'^google323523d1a2bbb38c\.html$', lambda r: HttpResponse("google-site-verification: google323523d1a2bbb38c.html", content_type="text/plain")),
-	url(r'^sitemap\.xml$', direct_to_template, {'template': 'sitemap.xml', 'mimetype': 'xml/plain'}),
+	url(r'^(?i)sitemap.xml$', san.views.FileDownload.as_view()),,
 ]
 
 if settings.DEBUG:
