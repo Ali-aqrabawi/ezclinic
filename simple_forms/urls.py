@@ -49,7 +49,7 @@ urlpatterns = [
 	url(r'^_ah/', include('djangae.urls')),
     url(r'^dashboard/$', views.dashboard, name='dashboard'),
     url(r'^google323523d1a2bbb38c\.html$', lambda r: HttpResponse("google-site-verification: google323523d1a2bbb38c.html", content_type="text/plain")),
-	url(r'^(?i)sitemap.xml$', san.views.FileDownload.as_view()),,
+	url(r'^(?i)sitemap.xml$', san.views.FileDownload.as_view()),
 ]
 
 if settings.DEBUG:
