@@ -31,7 +31,7 @@ DENTAL_CHART_CHOICES = (
 
 
 public_storage = storage.CloudStorage(
-    bucket='ezclinic16.appspot.com', google_acl='public-read')
+    bucket='ezclinic-app.appspot.com', google_acl='public-read')
 
 
 class User(AbstractUser):
