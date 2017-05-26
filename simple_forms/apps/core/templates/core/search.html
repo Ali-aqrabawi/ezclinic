@@ -30,7 +30,7 @@
         <td>{{ person.last_name }}</td>
         <td>{{ person.treatment_done|linebreaks }}</td>
         <td>{{ person.treatment_plan|linebreaks }}</td>
-        <td >{{ person.phone }}</td>
+        <td >{{ person.mobile }}</td>
         <td><a  href="{% url 'view' person.id %}"><i  class="glyphicon glyphicon-list-alt"></i></a></td>
       </tr>
       {% empty %}
