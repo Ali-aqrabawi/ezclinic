@@ -136,7 +136,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-BUCKET_KEY='ezclinic-app.appspot.com'
+BUCKET_KEY='ezclinic-dental.appspot.com'
 
 
 
