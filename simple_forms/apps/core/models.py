@@ -35,7 +35,8 @@ public_storage = storage.CloudStorage(
 
 
 class User(AbstractUser):
-    email = models.EmailField(_('email address'), unique=True, null=False, blank=False)
+    email = models.EmailField(
+        _('email address'), unique=True, null=False, blank=False)
 
     country = CountryField()
     city = models.CharField(max_length=30)
@@ -49,7 +50,8 @@ class Person(models.Model):
     age = models.IntegerField(default=100)
     martial_status = models.CharField(
         max_length=20, choices=STATUS_CHOICES, default=("Single"))
-    sex = models.CharField( max_length=20, choices=SEX_CHOICES, default=("Male"))
+    sex = models.CharField(
+        max_length=20, choices=SEX_CHOICES, default=("Male"))
     mobile = models.CharField(max_length=26, default=0011)
     amount_paid = models.DecimalField("money paid", max_digits=10,
                                       decimal_places=2, null=False, default=0)
@@ -64,7 +66,7 @@ class Person(models.Model):
     treatment_done = models.CharField(max_length=256, null=True, blank=True)
 
     dental_chart_type = models.CharField(
-            max_length=20, choices=DENTAL_CHART_CHOICES, default=("Permanent"))
+        max_length=20, choices=DENTAL_CHART_CHOICES, default=("Permanent"))
     dental_chart = models.CharField(max_length=1024, default="{}")
 
     created_at = models.DateTimeField(auto_now_add=True)
@@ -81,7 +83,8 @@ class Person(models.Model):
             delta = 0
             if self.pk:
                 old_state = Person.objects.get(pk=self.pk)
-                delta = self.amount_paid - Decimal(old_state.amount_paid or "0")
+                delta = self.amount_paid - \
+                    Decimal(old_state.amount_paid or "0")
             else:
                 delta = self.amount_paid
             super(Person, self).save(*args, **kwargs)
@@ -108,7 +111,8 @@ class Receipt(models.Model):
 class Picture(models.Model):
     picture = models.FileField(
         upload_to='image', storage=public_storage, blank=True)
-    person = models.ForeignKey(Person, related_name='pictures')
+    person = models.ForeignKey(
+        Person, related_name='pictures', on_delete=models.CASCADE)
 
     def filename(self):
 
@@ -120,7 +124,8 @@ class Picture(models.Model):
 
 class Diagcode(models.Model):
     diagcode = models.CharField(max_length=256)
-    person = models.ForeignKey(Person, related_name='diagcodes')
+    person = models.ForeignKey(
+        Person, related_name='diagcodes', on_delete=models.CASCADE)
 
     class Meta:
         unique_together = ('person', 'diagcode')
@@ -128,16 +133,17 @@ class Diagcode(models.Model):
     def __unicode__(self):
         return self.diagcode
 
+
 class DentalChart(models.Model):
     COLORS = {"x": "extraction",
               "red": "missing",
               "yellow": "filling",
               "green": "rct"}
 
-
-    person = models.ForeignKey(Person, related_name='dental_charts')
+    person = models.ForeignKey(
+        Person, related_name='dental_charts', on_delete=models.CASCADE)
     dental_chart_type = models.CharField(
-            max_length=20, choices=DENTAL_CHART_CHOICES, default=("Permanent"))
+        max_length=20, choices=DENTAL_CHART_CHOICES, default=("Permanent"))
     dental_chart = models.CharField(max_length=1024, default="{}")
 
     extraction = models.IntegerField(default=0)
@@ -165,4 +171,3 @@ class Event(models.Model):
     date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
