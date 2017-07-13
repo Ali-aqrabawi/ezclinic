@@ -59,9 +59,16 @@ class PersonForm(forms.ModelForm):
 
     def clean_name(self):
         name = self.cleaned_data.get('name')
-        if re.search('\d', name):
-            raise forms.ValidationError('Only letters are allowed in Name')
+        if not name.isalpha():
+            raise forms.ValidationError('Only letters are allowed in name')
         return name
+
+    def clean_last_name(self):
+        last_name = self.cleaned_data.get('last_name')
+        if not last_name.isalpha():
+            raise forms.ValidationError(
+                'Only letters are allowed in last name')
+        return last_name
 
 
 class UserForm(forms.ModelForm):

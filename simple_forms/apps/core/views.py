@@ -35,7 +35,6 @@ IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
 @login_required
 def add_person(request):
     form = f.PersonForm(request.POST or None, request.FILES or None)
-    print 'invalid'
     if form.is_valid():
         print 'valid'
         person = form.save(commit=False)
