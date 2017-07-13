@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+import re
 
 from django import forms
 from django.utils.translation import ugettext, ugettext_lazy as _
@@ -8,7 +9,7 @@ from django.contrib.auth.forms import PasswordResetForm
 
 from djangae.utils import get_in_batches
 
-from . import models as m
+from .models import Person, User, Event, Receipt
 
 
 class PersonForm(forms.ModelForm):
@@ -16,12 +17,18 @@ class PersonForm(forms.ModelForm):
         attrs={'required': False, 'multiple': True, 'class': 'form-control'}), required=False)
     time = forms.TimeField(input_formats=["%I:%M %p"])
 
+    def __init__(self, *args, **kwargs):
+        super(PersonForm, self).__init__(*args, **kwargs)
+        if not self.instance.pk:
+            self.fields['age'].initial = ''
+            self.fields['mobile'].initial = ''
+
     class Meta:
-        model = m.Person
+        model = Person
         fields = ['name', 'last_name', 'age', 'martial_status', 'mobile', 'sex',
                   'amount_paid', 'amount_left', 'note', 'address', 'date', 'time',
                   'treatment_done', 'treatment_plan', 'chief_complain',
-                   'dental_chart_type', 'dental_chart']
+                  'dental_chart_type', 'dental_chart']
         widgets = {
             'name': forms.TextInput(attrs={'required': True, 'class': 'form-control',
                                            'placeholder': 'name'}),
@@ -34,8 +41,8 @@ class PersonForm(forms.ModelForm):
             'amount_left': forms.TextInput(attrs={'required': False, 'class': 'form-control',
                                                   'placeholder': 'amount left'}),
             'note': forms.Textarea(attrs={'required': False, 'class': 'form-control',
-                                           'placeholder': 'Patient History',
-                                           'rows': '3'}),
+                                          'placeholder': 'Patient History',
+                                          'rows': '3'}),
             'address': forms.TextInput(attrs={'required': False, 'class': 'form-control',
                                               'placeholder': 'Current address'}),
             'chief_complain': forms.TextInput(attrs={'required': False, 'class': 'form-control',
@@ -50,19 +57,26 @@ class PersonForm(forms.ModelForm):
 
         }
 
+    def clean_name(self):
+        name = self.cleaned_data.get('name')
+        if re.search('\d', name):
+            raise forms.ValidationError('Only letters are allowed in Name')
+        return name
+
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
 
     class Meta:
-        model = m.User
+        model = User
         fields = ['username', 'email', 'password', 'country',
                   'last_name', 'first_name', 'city', 'clinic']
 
 
 class EventForm(forms.ModelForm):
+
     class Meta:
-        model = m.Event
+        model = Event
         fields = ['text', 'date']
 
 
@@ -72,8 +86,9 @@ class AppointmentForm(forms.Form):
 
 
 class ReceiptForm(forms.ModelForm):
+
     class Meta:
-        model = m.Receipt
+        model = Receipt
         fields = ['amount']
 
 

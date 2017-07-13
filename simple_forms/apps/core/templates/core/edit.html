@@ -30,10 +30,12 @@
                             <div class="col-sm-2 form-group">
                                 <label for="name" >{% trans "Name:" %}</label>
                                     {{ form.name|add_class:"form-control" }}
+                                    <span class="text-danger">{{form.name.errors}}</span>
                             </div>
                             <div class="col-sm-2 form-group">
                                 <label for="lname">{% trans "Lastname:" %}</label>
                                     {{ form.last_name|add_class:"form-control" }}
+                                    <span class="text-danger">{{form.last_name.errors}}</span>
                             </div>
                             <div class="col-sm-2 form-group">
                                <label for="Sex">{% trans "Sex:" %}</label>
@@ -50,6 +52,7 @@
                             <div  class="col-sm-2 form-group">
                                 <label for="age">{% trans "Age:" %}</label>
                                     {{ form.age|add_class:"form-control" }}
+                                    <span class="text-danger">{{form.age.errors}}</span>
                             </div>
                             <div class="col-sm-2 form-group">
                                 <label for="martial">{% trans "Martial Status:" %}</label>
@@ -199,10 +202,12 @@
                             <div class="col-sm-2 form-group">
                                 <label for="name" >{% trans "Name:" %}</label>
                                     {{ form.name|add_class:"form-control" }}
+                                    <span class="text-danger">{{form.name.errors}}</span>
                             </div>
                             <div class="col-sm-2 form-group">
                                 <label for="lname">{% trans "Lastname:" %}</label>
                                     {{ form.last_name|add_class:"form-control" }}
+                                    <span class="text-danger">{{form.last_name.errors}}</span>
                             </div>
                             <div class="col-sm-2 form-group">
                                <label for="Sex">{% trans "Sex:" %}</label>
@@ -219,6 +224,7 @@
                             <div  class="col-sm-2 form-group">
                                 <label for="age">{% trans "Age:" %}</label>
                                     {{ form.age|add_class:"form-control" }}
+                                    <span class="text-danger">{{form.age.errors}}</span>
                             </div>
                             <div class="col-sm-2 form-group">
                                 <label for="martial">{% trans "Martial Status:" %}</label>

@@ -14,9 +14,9 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponse, JsonResponse, HttpResponseNotAllowed
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
-from django.views.decorators.cache  import never_cache
+from django.views.decorators.cache import never_cache
 
-from djangae.contrib.consistency.signals import connect_signals;
+from djangae.contrib.consistency.signals import connect_signals
 from djangae.contrib.consistency.consistency import improve_queryset_consistency
 from djangae.utils import get_in_batches
 
@@ -30,6 +30,7 @@ connect_signals()
 CHUNK_SIZE = 30
 
 IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
+
 
 @login_required
 def add_person(request):
@@ -68,7 +69,7 @@ def add_person(request):
 def patients(request):
     page = request.GET.get('page', 1)
     persons = improve_queryset_consistency(
-            request.user.person_set.order_by("pk")) # Default ordering
+        request.user.person_set.order_by("pk"))  # Default ordering
     paginator = Paginator(persons, 6)
     # to avoid unsppuorted query by datastore
     if not persons:
@@ -192,11 +193,10 @@ def edit(request, person_id):
                     else:
                         pass
 
-
-        url = reverse('view', args=(person.id,))
-        if tab:
-            url = "{}?tab={}".format(url, tab)
-        return redirect(url)
+            url = reverse('view', args=(person.id,))
+            if tab:
+                url = "{}?tab={}".format(url, tab)
+            return redirect(url)
     else:
         form = f.PersonForm(instance=person)
 
@@ -219,7 +219,6 @@ def view(request, person_id):
         pictures_tuple = zip(it, it)
         last_picture = pictures.last()
 
-
     return render(request, 'core/view.html',
                   {'person': person, 'pictures_tuple': pictures_tuple,
                    'last_picture': last_picture, 'tab': tab,
@@ -234,11 +233,13 @@ def foto(request, person_id):
 
     return render(request, 'core/home3.html', {'persons': persons})
 
+
 @never_cache
 @login_required
 def calendar(request):
     try:
-        date = datetime.datetime.strptime(request.GET.get("appointment", "").strip(), "%Y-%m-%d").date()
+        date = datetime.datetime.strptime(request.GET.get(
+            "appointment", "").strip(), "%Y-%m-%d").date()
     except ValueError as e:
         date = datetime.date.today()
 
@@ -257,11 +258,11 @@ def calendar(request):
     events = request.user.event_set.filter(date=date)
 
     return render(request, 'core/calendar.html',
-            {'persons': persons,
-             'events': events,
-             'date': date,
-             'today': date == datetime.date.today(),
-             'event_form': event_form,})
+                  {'persons': persons,
+                   'events': events,
+                   'date': date,
+                   'today': date == datetime.date.today(),
+                   'event_form': event_form, })
 
 
 # search by name or last name
@@ -273,11 +274,12 @@ def search(request):
     if not q and not q1:
         return redirect("home")
     if q and q1:
-        persons = m.Person.objects.filter(name=q, last_name=q1,user=request.user)
+        persons = m.Person.objects.filter(
+            name=q, last_name=q1, user=request.user)
     elif q:
-        persons = m.Person.objects.filter(name=q,user=request.user)
+        persons = m.Person.objects.filter(name=q, user=request.user)
     elif q1:
-        persons = m.Person.objects.filter(last_name=q1,user=request.user)
+        persons = m.Person.objects.filter(last_name=q1, user=request.user)
 
     return render(request, 'core/search.html', {'persons': persons})
 
@@ -320,9 +322,9 @@ def dashboard(request):
     dental_charts_records = []
     for i in range(0, len(persons), CHUNK_SIZE):
         dental_charts_records.extend(
-                m.DentalChart.objects
-                    .filter(person__in=p_ids[i: i + CHUNK_SIZE])
-                    .values_list("extraction", "filling", "rct"))
+            m.DentalChart.objects
+            .filter(person__in=p_ids[i: i + CHUNK_SIZE])
+            .values_list("extraction", "filling", "rct"))
     data["dental_charts"] = charts_data.dental_charts(dental_charts_records)
 
     year_ago, end_of_month = charts_data.year_range()
@@ -354,6 +356,7 @@ def dashboard(request):
 
 
 class AppointmentView(View):
+
     def post(self, request, person_id):
         person = get_object_or_404(m.Person, pk=person_id)
         appointment_form = f.AppointmentForm(request.POST or None)
@@ -365,6 +368,7 @@ class AppointmentView(View):
 
 
 class ReceiptView(View):
+
     def post(self, request, person_id):
         person = get_object_or_404(m.Person, pk=person_id)
         receipt_form = f.ReceiptForm(request.POST or None)
