@@ -408,6 +408,11 @@
                     }
                 });
             });
+
+            var values="{{diagcodes}}";
+            $.each(values.split(","), function(i,e){
+                $("#diagcode option[value='" + e + "']").prop("selected", true);
+            });
           })
     </script>
   

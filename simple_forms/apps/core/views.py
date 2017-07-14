@@ -166,7 +166,8 @@ def register(request):
 
 @login_required
 def edit(request, person_id):
-    person = get_object_or_404(m.Person, pk=person_id)
+    person = get_object_or_404(
+        m.Person.objects.prefetch_related('diagcodes'), pk=person_id)
     tab = request.GET.get('tab')
 
     if request.method == "POST":
@@ -198,9 +199,11 @@ def edit(request, person_id):
             return redirect(url)
     else:
         form = f.PersonForm(instance=person)
+        diagcodes = ','.join(
+            [diagcode.diagcode for diagcode in person.diagcodes.all()])
 
     return render(request, 'core/edit.html',
-                  {'form': form, 'mode': 'edit', 'person': person, 'tab': tab})
+                  {'form': form, 'mode': 'edit', 'person': person, 'diagcodes': diagcodes, 'tab': tab})
 
 
 @login_required
