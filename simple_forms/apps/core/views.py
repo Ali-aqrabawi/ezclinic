@@ -89,12 +89,12 @@ def patients(request):
 #===========delete a prson==================
 @login_required
 def delete_person(request, person_id):
-    if request.method == "POST":
-        c = get_object_or_404(m.Person, pk=person_id)
+    if request.method == "GET" and request.method == 'POST':
+        c = get_object_or_404(m.Person, pk=person_id, user=request.user)
         c.delete()
         return redirect(reverse('patients'))
     else:
-        return HttpResponseNotAllowed("Use POST")
+        return redirect(reverse('view', args=(person_id,)))
 
 
 @login_required

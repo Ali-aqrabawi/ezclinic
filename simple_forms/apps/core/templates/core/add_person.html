@@ -52,10 +52,12 @@
                         <div class="col-sm-2 form-group">
                             <label for="amount paid">{% trans "Money Paid:" %}</label>
                                {{ form.amount_paid|add_class:"form-control" }}
+                               <span class="text-danger">{{form.amount_paid.errors}}</span>
                         </div>
                         <div class="col-sm-2 form-group">
                                <label for="amount left">{% trans "Total Price:" %}</label>
                                {{ form.amount_left|add_class:"form-control" }}
+                               <span class="text-danger">{{form.amount_left.errors}}</span>
                         </div>
                         
                     </div>
@@ -63,10 +65,12 @@
                         <div class="col-sm-4 form-group">
                            <label for="mobile">{% trans "Mobile Number:" %}</label>
                            {{ form.mobile|add_class:"form-control" }}
+                           <span class="text-danger">{{form.mobile.errors}}</span>
                         </div>
                         <div class="col-sm-4 form-group">
                             <label for="address">{% trans "Address:" %}</label>
                                 {{ form.address|add_class:"form-control" }}
+                                <span class="text-danger">{{form.address.errors}}</span>
                         </div>
                     </div>                    
                 </div>

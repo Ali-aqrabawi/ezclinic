@@ -34,15 +34,17 @@ class PersonForm(forms.ModelForm):
                                            'placeholder': 'name'}),
             'last_name': forms.TextInput(attrs={'required': True, 'class': 'form-control',
                                                 'placeholder': 'lastname'}),
-            'age': forms.TextInput(attrs={'required': False, 'class': 'form-control',
-                                          'placeholder': 'age'}),
-            'amount_paid': forms.TextInput(attrs={'required': False, 'class': 'form-control',
-                                                  'placeholder': 'amount paid'}),
-            'amount_left': forms.TextInput(attrs={'required': False, 'class': 'form-control',
-                                                  'placeholder': 'amount left'}),
+            'age': forms.NumberInput(attrs={'required': False, 'class': 'form-control',
+                                            'placeholder': 'age', 'max': 100}),
+            'amount_paid': forms.NumberInput(attrs={'required': False, 'class': 'form-control',
+                                                    'placeholder': 'amount paid'}),
+            'amount_left': forms.NumberInput(attrs={'required': False, 'class': 'form-control',
+                                                    'placeholder': 'amount left'}),
             'note': forms.Textarea(attrs={'required': False, 'class': 'form-control',
                                           'placeholder': 'Patient History',
                                           'rows': '3'}),
+            'mobile': forms.TextInput(attrs={'required': True, 'class': 'form-control',
+                                             'placeholder': 'Mobile Number', 'type': 'tel'}),
             'address': forms.TextInput(attrs={'required': False, 'class': 'form-control',
                                               'placeholder': 'Current address'}),
             'chief_complain': forms.TextInput(attrs={'required': False, 'class': 'form-control',
@@ -59,16 +61,32 @@ class PersonForm(forms.ModelForm):
 
     def clean_name(self):
         name = self.cleaned_data.get('name')
-        if not name.isalpha():
-            raise forms.ValidationError('Only letters are allowed in name')
+        if not name.replace(' ', '').isalpha():
+            raise forms.ValidationError(
+                'Only letters and spaces are allowed in name')
         return name
 
     def clean_last_name(self):
         last_name = self.cleaned_data.get('last_name')
-        if not last_name.isalpha():
+        if not last_name.replace(' ', '').isalpha():
             raise forms.ValidationError(
-                'Only letters are allowed in last name')
+                'Only letters and spaces are allowed in last name')
         return last_name
+
+    def clean_age(self):
+        age = self.cleaned_data.get('age')
+        if age > 100:
+            raise forms.ValidationError(
+                'Age cannot be greater than 100')
+        return age
+
+    def clean_mobile(self):
+        mobile = self.cleaned_data.get('mobile')
+        if not mobile.isdigit():
+            raise forms.ValidationError('Mobile Number should be digit only')
+        elif len(mobile) <= 10:
+            raise forms.ValidationError('Length of Mobile Number should be 10')
+        return mobile
 
 
 class UserForm(forms.ModelForm):
