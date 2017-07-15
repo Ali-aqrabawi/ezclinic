@@ -169,6 +169,7 @@ def edit(request, person_id):
     person = get_object_or_404(
         m.Person.objects.prefetch_related('diagcodes'), pk=person_id)
     tab = request.GET.get('tab')
+    diagcodes = ''
 
     if request.method == "POST":
         form = f.PersonForm(request.POST,

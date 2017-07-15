@@ -110,25 +110,71 @@
     </div>
   </main>
   <footer>
-<!-- Social Footer, Colour Matching Icons -->
+    <!-- Social Footer, Colour Matching Icons -->
 
-<!-- // -->
-<div class="container">
+    <!-- // -->
+    <div class="container">
 
-    <hr>
-        <div class="text-center center-block">
-		<p class="txt-railway">- contact us -</p>
-            
-            <br />
-                <a href="https://www.facebook.com/ezcloudservices/" target="_blank"><i id="social-fb" class="fa fa-facebook-square fa-3x social"></i></a>
-	            <a href="https://www.linkedin.com/company/ezcloud?trk=biz-companies-cym" target="_blank"><i id="social-tw" class="fa fa-linkedin-square fa-3x social"></i></a>
-	            <a href="https://plus.google.com/u/2/112962426364983904619" target="_blank"><i id="social-gp" class="fa fa-google-plus-square fa-3x social"></i></a>
-	            <a href="mailto:aqrabawi@ezcloudservices.com"><i id="social-em" class="fa fa-envelope-square fa-3x social"></i></a>
-</div>
-    <hr>
-</div>
+        <hr>
+            <div class="text-center center-block">
+    		<p class="txt-railway">- contact us -</p>
+                
+                <br />
+                    <a href="https://www.facebook.com/ezcloudservices/" target="_blank"><i id="social-fb" class="fa fa-facebook-square fa-3x social"></i></a>
+    	            <a href="https://www.linkedin.com/company/ezcloud?trk=biz-companies-cym" target="_blank"><i id="social-tw" class="fa fa-linkedin-square fa-3x social"></i></a>
+    	            <a href="https://plus.google.com/u/2/112962426364983904619" target="_blank"><i id="social-gp" class="fa fa-google-plus-square fa-3x social"></i></a>
+    	            <a href="mailto:aqrabawi@ezcloudservices.com"><i id="social-em" class="fa fa-envelope-square fa-3x social"></i></a>
+    </div>
+        <hr>
+    </div>
 
   </footer>
+
+  {% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var url = window.location.href;
+            if(url.indexOf('edit') !== -1 || url.indexOf('add') !== -1) {  
+                var date = new Date();
+                date.setDate(date.getDate());
+                $('#datepicker').datepicker({
+                  startDate: date
+                });
+                $("#{{ form.time.id_for_label }}").timepicker({
+
+                  minuteStep: 10
+                });
+
+                var input_date = $("#{{ form.date.id_for_label }}").val();
+                var input_time = $("#{{ form.time.id_for_label }}").val();
+
+                if ($("#{{ form.date.id_for_label }}").val() === "") {
+                  $("#appointment-button").html("Set date");
+                } else {
+                  $("#appointment-button").html(input_date + " " + input_time);
+                }              
+                
+                var input_date = input_date.split('-').map(function(item) {
+                    return parseInt(item, 10);
+                });
+                var input_time_ = input_time.split(' ')[0].split(':').map(function(item) {
+                    return parseInt(item, 10);
+                }); 
+                if (input_time.split(' ')[1] == 'PM'){
+                    input_time_[0] = input_time_[0] + 12;
+                }
+                var input_date_time = new Date(input_date[0], input_date[1], input_date[2], input_time_[0], input_time_[1]);
+                $('a[data-action="decrementMinute"], a[data-action="decrementHour"], a[data-action="toggleMeridian"]').click(function(){
+                    console.log('fasf');
+                    if(input_date_time <= date){
+                        console.log('fasf');
+                        var input_time = $("#{{ form.time.id_for_label }}").val(input_time);
+                    }
+                });
+            }
+        });
+    </script>
+  {% endblock javascript %}
 
     
   

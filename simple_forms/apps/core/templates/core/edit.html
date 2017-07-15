@@ -46,6 +46,7 @@
                                 <button id="appointment-button" type="button" class="col-sm-12 btn btn-info btn-sm" data-toggle="modal" data-target="#appointment-modal">
                                     {{ form.date.value|date:"Y-m-d" }}{% if form.date.value and form.time.value %} {{ form.time.value|time:"f A" }}{% endif %}
                                 </button>
+                                <span class="text-danger">{{form.date.errors}} {{form.time.errors}}</span>
                             </div>
                         </div>
                         <div class="row">
@@ -222,6 +223,7 @@
                                 <button id="appointment-button" type="button" class="col-sm-12 btn btn-info btn-sm" data-toggle="modal" data-target="#appointment-modal">
                                     {{ form.date.value|date:"Y-m-d" }}{% if form.date.value and form.time.value %} {{ form.time.value|time:"f A" }}{% endif %}
                                 </button>
+                                <span class="text-danger">{{form.date.errors}} {{form.time.errors}}</span>
                             </div>
                         </div>
                         <div class="row">
@@ -357,7 +359,7 @@
               <div class="modal-body">
                 <div class="form-group col-sm-6">
                   <label for="{{ form.date.id_for_label }}">{% trans "Next Appoinment Date" %}</label>
-                  <div class="input-group date" data-provide="datepicker" data-date-autoclose="true" data-date-format="yyyy-mm-dd">
+                  <div class="input-group date" id="datepicker" data-provide="datepicker" data-date-autoclose="true" data-date-format="yyyy-mm-dd">
                     {% render_field form.date class="form-control" %}
                     <div class="input-group-addon">
                       <span class="glyphicon glyphicon-th"></span>
@@ -381,21 +383,7 @@
       </div>
 
     </form>
-    <script>
-      $("#{{ form.time.id_for_label }}").timepicker();
-      $("#clear-appointment").click(function() {
-        $("#{{ form.date.id_for_label }}").val("");
-        $("#{{ form.time.id_for_label }}").val("");
-      });
-      $("#save-appointment").click(function() {
-        $("#appointment-modal").modal("hide");
-        if ($("#{{ form.date.id_for_label }}").val() === "") {
-          $("#appointment-button").html("Set date");
-        } else {
-          $("#appointment-button").html($("#{{ form.date.id_for_label }}").val() + " " + $("#{{ form.time.id_for_label }}").val());
-        }
-      });
-    </script>
+    
     <script type="text/javascript">
 
         $(document).ready(function(){
@@ -409,11 +397,24 @@
                 });
             });
 
+            $("#clear-appointment").click(function() {
+                $("#{{ form.date.id_for_label }}").val("");
+                $("#{{ form.time.id_for_label }}").val("");
+              });
+              $("#save-appointment").click(function() {
+                $("#appointment-modal").modal("hide");
+                if ($("#{{ form.date.id_for_label }}").val() === "") {
+                  $("#appointment-button").html("Set date");
+                } else {
+                  $("#appointment-button").html($("#{{ form.date.id_for_label }}").val() + " " + $("#{{ form.time.id_for_label }}").val());
+                }
+            });
+            // for setting diagcodes
             var values="{{diagcodes}}";
             $.each(values.split(","), function(i,e){
                 $("#diagcode option[value='" + e + "']").prop("selected", true);
             });
-          })
+          });
     </script>
   
 {% endblock %}

@@ -6,6 +6,7 @@ from django.utils.translation import ugettext, ugettext_lazy as _
 from django.contrib.auth import (authenticate, get_user_model,
                                  password_validation)
 from django.contrib.auth.forms import PasswordResetForm
+from datetime import datetime
 
 from djangae.utils import get_in_batches
 
@@ -15,7 +16,7 @@ from .models import Person, User, Event, Receipt
 class PersonForm(forms.ModelForm):
     pictures = forms.FileField(widget=forms.ClearableFileInput(
         attrs={'required': False, 'multiple': True, 'class': 'form-control'}), required=False)
-    time = forms.TimeField(input_formats=["%I:%M %p"])
+    time = forms.TimeField(input_formats=["%I:%M %p"], required=False)
 
     def __init__(self, *args, **kwargs):
         super(PersonForm, self).__init__(*args, **kwargs)
@@ -87,6 +88,26 @@ class PersonForm(forms.ModelForm):
         elif len(mobile) <= 10:
             raise forms.ValidationError('Length of Mobile Number should be 10')
         return mobile
+
+    def clean_date(self):
+        date = self.cleaned_data.get('date')
+        if not date:
+            return ''
+        today = datetime.today().date()
+        if date < today:
+            raise forms.ValidationError('Date cannot be from the past')
+        return date
+
+    def clean_time(self):
+        date = self.cleaned_data.get('date')
+        time = self.cleaned_data.get('time')
+        if not time:
+            return ''
+        today = datetime.today().date()
+        today_time = datetime.today().time()
+        if date and date <= today and time <= today_time:
+            raise forms.ValidationError('Time should be of the future')
+        return time
 
 
 class UserForm(forms.ModelForm):

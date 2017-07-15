@@ -59,7 +59,8 @@ class Person(models.Model):
                                       decimal_places=2, null=False, default=0)
     note = models.CharField(max_length=256, null=True, blank=True)
     address = models.CharField(max_length=256, null=True, blank=True)
-    date = models.DateField(("Date"), default=date.today, blank=True)
+    date = models.DateField(
+        ("Date"), default=date.today, null=True, blank=True)
     time = models.TimeField(("Time"), null=True, blank=True)
     chief_complain = models.CharField(max_length=256, null=True, blank=True)
     treatment_plan = models.CharField(max_length=256, null=True, blank=True)
