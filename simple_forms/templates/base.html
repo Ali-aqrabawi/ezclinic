@@ -140,14 +140,19 @@
                 $('#datepicker').datepicker({
                   startDate: date
                 });
-                $("#{{ form.time.id_for_label }}").timepicker({
-
-                  minuteStep: 10
-                });
+                if (url.indexOf('edit') !== -1 ){
+                    $("#{{ form.time.id_for_label }}").timepicker({
+                      minuteStep: 10,
+                      defaultTime: false
+                    });
+                } else{
+                    $("#{{ form.time.id_for_label }}").timepicker({
+                      minuteStep: 10
+                    });
+                }
 
                 var input_date = $("#{{ form.date.id_for_label }}").val();
                 var input_time = $("#{{ form.time.id_for_label }}").val();
-
                 if ($("#{{ form.date.id_for_label }}").val() === "") {
                   $("#appointment-button").html("Set date");
                 } else {

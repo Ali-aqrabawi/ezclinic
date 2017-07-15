@@ -92,7 +92,7 @@ class PersonForm(forms.ModelForm):
     def clean_date(self):
         date = self.cleaned_data.get('date')
         if not date:
-            return ''
+            return None
         today = datetime.today().date()
         if date < today:
             raise forms.ValidationError('Date cannot be from the past')
@@ -102,7 +102,7 @@ class PersonForm(forms.ModelForm):
         date = self.cleaned_data.get('date')
         time = self.cleaned_data.get('time')
         if not time:
-            return ''
+            return None
         today = datetime.today().date()
         today_time = datetime.today().time()
         if date and date <= today and time <= today_time:
