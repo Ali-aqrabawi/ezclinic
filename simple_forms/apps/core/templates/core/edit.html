@@ -414,6 +414,12 @@
             $.each(values.split(","), function(i,e){
                 $("#diagcode option[value='" + e + "']").prop("selected", true);
             });
+
+            $('a[href="#tab4"]').click(function(){
+              $('html,body').animate({
+                scrollTop: 25
+              }, 500)
+            });
           });
     </script>
   

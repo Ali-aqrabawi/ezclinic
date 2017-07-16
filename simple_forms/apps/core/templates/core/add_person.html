@@ -250,6 +250,12 @@
             $("#appointment-button").html($("#{{ form.date.id_for_label }}").val() + " " + $("#{{ form.time.id_for_label }}").val());
           }
         });
+
+        $('a[href="#tab4"]').click(function(){
+          $('html,body').animate({
+            scrollTop: 25
+          }, 500)
+        });
       });
     </script>
   
