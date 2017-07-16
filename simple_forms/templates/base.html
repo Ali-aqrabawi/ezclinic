@@ -139,15 +139,15 @@
                 date.setDate(date.getDate());
                 $('#datepicker').datepicker({
                   startDate: date
-                });
+                })
                 if (url.indexOf('edit') !== -1 ){
-                    $("#{{ form.time.id_for_label }}").timepicker({
+                   $timepicker = $("#{{ form.time.id_for_label }}").timepicker({
                       minuteStep: 10,
                       defaultTime: false
                     });
                 } else{
-                    $("#{{ form.time.id_for_label }}").timepicker({
-                      minuteStep: 10
+                    $timepicker = $("#{{ form.time.id_for_label }}").timepicker({
+                      minuteStep: 10,
                     });
                 }
 
@@ -159,23 +159,37 @@
                   $("#appointment-button").html(input_date + " " + input_time);
                 }              
                 
-                var input_date = input_date.split('-').map(function(item) {
-                    return parseInt(item, 10);
-                });
-                var input_time_ = input_time.split(' ')[0].split(':').map(function(item) {
-                    return parseInt(item, 10);
-                }); 
-                if (input_time.split(' ')[1] == 'PM'){
-                    input_time_[0] = input_time_[0] + 12;
-                }
-                var input_date_time = new Date(input_date[0], input_date[1], input_date[2], input_time_[0], input_time_[1]);
-                $('a[data-action="decrementMinute"], a[data-action="decrementHour"], a[data-action="toggleMeridian"]').click(function(){
-                    console.log('fasf');
+               
+                 $timepicker.on('changeTime.timepicker', function() {
+                    var input_date = $("#{{ form.date.id_for_label }}").val();
+                    var input_time = $("#{{ form.time.id_for_label }}").val();
+                    var input_date = input_date.split('-').map(function(item) {
+                        return parseInt(item, 10);
+                    });
+                    var input_time_ = input_time.split(' ')[0].split(':').map(function(item) {
+                        return parseInt(item, 10);
+                    }); 
+                    if (input_time.split(' ')[1] == 'PM'){
+                        input_time_[0] = input_time_[0] + 12;
+                    }
+                    var input_date_time = new Date(input_date[0], input_date[1]-1, input_date[2], input_time_[0], input_time_[1]);
+                    
                     if(input_date_time <= date){
-                        console.log('fasf');
-                        var input_time = $("#{{ form.time.id_for_label }}").val(input_time);
+                        console.log('hello')
+                        $("#{{ form.time.id_for_label }}").val(formatAMPM(date));
                     }
                 });
+            }
+
+            function formatAMPM(date) {
+              var hours = date.getHours();
+              var minutes = date.getMinutes();
+              var ampm = hours >= 12 ? 'PM' : 'AM';
+              hours = hours % 12;
+              hours = hours ? hours : 12; // the hour '0' should be '12'
+              minutes = minutes < 10 ? '0'+minutes : minutes;
+              var strTime = hours + ':' + minutes + ' ' + ampm;
+              return strTime;
             }
         });
     </script>
