@@ -180,7 +180,6 @@
                     }
                 });
             }
-
             function formatAMPM(date) {
               var hours = date.getHours();
               var minutes = date.getMinutes();
@@ -191,12 +190,23 @@
               var strTime = hours + ':' + minutes + ' ' + ampm;
               return strTime;
             }
+
+            if(window.location.href.indexOf('tab=tab4') != -1){
+                $('html,body').animate({
+                    scrollTop: 60
+                }, 500)
+            }
+            $('a[href="#tab4"]').click(function(){
+                  $('html,body').animate({
+                    scrollTop: 60
+                  }, 500)
+            });
         });
-    </script>
-  {% endblock javascript %}
+        </script>
+      {% endblock javascript %}
 
-    
-  
-</body>
+        
+      
+    </body>
 
-</html>
+    </html>

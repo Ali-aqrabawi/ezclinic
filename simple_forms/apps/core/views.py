@@ -91,7 +91,7 @@ def delete_person(request, person_id):
     if request.method == "GET" or request.method == 'POST':
         c = get_object_or_404(m.Person, pk=person_id, user=request.user)
         c.delete()
-        if request.GET.get('page', None) == 'calendar':
+        if request.GET.get('next', None) == 'calendar':
             return redirect('home')
         return redirect(reverse('patients'))
     else:
@@ -258,6 +258,7 @@ def calendar(request):
     # Simulate ORDER BY with NULLS LAST
     persons = list(request.user.person_set.filter(date=date))
     persons.sort(key=lambda p: p.time or datetime.time(23, 59, 59))
+    print(persons)
 
     events = request.user.event_set.filter(date=date)
 
