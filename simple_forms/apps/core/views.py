@@ -185,6 +185,7 @@ def edit(request, person_id):
                 for picture in files:
                     m.Picture.objects.create(person=person, picture=picture)
 
+            person.diagcodes.all().delete()
             diagcodes = request.POST.getlist('diagcode')
             if diagcodes:
                 for diagcode in diagcodes:
