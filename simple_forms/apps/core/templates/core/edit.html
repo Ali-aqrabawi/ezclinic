@@ -3,10 +3,10 @@
 {% load staticfiles %}
 {% load widget_tweaks %}
 
+
 {% block content %}
 
     <h2>Edit Patient</h2>
-
     <form enctype="multipart/form-data" id="edit-person-form" method="post">
         {% csrf_token %}
         <div class="tabtable"> 
@@ -386,7 +386,18 @@
     
     <script type="text/javascript">
 
+        // window.onload = function() {
+        //     if(!window.location.hash) {
+        //         window.location = window.location + '#_';
+        //         window.location.reload();
+        //     }
+        // }
+        
         $(document).ready(function(){
+            var values="{{diagcodes}}".split(",");
+            $('#diagcode').val(values);
+            $('.selectpicker').selectpicker('refresh')
+            
             $("form#form1").submit(function(e) {
                 e.preventDefault();
                 var lHref = $(this).attr('action');
@@ -409,12 +420,6 @@
                   $("#appointment-button").html($("#{{ form.date.id_for_label }}").val() + " " + $("#{{ form.time.id_for_label }}").val());
                 }
             });
-            // for setting diagcodes
-            var values="{{diagcodes}}";
-            $.each(values.split(","), function(i,e){
-                $("#diagcode option[value='" + e + "']").prop("selected", true);
-            });
-
             $('#edit-person').click(function(){
                 $('#edit-person-form').submit();
             });

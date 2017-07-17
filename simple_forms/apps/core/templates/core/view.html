@@ -820,7 +820,8 @@
       $(document).ready(function(){
           $("#edit").click(function(e) {
               e.preventDefault();
-              window.document.location = $(this).attr('href') + '?tab='+ $('.tab-pane.active').attr('id');
+
+              window.location.href = $(this).attr('href') + '?tab='+ $('.tab-pane.active').attr('id');
           });
       });
 
