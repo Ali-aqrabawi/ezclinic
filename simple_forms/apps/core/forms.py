@@ -1,41 +1,53 @@
 from __future__ import unicode_literals
+import re
 
 from django import forms
 from django.utils.translation import ugettext, ugettext_lazy as _
 from django.contrib.auth import (authenticate, get_user_model,
                                  password_validation)
 from django.contrib.auth.forms import PasswordResetForm
+from datetime import datetime
 
 from djangae.utils import get_in_batches
 
-from . import models as m
+from .models import Person, User, Event, Receipt
 
 
 class PersonForm(forms.ModelForm):
     pictures = forms.FileField(widget=forms.ClearableFileInput(
         attrs={'required': False, 'multiple': True, 'class': 'form-control'}), required=False)
-    time = forms.TimeField(input_formats=["%I:%M %p"])
+    time = forms.TimeField(input_formats=["%I:%M %p"], required=False)
+    amount_paid = forms.DecimalField(required=False)
+    amount_left = forms.DecimalField(required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(PersonForm, self).__init__(*args, **kwargs)
+        if not self.instance.pk:
+            self.fields['age'].initial = ''
+            self.fields['mobile'].initial = ''
 
     class Meta:
-        model = m.Person
+        model = Person
         fields = ['name', 'last_name', 'age', 'martial_status', 'mobile', 'sex',
                   'amount_paid', 'amount_left', 'note', 'address', 'date', 'time',
                   'treatment_done', 'treatment_plan', 'chief_complain',
-                   'dental_chart_type', 'dental_chart']
+                  'dental_chart_type', 'dental_chart']
         widgets = {
             'name': forms.TextInput(attrs={'required': True, 'class': 'form-control',
                                            'placeholder': 'name'}),
             'last_name': forms.TextInput(attrs={'required': True, 'class': 'form-control',
                                                 'placeholder': 'lastname'}),
-            'age': forms.TextInput(attrs={'required': False, 'class': 'form-control',
-                                          'placeholder': 'age'}),
-            'amount_paid': forms.TextInput(attrs={'required': False, 'class': 'form-control',
-                                                  'placeholder': 'amount paid'}),
-            'amount_left': forms.TextInput(attrs={'required': False, 'class': 'form-control',
-                                                  'placeholder': 'amount left'}),
+            'age': forms.NumberInput(attrs={'required': False, 'class': 'form-control',
+                                            'placeholder': 'age', 'max': 100}),
+            'amount_paid': forms.NumberInput(attrs={'required': False, 'class': 'form-control',
+                                                    'placeholder': 'amount paid'}),
+            'amount_left': forms.NumberInput(attrs={'required': False, 'class': 'form-control',
+                                                    'placeholder': 'amount left'}),
             'note': forms.Textarea(attrs={'required': False, 'class': 'form-control',
-                                           'placeholder': 'Patient History',
-                                           'rows': '3'}),
+                                          'placeholder': 'Patient History',
+                                          'rows': '3'}),
+            'mobile': forms.TextInput(attrs={'required': True, 'class': 'form-control',
+                                             'placeholder': 'Mobile Number', 'type': 'tel'}),
             'address': forms.TextInput(attrs={'required': False, 'class': 'form-control',
                                               'placeholder': 'Current address'}),
             'chief_complain': forms.TextInput(attrs={'required': False, 'class': 'form-control',
@@ -50,19 +62,69 @@ class PersonForm(forms.ModelForm):
 
         }
 
+    def clean_name(self):
+        name = self.cleaned_data.get('name')
+        if not name.replace(' ', '').isalpha():
+            raise forms.ValidationError(
+                'Only letters and spaces are allowed in name')
+        return name
+
+    def clean_last_name(self):
+        last_name = self.cleaned_data.get('last_name')
+        if not last_name.replace(' ', '').isalpha():
+            raise forms.ValidationError(
+                'Only letters and spaces are allowed in last name')
+        return last_name
+
+    def clean_age(self):
+        age = self.cleaned_data.get('age')
+        if age > 100:
+            raise forms.ValidationError(
+                'Age cannot be greater than 100')
+        return age
+
+    def clean_mobile(self):
+        mobile = self.cleaned_data.get('mobile')
+        if not mobile.isdigit():
+            raise forms.ValidationError('Mobile Number should be digit only')
+        elif len(mobile) < 10:
+            raise forms.ValidationError('Length of Mobile Number should be 10')
+        return mobile
+
+    def clean_date(self):
+        date = self.cleaned_data.get('date')
+        if not date:
+            return None
+        today = datetime.today().date()
+        if date < today:
+            raise forms.ValidationError('Date cannot be from the past')
+        return date
+
+    def clean_time(self):
+        date = self.cleaned_data.get('date')
+        time = self.cleaned_data.get('time')
+        if not time:
+            return None
+        today = datetime.today().date()
+        today_time = datetime.today().time()
+        if date and date <= today and time <= today_time:
+            raise forms.ValidationError('Time should be of the future')
+        return time
+
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
 
     class Meta:
-        model = m.User
+        model = User
         fields = ['username', 'email', 'password', 'country',
                   'last_name', 'first_name', 'city', 'clinic']
 
 
 class EventForm(forms.ModelForm):
+
     class Meta:
-        model = m.Event
+        model = Event
         fields = ['text', 'date']
 
 
@@ -72,8 +134,9 @@ class AppointmentForm(forms.Form):
 
 
 class ReceiptForm(forms.ModelForm):
+
     class Meta:
-        model = m.Receipt
+        model = Receipt
         fields = ['amount']
 
 

@@ -3,11 +3,11 @@
 {% load staticfiles %}
 {% load widget_tweaks %}
 
+
 {% block content %}
 
     <h2>Edit Patient</h2>
-
-    <form enctype="multipart/form-data" method="post">
+    <form enctype="multipart/form-data" id="edit-person-form" method="post">
         {% csrf_token %}
         <div class="tabtable"> 
             <ul class="nav nav-tabs">
@@ -28,58 +28,66 @@
                     <div class="tab-pane {% if tab == 'tab1' %}active{% endif %}" id="tab1">
                         <div class="row">
                             <div class="col-sm-2 form-group">
-                                <label for="name" >{% trans "Name:" %}</label>
+                                <label for="name" >{% trans "Name:" %}{% if form.name.field.required %} <span class="text-danger">*</span>{% endif %}</label>
                                     {{ form.name|add_class:"form-control" }}
+                                    <span class="text-danger">{{form.name.errors}}</span>
                             </div>
                             <div class="col-sm-2 form-group">
-                                <label for="lname">{% trans "Lastname:" %}</label>
+                                <label for="lname">{% trans "Lastname:" %}{% if form.last_name.field.required %} <span class="text-danger">*</span>{% endif %}</label>
                                     {{ form.last_name|add_class:"form-control" }}
+                                    <span class="text-danger">{{form.last_name.errors}}</span>
                             </div>
                             <div class="col-sm-2 form-group">
-                               <label for="Sex">{% trans "Sex:" %}</label>
+                               <label for="Sex">{% trans "Sex:" %}{% if form.sex.field.required %} <span class="text-danger">*</span>{% endif %}</label>
                                {{ form.sex|add_class:"form-control" }}
                             </div>
                             <div class="col-sm-2 form-group">
-                                <label for="{{ form.date.id_for_label }}">{% trans "Next Appoinment:" %}</label>
+                                <label for="{{ form.date.id_for_label }}">{% trans "Next Appoinment:" %}{% if form.date.field.required %} <span class="text-danger">*</span>{% endif %}</label>
                                 <button id="appointment-button" type="button" class="col-sm-12 btn btn-info btn-sm" data-toggle="modal" data-target="#appointment-modal">
                                     {{ form.date.value|date:"Y-m-d" }}{% if form.date.value and form.time.value %} {{ form.time.value|time:"f A" }}{% endif %}
                                 </button>
+                                <span class="text-danger">{{form.date.errors}} {{form.time.errors}}</span>
                             </div>
                         </div>
                         <div class="row">
                             <div  class="col-sm-2 form-group">
-                                <label for="age">{% trans "Age:" %}</label>
+                                <label for="age">{% trans "Age:" %}{% if form.age.field.required %} <span class="text-danger">*</span>{% endif %}</label>
                                     {{ form.age|add_class:"form-control" }}
+                                    <span class="text-danger">{{form.age.errors}}</span>
                             </div>
                             <div class="col-sm-2 form-group">
-                                <label for="martial">{% trans "Martial Status:" %}</label>
+                                <label for="martial">{% trans "Martial Status:" %}{% if form.marital_status.field.required %} <span class="text-danger">*</span>{% endif %}</label>
                                {{ form.martial_status|add_class:"form-control" }}
                             </div>
                             <div class="col-sm-2 form-group">
-                                <label for="amount paid">{% trans "Money Paid:" %}</label>
+                                <label for="amount paid">{% trans "Money Paid:" %}{% if form.amount_paid.field.required %} <span class="text-danger">*</span>{% endif %}</label>
                                    {{ form.amount_paid|add_class:"form-control" }}
+                                   <span class="text-danger">{{form.amount_paid.errors}}</span>
                             </div>
                             <div class="col-sm-2 form-group">
-                                   <label for="amount left">{% trans "Total Price:" %}</label>
+                                   <label for="amount left">{% trans "Total Price:" %}{% if form.amount_left.field.required %} <span class="text-danger">*</span>{% endif %}</label>
                                    {{ form.amount_left|add_class:"form-control" }}
+                                   <span class="text-danger">{{form.amount_left.errors}}</span>
                             </div>
                             
                         </div>
                         <div class="row">
                             <div class="col-sm-4 form-group">
-                               <label for="mobile">{% trans "Mobile Number:" %}</label>
+                               <label for="mobile">{% trans "Mobile Number:" %}{% if form.mobile.field.required %} <span class="text-danger">*</span>{% endif %}</label>
                                {{ form.mobile|add_class:"form-control" }}
+                               <span class="text-danger">{{form.mobile.errors}}</span>
                             </div>
                             <div class="col-sm-4 form-group">
-                                <label for="address">{% trans "Address:" %}</label>
+                                <label for="address">{% trans "Address:" %}{% if form.address.field.required %} <span class="text-danger">*</span>{% endif %}</label>
                                     {{ form.address|add_class:"form-control" }}
+                                    <span class="text-danger">{{form.address.errors}}</span>
                             </div>
                         </div>
                     </div>
                     <div class="tab-pane {% if tab == 'tab2' %}active{% endif %}" id="tab2">
                         <div class="row">
                             <div class="col-sm-4 form-group">
-                                <label for="chief_complain" >{% trans "Chief Complain:" %}</label>
+                                <label for="chief_complain" >{% trans "Chief Complain:" %}{% if form.chief_complain.field.required %} <span class="text-danger">*</span>{% endif %}</label>
                                     {{ form.chief_complain|add_class:"form-control" }}
                             </div>
                             <div class="col-sm-4">
@@ -156,17 +164,17 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-4 form-group">
-                                <label for="treatment_plan" >{% trans "Treatment Plan:" %}</label>
+                                <label for="treatment_plan" >{% trans "Treatment Plan:" %}{% if form.treatment_plan.field.required %} <span class="text-danger">*</span>{% endif %}</label>
                                     {{ form.treatment_plan|add_class:"form-control" }}
                             </div>
                             <div class="col-sm-4 form-group">
-                                <label for="note">{% trans "Medical History:" %}</label>
+                                <label for="note">{% trans "Medical History:" %}{% if form.note.field.required %} <span class="text-danger">*</span>{% endif %}</label>
                                     {{ form.note|add_class:"form-control" }}
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-4 form-group">
-                                <label for="treatment_done">{% trans "Treatment Done:" %}</label>
+                                <label for="treatment_done">{% trans "Treatment Done:" %}{% if form.treatment_done.field.required %} <span class="text-danger">*</span>{% endif %}</label>
                                     {{ form.treatment_done|add_class:"form-control" }}
                             </div>
                         </div>
@@ -199,10 +207,12 @@
                             <div class="col-sm-2 form-group">
                                 <label for="name" >{% trans "Name:" %}</label>
                                     {{ form.name|add_class:"form-control" }}
+                                    <span class="text-danger">{{form.name.errors}}</span>
                             </div>
                             <div class="col-sm-2 form-group">
                                 <label for="lname">{% trans "Lastname:" %}</label>
                                     {{ form.last_name|add_class:"form-control" }}
+                                    <span class="text-danger">{{form.last_name.errors}}</span>
                             </div>
                             <div class="col-sm-2 form-group">
                                <label for="Sex">{% trans "Sex:" %}</label>
@@ -213,12 +223,14 @@
                                 <button id="appointment-button" type="button" class="col-sm-12 btn btn-info btn-sm" data-toggle="modal" data-target="#appointment-modal">
                                     {{ form.date.value|date:"Y-m-d" }}{% if form.date.value and form.time.value %} {{ form.time.value|time:"f A" }}{% endif %}
                                 </button>
+                                <span class="text-danger">{{form.date.errors}} {{form.time.errors}}</span>
                             </div>
                         </div>
                         <div class="row">
                             <div  class="col-sm-2 form-group">
                                 <label for="age">{% trans "Age:" %}</label>
                                     {{ form.age|add_class:"form-control" }}
+                                    <span class="text-danger">{{form.age.errors}}</span>
                             </div>
                             <div class="col-sm-2 form-group">
                                 <label for="martial">{% trans "Martial Status:" %}</label>
@@ -331,7 +343,7 @@
         </div>       
 
         <div class="form-group">
-            <button type="submit" class="btn btn-info">
+            <button type="submit" id="edit-person" class="btn btn-info">
                 <span class="glyphicon glyphicon-ok"></span> {% trans "Save" %}
             </button>
             <a href="{% url 'view' person.id %}" class="btn btn-default">Cancel</a>
@@ -347,7 +359,7 @@
               <div class="modal-body">
                 <div class="form-group col-sm-6">
                   <label for="{{ form.date.id_for_label }}">{% trans "Next Appoinment Date" %}</label>
-                  <div class="input-group date" data-provide="datepicker" data-date-autoclose="true" data-date-format="yyyy-mm-dd">
+                  <div class="input-group date" id="datepicker" data-provide="datepicker" data-date-autoclose="true" data-date-format="yyyy-mm-dd">
                     {% render_field form.date class="form-control" %}
                     <div class="input-group-addon">
                       <span class="glyphicon glyphicon-th"></span>
@@ -371,24 +383,21 @@
       </div>
 
     </form>
-    <script>
-      $("#{{ form.time.id_for_label }}").timepicker();
-      $("#clear-appointment").click(function() {
-        $("#{{ form.date.id_for_label }}").val("");
-        $("#{{ form.time.id_for_label }}").val("");
-      });
-      $("#save-appointment").click(function() {
-        $("#appointment-modal").modal("hide");
-        if ($("#{{ form.date.id_for_label }}").val() === "") {
-          $("#appointment-button").html("Set date");
-        } else {
-          $("#appointment-button").html($("#{{ form.date.id_for_label }}").val() + " " + $("#{{ form.time.id_for_label }}").val());
-        }
-      });
-    </script>
+    
     <script type="text/javascript">
 
+        // window.onload = function() {
+        //     if(!window.location.hash) {
+        //         window.location = window.location + '#_';
+        //         window.location.reload();
+        //     }
+        // }
+        
         $(document).ready(function(){
+            var values="{{diagcodes}}".split(",");
+            $('#diagcode').val(values);
+            $('.selectpicker').selectpicker('refresh')
+            
             $("form#form1").submit(function(e) {
                 e.preventDefault();
                 var lHref = $(this).attr('action');
@@ -398,7 +407,23 @@
                     }
                 });
             });
-          })
+
+            $("#clear-appointment").click(function() {
+                $("#{{ form.date.id_for_label }}").val("");
+                $("#{{ form.time.id_for_label }}").val("");
+              });
+              $("#save-appointment").click(function() {
+                $("#appointment-modal").modal("hide");
+                if ($("#{{ form.date.id_for_label }}").val() === "") {
+                  $("#appointment-button").html("Set date");
+                } else {
+                  $("#appointment-button").html($("#{{ form.date.id_for_label }}").val() + " " + $("#{{ form.time.id_for_label }}").val());
+                }
+            });
+            $('#edit-person').click(function(){
+                $('#edit-person-form').submit();
+            });
+          });
     </script>
   
 {% endblock %}

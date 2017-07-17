@@ -11,6 +11,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  {% block extra_meta %}{% endblock %}
   <!--<title>{% block title %}ezClinic{% endblock %}</title>-->
   <!-- Le styles -->
      <link href="{% static 'css/patients.css' %}" rel="stylesheet">
@@ -110,28 +111,103 @@
     </div>
   </main>
   <footer>
-<!-- Social Footer, Colour Matching Icons -->
+    <!-- Social Footer, Colour Matching Icons -->
 
-<!-- // -->
-<div class="container">
+    <!-- // -->
+    <div class="container">
 
-    <hr>
-        <div class="text-center center-block">
-		<p class="txt-railway">- contact us -</p>
-            
-            <br />
-                <a href="https://www.facebook.com/ezcloudservices/" target="_blank"><i id="social-fb" class="fa fa-facebook-square fa-3x social"></i></a>
-	            <a href="https://www.linkedin.com/company/ezcloud?trk=biz-companies-cym" target="_blank"><i id="social-tw" class="fa fa-linkedin-square fa-3x social"></i></a>
-	            <a href="https://plus.google.com/u/2/112962426364983904619" target="_blank"><i id="social-gp" class="fa fa-google-plus-square fa-3x social"></i></a>
-	            <a href="mailto:aqrabawi@ezcloudservices.com"><i id="social-em" class="fa fa-envelope-square fa-3x social"></i></a>
-</div>
-    <hr>
-</div>
+        <hr>
+            <div class="text-center center-block">
+    		<p class="txt-railway">- contact us -</p>
+                
+                <br />
+                    <a href="https://www.facebook.com/ezcloudservices/" target="_blank"><i id="social-fb" class="fa fa-facebook-square fa-3x social"></i></a>
+    	            <a href="https://www.linkedin.com/company/ezcloud?trk=biz-companies-cym" target="_blank"><i id="social-tw" class="fa fa-linkedin-square fa-3x social"></i></a>
+    	            <a href="https://plus.google.com/u/2/112962426364983904619" target="_blank"><i id="social-gp" class="fa fa-google-plus-square fa-3x social"></i></a>
+    	            <a href="mailto:aqrabawi@ezcloudservices.com"><i id="social-em" class="fa fa-envelope-square fa-3x social"></i></a>
+    </div>
+        <hr>
+    </div>
 
   </footer>
 
-    
-  
-</body>
+  {% block javascript %}
+    <script type="text/javascript">
+        $(document).ready(function(){
+            var url = window.location.href;
+            if(url.indexOf('edit') !== -1 || url.indexOf('add') !== -1 || url.indexOf('view')!== -1) {  
+                var date = new Date();
+                date.setDate(date.getDate());
+                $('#datepicker').datepicker({
+                  startDate: date
+                })
+                if (url.indexOf('edit') !== -1 || url.indexOf('view') !== -1 ){
+                   $timepicker = $("#id_time").timepicker({
+                      minuteStep: 10,
+                      defaultTime: false
+                    });
+                } else{
+                    $timepicker = $("#id_time").timepicker({
+                      minuteStep: 10,
+                    });
+                }
 
-</html>
+                var input_date = $("#id_date").val();
+                var input_time = $("#id_time").val();
+                if ($("#id_date").val() === "") {
+                  $("#appointment-button").html("Set date");
+                } else {
+                  $("#appointment-button").html(input_date + " " + input_time);
+                }              
+                
+               
+                 $timepicker.on('changeTime.timepicker', function() {
+                    var input_date = $("#id_date").val();
+                    var input_time = $("#id_time").val();
+                    var input_date = input_date.split('-').map(function(item) {
+                        return parseInt(item, 10);
+                    });
+                    var input_time_ = input_time.split(' ')[0].split(':').map(function(item) {
+                        return parseInt(item, 10);
+                    }); 
+                    if (input_time.split(' ')[1] == 'PM'){
+                        input_time_[0] = input_time_[0] + 12;
+                    }
+                    var input_date_time = new Date(input_date[0], input_date[1]-1, input_date[2], input_time_[0], input_time_[1]);
+                    
+                    if(input_date_time <= date){
+                        console.log('hello')
+                        $("#id_time").val(formatAMPM(date));
+                    }
+                });
+            }
+            function formatAMPM(date) {
+              var hours = date.getHours();
+              var minutes = date.getMinutes();
+              var ampm = hours >= 12 ? 'PM' : 'AM';
+              hours = hours % 12;
+              hours = hours ? hours : 12; // the hour '0' should be '12'
+              minutes = minutes < 10 ? '0'+minutes : minutes;
+              var strTime = hours + ':' + minutes + ' ' + ampm;
+              return strTime;
+            }
+
+            if(window.location.href.indexOf('tab=tab4') != -1){
+                $('html,body').animate({
+                    scrollTop: 60
+                }, 500)
+            }
+            $('a[href="#tab4"]').click(function(){
+                  $('html,body').animate({
+                    scrollTop: 60
+                  }, 500)
+            });
+        });
+        </script>
+      {% endblock javascript %}
+
+        
+      
+    </body>
+
+    </html>
