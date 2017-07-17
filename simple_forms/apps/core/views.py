@@ -36,7 +36,6 @@ IMAGE_FILE_TYPES = ['png', 'jpg', 'jpeg']
 def add_person(request):
     form = f.PersonForm(request.POST or None, request.FILES or None)
     if form.is_valid():
-        print 'valid'
         person = form.save(commit=False)
 
         person.user = request.user
@@ -89,9 +88,11 @@ def patients(request):
 #===========delete a prson==================
 @login_required
 def delete_person(request, person_id):
-    if request.method == "GET" and request.method == 'POST':
+    if request.method == "GET" or request.method == 'POST':
         c = get_object_or_404(m.Person, pk=person_id, user=request.user)
         c.delete()
+        if request.GET.get('page', None) == 'calendar':
+            return redirect('home')
         return redirect(reverse('patients'))
     else:
         return redirect(reverse('view', args=(person_id,)))

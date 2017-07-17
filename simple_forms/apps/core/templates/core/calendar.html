@@ -60,9 +60,15 @@
                 <td>{{ person.treatment_plan|linebreaks }}</td>
                 <td class="text-center">{{ person.time|time:"f A" }}</td>
                 <td>
-                    <button data-appointment-id="{{ person.id }}" type="button" class="cancel-button btn btn-xs btn-link">
+                    <!-- <button data-appointment-id="{{ person.id }}" type="button" class="cancel-button btn btn-xs btn-link">
                         <span  class="glyphicon glyphicon-minus"></span>
-                    </button>
+                    </button> -->
+                    <form class="delete-person" action="{% url 'delete_person' person.id %}?page=calendar" method='POST'>
+                      {% csrf_token %}
+                      <button type='submit' class='btn btn-xs btn-link icon'>
+                        <i class='glyphicon glyphicon-remove'></i>
+                      </button>
+                    </form>
                 </td>
                 <td><a  href="{% url 'view' person.id %}"><i  class="glyphicon glyphicon-list-alt"></i></a></td>
             </tr>
@@ -193,19 +199,31 @@
   });
 </script>
   <script>
-    var hidden_persons = JSON.parse(localStorage["hidden_persons"] || "[]");
-    for (var i = 0; i < hidden_persons.length; i++) {
-      $("#appointment-" + hidden_persons[i]).hide();
-    }
+    // var hidden_persons = JSON.parse(localStorage["hidden_persons"] || "[]");
+    // for (var i = 0; i < hidden_persons.length; i++) {
+    //   $("#appointment-" + hidden_persons[i]).hide();
+    // }
 
-    $(".cancel-button").click(function () {
-      var user_id = $(this).data("appointment-id");
-      bootbox.confirm("Are you sure you want to cancel an appointment?", function(confirmed) {
-        if (confirmed) {
-          hidden_persons.push(user_id);
-          localStorage["hidden_persons"] = JSON.stringify(hidden_persons);
-          $("#appointment-" + user_id).hide();
-        }
+    // $(".cancel-button").click(function () {
+    //   var user_id = $(this).data("appointment-id");
+    //   bootbox.confirm("Are you sure you want to cancel an appointment?", function(confirmed) {
+    //     if (confirmed) {
+    //       hidden_persons.push(user_id);
+    //       localStorage["hidden_persons"] = JSON.stringify(hidden_persons);
+    //       $("#appointment-" + user_id).hide();
+    //     }
+    //   });
+    // });
+
+    $(document).ready(function(){
+      $(".delete-person").submit(function(e) {
+        var form = $(this);
+        e.preventDefault();
+        bootbox.confirm("Are you sure you want to delete a Pateint?", function(confirmed) {
+          if(confirmed) {
+            form.off("submit").submit();
+          }
+        });
       });
     });
   </script>

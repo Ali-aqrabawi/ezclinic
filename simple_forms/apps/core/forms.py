@@ -85,7 +85,7 @@ class PersonForm(forms.ModelForm):
         mobile = self.cleaned_data.get('mobile')
         if not mobile.isdigit():
             raise forms.ValidationError('Mobile Number should be digit only')
-        elif len(mobile) <= 10:
+        elif len(mobile) < 10:
             raise forms.ValidationError('Length of Mobile Number should be 10')
         return mobile
 
