@@ -54,9 +54,9 @@ class Person(models.Model):
         max_length=20, choices=SEX_CHOICES, default=("Male"))
     mobile = models.CharField(max_length=26, default=0011)
     amount_paid = models.DecimalField("money paid", max_digits=10,
-                                      decimal_places=2, null=False, default=0)
+                                      decimal_places=2, null=True, default=0)
     amount_left = models.DecimalField("total price", max_digits=10,
-                                      decimal_places=2, null=False, default=0)
+                                      decimal_places=2, null=True, default=0)
     note = models.CharField(max_length=256, null=True, blank=True)
     address = models.CharField(max_length=256, null=True, blank=True)
     date = models.DateField(

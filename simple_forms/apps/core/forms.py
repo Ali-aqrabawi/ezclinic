@@ -17,6 +17,8 @@ class PersonForm(forms.ModelForm):
     pictures = forms.FileField(widget=forms.ClearableFileInput(
         attrs={'required': False, 'multiple': True, 'class': 'form-control'}), required=False)
     time = forms.TimeField(input_formats=["%I:%M %p"], required=False)
+    amount_paid = forms.DecimalField(required=False)
+    amount_left = forms.DecimalField(required=False)
 
     def __init__(self, *args, **kwargs):
         super(PersonForm, self).__init__(*args, **kwargs)

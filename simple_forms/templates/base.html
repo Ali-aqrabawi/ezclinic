@@ -134,26 +134,26 @@
     <script type="text/javascript">
         $(document).ready(function(){
             var url = window.location.href;
-            if(url.indexOf('edit') !== -1 || url.indexOf('add') !== -1) {  
+            if(url.indexOf('edit') !== -1 || url.indexOf('add') !== -1 || url.indexOf('view')!== -1) {  
                 var date = new Date();
                 date.setDate(date.getDate());
                 $('#datepicker').datepicker({
                   startDate: date
                 })
-                if (url.indexOf('edit') !== -1 ){
-                   $timepicker = $("#{{ form.time.id_for_label }}").timepicker({
+                if (url.indexOf('edit') !== -1 || url.indexOf('view') !== -1 ){
+                   $timepicker = $("#id_time").timepicker({
                       minuteStep: 10,
                       defaultTime: false
                     });
                 } else{
-                    $timepicker = $("#{{ form.time.id_for_label }}").timepicker({
+                    $timepicker = $("#id_time").timepicker({
                       minuteStep: 10,
                     });
                 }
 
-                var input_date = $("#{{ form.date.id_for_label }}").val();
-                var input_time = $("#{{ form.time.id_for_label }}").val();
-                if ($("#{{ form.date.id_for_label }}").val() === "") {
+                var input_date = $("#id_date").val();
+                var input_time = $("#id_time").val();
+                if ($("#id_date").val() === "") {
                   $("#appointment-button").html("Set date");
                 } else {
                   $("#appointment-button").html(input_date + " " + input_time);
@@ -161,8 +161,8 @@
                 
                
                  $timepicker.on('changeTime.timepicker', function() {
-                    var input_date = $("#{{ form.date.id_for_label }}").val();
-                    var input_time = $("#{{ form.time.id_for_label }}").val();
+                    var input_date = $("#id_date").val();
+                    var input_time = $("#id_time").val();
                     var input_date = input_date.split('-').map(function(item) {
                         return parseInt(item, 10);
                     });
@@ -176,7 +176,7 @@
                     
                     if(input_date_time <= date){
                         console.log('hello')
-                        $("#{{ form.time.id_for_label }}").val(formatAMPM(date));
+                        $("#id_time").val(formatAMPM(date));
                     }
                 });
             }

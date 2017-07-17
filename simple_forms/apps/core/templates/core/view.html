@@ -702,7 +702,7 @@
           <div class="modal-body">
               <div class="form-group col-sm-6">
                 <label for="{{ appointment_form.date.id_for_label }}">{% trans "Next Appoinment Date" %}</label>
-                <div class="input-group date" data-provide="datepicker" data-date-autoclose="true" data-date-format="yyyy-mm-dd">
+                <div class="input-group date" id="datepicker" data-provide="datepicker" data-date-autoclose="true" data-date-format="yyyy-mm-dd">
                   {% render_field appointment_form.date value=person.date class="form-control" %}
                   <div class="input-group-addon">
                     <span class="glyphicon glyphicon-th"></span>
@@ -725,11 +725,6 @@
         </div><!-- /.modal-content -->
       </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
-
-    <script>
-      $("#{{ appointment_form.time.id_for_label }}").timepicker();
-    </script> 
-
     <div id="receipt-modal" class="modal fade" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
