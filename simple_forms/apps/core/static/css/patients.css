@@ -3,8 +3,23 @@
     color:white;
 }
 
+.navbar .navbar-toggle {
+border-color: #ddd;
+}
+.navbar .navbar-toggle .icon-bar {
+  background-color: gray; /* Changes regular toggle color */
+}
+
+.navbar .navbar-toggle:hover,
+.navbar .navbar-toggle:focus {
+  background-color: #ddd;
+}
+
 .registration-form {
     padding-top: 1em;
 }
+
+
+
 
 
