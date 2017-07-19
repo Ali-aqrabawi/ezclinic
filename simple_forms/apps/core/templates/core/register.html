@@ -4,7 +4,7 @@
 {% load staticfiles %}
 {% load widget_tweaks %}
 {% load i18n %}
-	
+
 {% block body %}
 <div class="container-fluid">
 
@@ -115,6 +115,23 @@
     </div>
 
 </div>
+<script>
+$(function () {
 
+$(".navbar-toggle").click(function () {
+
+  $(".layer").css("display","block");
+  $('.collapse').collapse("show");
+
+  });
+  $(".layer").click(function () {
+      $('.collapse').collapse("hide");
+  $(".layer").css("display","none");
+
+
+
+  });
+
+});
+</script>
 {% endblock %}
-
