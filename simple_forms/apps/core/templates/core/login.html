@@ -68,9 +68,27 @@
     </div>
 </div>
 <script>
+$(function () {
+
+$(".navbar-toggle").click(function () {
+
+  $(".layer").css("display","block");
+  $('.collapse').collapse("show");
+
+  });
+  $(".layer").click(function () {
+      $('.collapse').collapse("hide");
+  $(".layer").css("display","none");
+
+
+
+  });
+
+});
+</script>
+<script>
     window.onload = function (){
     document.getElementById("page-preloader").style.display = "none";
     };
 </script>
 {% endblock %}
-
