@@ -93,7 +93,7 @@
                     padding: 0,
                     closeBtn : false,
                     fitToView: false, // avoids scaling the image to fit in the viewport
-                    nextSpeed : 0, 
+                    nextSpeed : 0,
 
                     prevSpeed : 0,
                     beforeShow: function () {
@@ -104,7 +104,7 @@
                         // });
                         // set size for parent container
                         this.width = 700;
-                        this.height = 500; 
+                        this.height = 500;
                     },
                     helpers: {
                         overlay: {
@@ -116,5 +116,25 @@
 
         });
   </script>
+  <script>
+  $(function () {
 
+
+    $(".navbar-toggle").click(function () {
+
+    $(".layer").css("display","block");
+    $('.collapse').collapse("show");
+
+    });
+    $(".layer").click(function () {
+        $('.collapse').collapse("hide");
+    $(".layer").css("display","none");
+
+
+
+    });
+
+  });
+
+  </script>
 {% endblock %}
