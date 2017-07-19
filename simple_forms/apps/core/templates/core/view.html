@@ -17,23 +17,26 @@
     .pseudo-label {
         font-weight: 700;
     }
+    @media screen and (max-width:1016px) {
+
+    }
 </style>
 
     <h2>Patient Details </h2>
 
     {% csrf_token %}
-    <div class="tabtable"> 
+    <div class="tabtable">
         <ul class="nav nav-tabs">
             {% if tab %}
               <li class="{% if tab == 'tab1' %}active{% endif %}"><a href="#tab1" data-toggle="tab">Personal Info</a></li>
               <li class="{% if tab == 'tab2' %}active{% endif %}"><a href="#tab2" data-toggle="tab">Medical Details</a></li>
               <li class="{% if tab == 'tab3' %}active{% endif %}"><a href="#tab3" data-toggle="tab">Files</a></li>
-              <li class="{% if tab == 'tab4' %}active{% endif %}"><a href="#tab4" data-toggle="tab">Dental Chart</a></li>
+              <li class="{% if tab == 'tab4' %}active{% endif %} scroll" ><a href="#tab4" data-toggle="tab">Dental Chart</a></li>
             {% else %}
               <li class="active"><a href="#tab1" data-toggle="tab">Personal Info</a></li>
               <li class=""><a href="#tab2" data-toggle="tab">Medical Details</a></li>
               <li class=""><a href="#tab3" data-toggle="tab">Files</a></li>
-              <li class=""><a href="#tab4" data-toggle="tab">Dental Chart</a></li>
+              <li class="scroll"><a href="#tab4" data-toggle="tab">Dental Chart</a></li>
             {% endif %}
         </ul>
         <div class="tab-content">
@@ -89,7 +92,7 @@
                         <label for="address">{% trans "Address:" %}</label>
                         <input class="form-control"  value='{{ person.address|default:"."  }}' readonly>
                     </div>
-                    
+
                 </div>
             </div>
             <div class="tab-pane {% if tab == 'tab2' %}active{% endif %}" id="tab2">
@@ -127,7 +130,7 @@
                                             <button type='submit'  id='form1'  class='btn btn-xs btn-link icon' title="Delete"><i  class='glyphicon glyphicon-remove'></i></button>
                                         </form>
                                     </div>
-                                {% endfor %} 
+                                {% endfor %}
                            </div>
                         </div>
                          <div class="col-sm-12 form-group">
@@ -136,8 +139,8 @@
                                 {{ person.note|default:"."|linebreaks }}
                             </div>
                         </div>
-                    </div>                   
-                </div>              
+                    </div>
+                </div>
             </div>
             <div class="tab-pane {% if tab == 'tab3' %}active{% endif %}" id="tab3">
 
@@ -148,24 +151,24 @@
                             {% if  person.pictures.count == 0  %}
                             <input class="form-control"  value="No files for this patient" style="height: 200px;text-align:center;" readonly>
 
-                            {% else %} 
+                            {% else %}
                             <div class="well">
-   
-                                <div id="myCarousel" class="carousel slide">    
+
+                                <div id="myCarousel" class="carousel slide">
                               <!-- Carousel items -->
                               <div class="carousel-inner">
                                 {% if pictures_tuple %}
                                 {% for first, second in pictures_tuple %}
 
-                                  {% if forloop.counter == 1 %} 
+                                  {% if forloop.counter == 1 %}
                                     <div class="item active">
                                       <div class="row-fluid">
-                                        
-                                          
+
+
                                               <div class="col-md-6">
                                                   <div class="thumbnail">
-                                                      
-                                                          
+
+
                                                               <a class="fancybox" rel="group" href="{{ first.picture.url }}">
                                                               <img src="{{ first.picture.url }}" style="height:100px;width:100%" alt="" />
                                                               </a>
@@ -185,8 +188,8 @@
                                               </div>
                                               <div class="col-md-6">
                                                   <div class="thumbnail">
-                                                      
-                                                          
+
+
                                                               <a class="fancybox" rel="group" href="{{ second.picture.url }}">
                                                               <img src="{{ second.picture.url }}" style="height:100px;width:100%" alt="" />
                                                               </a>
@@ -204,18 +207,18 @@
                                                     </form>
                                                   </div>
                                               </div>
-                                      
+
                                       </div>
-                                    </div>           
-                                  {% else %} 
+                                    </div>
+                                  {% else %}
                                     <div class="item">
                                       <div class="row-fluid">
-                                        
-                                          
+
+
                                               <div class="col-md-6">
                                                   <div class="thumbnail">
-                                                      
-                                                          
+
+
                                                               <a class="fancybox" rel="group" href="{{ first.picture.url }}">
                                                               <img src="{{ first.picture.url }}" style="height:100px;width:100%" alt="" />
                                                               </a>
@@ -235,8 +238,8 @@
                                               </div>
                                               <div class="col-md-6">
                                                   <div class="thumbnail">
-                                                      
-                                                          
+
+
                                                               <a class="fancybox" rel="group" href="{{ second.picture.url }}">
                                                               <img src="{{ second.picture.url }}" style="height:100px;width:100%" alt="" />
                                                               </a>
@@ -254,21 +257,21 @@
                                                     </form>
                                                   </div>
                                               </div>
-                                      
+
                                       </div>
-                                    </div> 
-                                  {% endif %}   
-                                           
+                                    </div>
+                                  {% endif %}
+
                                 {% endfor %}
                                 {% if last_picture %}
                                   <div class="item">
                                       <div class="row-fluid">
-                                        
-                                          
+
+
                                               <div class="col-md-6">
                                                   <div class="thumbnail">
-                                                      
-                                                          
+
+
                                                               <a class="fancybox" rel="group" href="{{ last_picture.picture.url }}">
                                                               <img src="{{ last_picture.picture.url }}" style="height:100px;width:100%" alt="" />
                                                               </a>
@@ -286,21 +289,21 @@
                                                     </form>
                                                   </div>
                                               </div>
-                                              
-                                      
+
+
                                       </div>
-                                    </div> 
+                                    </div>
                                 {% endif %}
 
                                 {% elif last_picture %}
                                     <div class="item active">
                                       <div class="row-fluid">
-                                        
-                                          
+
+
                                               <div class="col-md-6">
                                                   <div class="thumbnail">
-                                                      
-                                                          
+
+
                                                               <a class="fancybox" rel="group" href="{{ last_picture.picture.url }}">
                                                               <img src="{{ last_picture.picture.url }}" style="height:100px;width:100%" alt="" />
                                                               </a>
@@ -318,14 +321,14 @@
                                                     </form>
                                                   </div>
                                               </div>
-                                              
-                                      
+
+
                                       </div>
-                                    </div> 
+                                    </div>
                                 {% endif %}
-                                
+
                               </div><!--/carousel-inner-->
-   
+
                                 <a class="left carousel-control" href="#myCarousel" data-slide="prev">
                                     <span class="icon-prev fa-stack fa-lg"></span>
                                 </a>
@@ -333,7 +336,7 @@
                                     <span class="icon-next fa-stack fa-lg"></span>
                                 </a>
                                 </div><!--/myCarousel-->
-   
+
                             </div><!--/well-->
                             {% endif %}
                         </div>
@@ -397,9 +400,9 @@
                         <label for="amount left">{% trans "Total price:" %}</label>
                         <input class="form-control"  value='{{ person.amount_left|default:"0"  }}' readonly>
                     </div>
-                    
+
                 </div>
-                
+
                 <div class="row">
                     <div class="col-sm-4 form-group">
                         <label for="mobile">{% trans "Mobile Number:" %}</label>
@@ -409,7 +412,7 @@
                         <label for="address">{% trans "Address:" %}</label>
                         <input class="form-control"  value='{{ person.address|default:"."  }}' readonly>
                     </div>
-                    
+
                 </div>
             </div>
             <div class="tab-pane" id="tab2">
@@ -447,7 +450,7 @@
                                             <button type='submit'  id='form1'  class='btn btn-xs btn-link icon' title="Delete"><i  class='glyphicon glyphicon-remove'></i></button>
                                         </form>
                                     </div>
-                                {% endfor %} 
+                                {% endfor %}
                            </div>
                         </div>
                          <div class="col-sm-12 form-group">
@@ -456,8 +459,8 @@
                                 {{ person.note|default:"."|linebreaks }}
                             </div>
                         </div>
-                    </div>                   
-                </div>              
+                    </div>
+                </div>
             </div>
             <div class="tab-pane" id="tab3">
 
@@ -468,24 +471,24 @@
                             {% if  person.pictures.count == 0  %}
                             <input class="form-control"  value="No files for this patient" style="height: 200px;text-align:center;" readonly>
 
-                            {% else %} 
+                            {% else %}
                             <div class="well">
-   
-                                <div id="myCarousel" class="carousel slide">    
+
+                                <div id="myCarousel" class="carousel slide">
                               <!-- Carousel items -->
                               <div class="carousel-inner">
                                 {% if pictures_tuple %}
                                 {% for first, second in pictures_tuple %}
 
-                                  {% if forloop.counter == 1 %} 
+                                  {% if forloop.counter == 1 %}
                                     <div class="item active">
                                       <div class="row-fluid">
-                                        
-                                          
+
+
                                               <div class="col-md-6">
                                                   <div class="thumbnail">
-                                                      
-                                                          
+
+
                                                               <a class="fancybox" rel="group" href="{{ first.picture.url }}">
                                                               <img src="{{ first.picture.url }}" style="height:100px;width:100%" alt="" />
                                                               </a>
@@ -505,8 +508,8 @@
                                               </div>
                                               <div class="col-md-6">
                                                   <div class="thumbnail">
-                                                      
-                                                          
+
+
                                                               <a class="fancybox" rel="group" href="{{ second.picture.url }}">
                                                               <img src="{{ second.picture.url }}" style="height:100px;width:100%" alt="" />
                                                               </a>
@@ -524,18 +527,18 @@
                                                     </form>
                                                   </div>
                                               </div>
-                                      
+
                                       </div>
-                                    </div>           
-                                  {% else %} 
+                                    </div>
+                                  {% else %}
                                     <div class="item">
                                       <div class="row-fluid">
-                                        
-                                          
+
+
                                               <div class="col-md-6">
                                                   <div class="thumbnail">
-                                                      
-                                                          
+
+
                                                               <a class="fancybox" rel="group" href="{{ first.picture.url }}">
                                                               <img src="{{ first.picture.url }}" style="height:100px;width:100%" alt="" />
                                                               </a>
@@ -555,8 +558,8 @@
                                               </div>
                                               <div class="col-md-6">
                                                   <div class="thumbnail">
-                                                      
-                                                          
+
+
                                                               <a class="fancybox" rel="group" href="{{ second.picture.url }}">
                                                               <img src="{{ second.picture.url }}" style="height:100px;width:100%" alt="" />
                                                               </a>
@@ -574,21 +577,21 @@
                                                     </form>
                                                   </div>
                                               </div>
-                                      
+
                                       </div>
-                                    </div> 
-                                  {% endif %}   
-                                           
+                                    </div>
+                                  {% endif %}
+
                                 {% endfor %}
                                 {% if last_picture %}
                                   <div class="item">
                                       <div class="row-fluid">
-                                        
-                                          
+
+
                                               <div class="col-md-6">
                                                   <div class="thumbnail">
-                                                      
-                                                          
+
+
                                                               <a class="fancybox" rel="group" href="{{ last_picture.picture.url }}">
                                                               <img src="{{ last_picture.picture.url }}" style="height:100px;width:100%" alt="" />
                                                               </a>
@@ -606,21 +609,21 @@
                                                     </form>
                                                   </div>
                                               </div>
-                                              
-                                      
+
+
                                       </div>
-                                    </div> 
+                                    </div>
                                 {% endif %}
 
                                 {% elif last_picture %}
                                     <div class="item active">
                                       <div class="row-fluid">
-                                        
-                                          
+
+
                                               <div class="col-md-6">
                                                   <div class="thumbnail">
-                                                      
-                                                          
+
+
                                                               <a class="fancybox" rel="group" href="{{ last_picture.picture.url }}">
                                                               <img src="{{ last_picture.picture.url }}" style="height:100px;width:100%" alt="" />
                                                               </a>
@@ -638,14 +641,14 @@
                                                     </form>
                                                   </div>
                                               </div>
-                                              
-                                      
+
+
                                       </div>
-                                    </div> 
+                                    </div>
                                 {% endif %}
-                                
+
                               </div><!--/carousel-inner-->
-   
+
                                 <a class="left carousel-control" href="#myCarousel" data-slide="prev">
                                     <span class="icon-prev fa-stack fa-lg"></span>
                                 </a>
@@ -653,7 +656,7 @@
                                     <span class="icon-next fa-stack fa-lg"></span>
                                 </a>
                                 </div><!--/myCarousel-->
-   
+
                             </div><!--/well-->
                             {% endif %}
                         </div>
@@ -678,13 +681,13 @@
             </div>
           {% endif %}
         </div>
-    </div>    
+    </div>
 
     <div class="form-group">
-	   
+
         <a href="{% url 'edit' person.id %}"  class="btn btn-info" id="edit">
             <i class="glyphicon glyphicon-pencil" ></i><span> {% trans "Edit" %}</span>
-          
+
     	</a>
         <a id="delete" href="{% url 'delete_person' person.id %}" class="btn btn-danger">Delete</a>
         <a href="{% url 'home' %}" class="btn btn-default">Back</a>
@@ -761,7 +764,7 @@
                     padding: 0,
                     closeBtn : false,
                     fitToView: false, // avoids scaling the image to fit in the viewport
-                    nextSpeed : 0, 
+                    nextSpeed : 0,
 
                     prevSpeed : 0,
                     beforeShow: function () {
@@ -772,7 +775,7 @@
                         // });
                         // set size for parent container
                         this.width = 700;
-                        this.height = 500; 
+                        this.height = 500;
                     },
                     helpers: {
                         overlay: {
@@ -792,6 +795,29 @@
                 }
             });
         });
+
+        $(".scroll").click(function () {
+          if ($(window).width() < 768) {
+            $("body,html").animate({scrollTop:200}, 1000);
+          }else {
+              $("body,html").animate({scrollTop:65}, 1000);
+          }
+
+
+        });
+        $(".navbar-toggle").click(function () {
+
+          $(".layer").css("display","block");
+          $('.collapse').collapse("show");
+
+          });
+          $(".layer").click(function () {
+              $('.collapse').collapse("hide");
+          $(".layer").css("display","none");
+
+
+
+          });
         $("form#form2").submit(function(e) {
             e.preventDefault();
             var lHref = $(this).attr('action');
@@ -832,6 +858,3 @@
       });
   </script>
 {% endblock %}
-
-
- 
