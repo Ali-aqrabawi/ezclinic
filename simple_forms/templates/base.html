@@ -2,11 +2,11 @@
 {% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
-<head>         
+<head>
 	<title>ezClinic | for Dental clinics - Online App to manage your patients</title>
 
 	<meta name="description" content="ezClinic is an online cloud based application for dental clinic. Manage your patients, appointments and your calendar all in one secure place.it provide degital dental chart - diagnostic code - personal details - and more ">
-	
+
 	<meta name="keywords" content="dental chart online,dentist software,dental clinic software,ezclinic, dental chart, dental clinic cloud solution, dental clinic software management, dental clinic cloud CRM">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,7 +16,7 @@
   <!-- Le styles -->
      <link href="{% static 'css/patients.css' %}" rel="stylesheet">
      <!-- <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet"> -->
-      
+
     <!-- <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet"> -->
     <!-- Include Font Awesome Stylesheet in Header -->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet" rel="stylesheet">
@@ -29,8 +29,8 @@
     <link href="{% static 'css/bootstrap-datepicker.min.css' %}" rel="stylesheet">
     <link href="{% static 'css/bootstrap-timepicker.min.css' %}" rel="stylesheet">
 	<!-- <script src="{% static 'js/jquery.confirm.js' %}" ></script>   -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript"></script> 
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous" type="text/javascript"></script> 
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" type="text/javascript"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.1/js/bootstrap-select.min.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js" type="text/javascript"></script>
     <script type="text/javascript" src='{% static "js1/bootstrap-datepicker.min.js" %}'></script>
@@ -51,17 +51,26 @@
     }
     /*for datepicker*/
     .datepicker.datepicker-dropdown {
-        margin-top: 9vh;        
+        margin-top: 9vh;
     }
     @media (max-width: 767px) {
       .datepicker.datepicker-dropdown {
-        margin-top: 5vh;        
+        margin-top: 5vh;
     }
     }
-		
+		.layer {
+			width: 100%;
+			height: 100vh;
+			background-color: transparent;
+			z-index: 9999999;
+			display: none;
+			position: fixed;
+		}
+
   </style>
 </head>
 <body>
+
 <nav class="navbar  navbar-fixed-top" >
     <div class="container-fluid">
 
@@ -101,12 +110,13 @@
               </li>
           </ul>
         </div>
+				<span class="layer"></span>
 
     </div>
 </nav>
 
   <main>
-    <div class="container" style="margin-top:4%">
+    <div class="container" style="margin-top:50px">
       {% block content %}
       {% endblock %}
     </div>
@@ -120,7 +130,7 @@
         <hr>
             <div class="text-center center-block">
     		<p class="txt-railway">- contact us -</p>
-                
+
                 <br />
                     <a href="https://www.facebook.com/ezcloudservices/" target="_blank"><i id="social-fb" class="fa fa-facebook-square fa-3x social"></i></a>
     	            <a href="https://www.linkedin.com/company/ezcloud?trk=biz-companies-cym" target="_blank"><i id="social-tw" class="fa fa-linkedin-square fa-3x social"></i></a>
@@ -136,7 +146,7 @@
     <script type="text/javascript">
         $(document).ready(function(){
             var url = window.location.href;
-            if(url.indexOf('edit') !== -1 || url.indexOf('add') !== -1 || url.indexOf('view')!== -1) {  
+            if(url.indexOf('edit') !== -1 || url.indexOf('add') !== -1 || url.indexOf('view')!== -1) {
                 var date = new Date();
                 date.setDate(date.getDate());
                 $('#datepicker').datepicker({
@@ -159,9 +169,9 @@
                   $("#appointment-button").html("Set date");
                 } else {
                   $("#appointment-button").html(input_date + " " + input_time);
-                }              
-                
-               
+                }
+
+
                  $timepicker.on('changeTime.timepicker', function() {
                     var input_date = $("#id_date").val();
                     var input_time = $("#id_time").val();
@@ -170,12 +180,12 @@
                     });
                     var input_time_ = input_time.split(' ')[0].split(':').map(function(item) {
                         return parseInt(item, 10);
-                    }); 
+                    });
                     if (input_time.split(' ')[1] == 'PM'){
                         input_time_[0] = input_time_[0] + 12;
                     }
                     var input_date_time = new Date(input_date[0], input_date[1]-1, input_date[2], input_time_[0], input_time_[1]);
-                    
+
                     if(input_date_time <= date){
                         console.log('hello')
                         $("#id_time").val(formatAMPM(date));
@@ -193,22 +203,13 @@
               return strTime;
             }
 
-            if(window.location.href.indexOf('tab=tab4') != -1){
-                $('html,body').animate({
-                    scrollTop: 60
-                }, 500)
-            }
-            $('a[href="#tab4"]').click(function(){
-                  $('html,body').animate({
-                    scrollTop: 60
-                  }, 500)
-            });
+    
         });
         </script>
       {% endblock javascript %}
 
-        
-      
+
+
     </body>
 
     </html>
