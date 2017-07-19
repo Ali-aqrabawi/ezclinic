@@ -6,14 +6,50 @@
 <style>
   .page-header {
     padding: 1em 0 1em 0;
+    position: relative;
+
   }
   .page-header--h {
-    line-height: 0;
+    line-height: 30px;
+
   }
-</style>
+  @media screen and (min-width:768px) {
+    .mobile {
+      display: none;
+    }
+  }
+  @media screen and (max-width:768px) {
+    .desktop {
+      display: none;
+    }
+    .mobile {
+      margin-bottom: 35px;
+      margin-top: 30px;
+    }
+  }
+  @media screen and (min-width:769px) and (max-width:864px) {
+    .desktop {
+      margin-top: 50px;
+    }
+
+  }
+  @media screen and (max-width:470px) {
+    .btn {
+      width: 100%;
+      margin-bottom: 15px;
+    }
+
+  }
+  @media screen and (max-width:400px) {
+    .mobile {
+          font-size: 12pt;
+    }
+  }
+
+ </style>
     <div class="row page-header">
       <div class="col-md-6">
-        <h2 class="page-header--h">
+        <h2 class="page-header--h desktop">
         {% if today %}
         Today's Appointments
         {% else %}
@@ -35,6 +71,13 @@
       </div>
       </div>
     </div>
+    <h2 class="page-header--h mobile">
+    {% if today %}
+    Today's Appointments
+    {% else %}
+    Appointments for {{ date|date:"F j"}}
+    {% endif %}
+  </h2>
     <form id="patients-calendar-form" action="">
       <input id="patients-calendar-form-appointment" name="appointment" type="hidden">
     </form>
@@ -154,12 +197,32 @@
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<script>
+$(function () {
+
+
+  $(".navbar-toggle").click(function () {
+
+  $(".layer").css("display","block");
+  $('.collapse').collapse("show");
+
+  });
+  $(".layer").click(function () {
+  $(".layer").css("display","none");
+  $('.collapse').collapse("hide");
+
+
+  });
+
+});
+
+</script>
 
 <script>
   var key = 'events-state-{{ date|date:"Y-m-d" }}';
   // Default is show
   var events_shown = !! JSON.parse(window.localStorage[key] || "true");
- 
+
   $(".patients-datepicker")
     .datepicker({autoClose: true, todayBtn: true, todayHighlight: true})
     .on("changeDate", function(event) {
@@ -178,7 +241,7 @@
     $("#hide-events").html("Show Reminders");
   }
   $("#events-table").removeClass("hidden");
-  
+
   $("#hide-events").click(function() {
     events_shown = ! events_shown;
     window.localStorage[key] = events_shown;
