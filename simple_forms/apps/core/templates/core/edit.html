@@ -9,18 +9,18 @@
     <h2>Edit Patient</h2>
     <form enctype="multipart/form-data" id="edit-person-form" method="post">
         {% csrf_token %}
-        <div class="tabtable"> 
+        <div class="tabtable">
             <ul class="nav nav-tabs">
             {% if tab %}
               <li class="{% if tab == 'tab1' %}active{% endif %}"><a href="#tab1" data-toggle="tab">Personal Info</a></li>
               <li class="{% if tab == 'tab2' %}active{% endif %}"><a href="#tab2" data-toggle="tab">Medical Details</a></li>
               <li class="{% if tab == 'tab3' %}active{% endif %}"><a href="#tab3" data-toggle="tab">Files</a></li>
-              <li class="{% if tab == 'tab4' %}active{% endif %}"><a href="#tab4" data-toggle="tab">Dental Chart</a></li>
+              <li class="{% if tab == 'tab4' %}active{% endif %} scroll"><a href="#tab4" data-toggle="tab">Dental Chart</a></li>
             {% else %}
                 <li class="active"><a href="#tab1" data-toggle="tab">Personal Info</a></li>
                 <li class=""><a href="#tab2" data-toggle="tab">Medical Details</a></li>
                 <li class=""><a href="#tab3" data-toggle="tab">Files</a></li>
-                <li class=""><a href="#tab4" data-toggle="tab">Dental Chart</a></li>
+                <li class="scroll"><a href="#tab4" data-toggle="tab">Dental Chart</a></li>
             {% endif %}
             </ul>
             <div class="tab-content">
@@ -69,7 +69,7 @@
                                    {{ form.amount_left|add_class:"form-control" }}
                                    <span class="text-danger">{{form.amount_left.errors}}</span>
                             </div>
-                            
+
                         </div>
                         <div class="row">
                             <div class="col-sm-4 form-group">
@@ -151,7 +151,7 @@
 										<option value="Loss of teeth due to trauma">Loss of teeth due to trauma</option>
 										<option value="Loss of teeth due to periodontal disease">Loss of teeth due to periodontal disease</option>
 										<option value="Loss of teeth due to caries">Loss of teeth due to caries</option>
-										
+
 									</optgroup>
 									<optgroup label="Diseases of the jaws">
 										<option value="Fissural cyst of jaw">Fissural cyst of jaw</option>
@@ -244,7 +244,7 @@
                                    <label for="amount left">{% trans "Total Price:" %}</label>
                                    {{ form.amount_left|add_class:"form-control" }}
                             </div>
-                            
+
                         </div>
                         <div class="row">
                             <div class="col-sm-4 form-group">
@@ -340,7 +340,7 @@
                     </div>
                 {% endif %}
             </div>
-        </div>       
+        </div>
 
         <div class="form-group">
             <button type="submit" id="edit-person" class="btn btn-info">
@@ -383,7 +383,10 @@
       </div>
 
     </form>
-    
+
+
+
+
     <script type="text/javascript">
 
         // window.onload = function() {
@@ -392,12 +395,35 @@
         //         window.location.reload();
         //     }
         // }
-        
+
         $(document).ready(function(){
+          $(".scroll").click(function () {
+
+              if ($(window).width() < 768) {
+                $("body,html").animate({scrollTop:200}, 1000);
+              }else {
+                  $("body,html").animate({scrollTop:65}, 1000);
+              }
+
+
+            });
+            $(".navbar-toggle").click(function () {
+
+              $(".layer").css("display","block");
+              $('.collapse').collapse("show");
+
+              });
+              $(".layer").click(function () {
+                  $('.collapse').collapse("hide");
+              $(".layer").css("display","none");
+
+
+
+              });
             var values="{{diagcodes}}".split(",");
             $('#diagcode').val(values);
             $('.selectpicker').selectpicker('refresh')
-            
+
             $("form#form1").submit(function(e) {
                 e.preventDefault();
                 var lHref = $(this).attr('action');
@@ -423,7 +449,9 @@
             $('#edit-person').click(function(){
                 $('#edit-person-form').submit();
             });
+
+
           });
     </script>
-  
+
 {% endblock %}
