@@ -17,7 +17,18 @@
       });
     });
   </script>
+<style>
 
+.table-row {
+  cursor: pointer;
+  transition: 0.5s ease;
+  position: relative;
+}
+.table-row:hover {
+background-color: #eee;
+}
+
+</style>
   <h2>
     All patients
     <a href="{% url 'add_person' %}" class="btn btn-info pull-right">
@@ -39,7 +50,7 @@
     </thead>
     <tbody>
       {% for person in persons %}
-        <tr id="person-{{ person.id }}">
+        <tr id="person-{{ person.id }}" class="table-row" data="{% url 'view' person.id %}">
           <td>{{ person.name }}</td>
           <td>{{ person.last_name }}</td>
           <td>{{ person.chief_complain }}</td>
@@ -48,7 +59,7 @@
           <td>
             <form class="delete-person" action="{% url 'delete_person' person.id %}" method='POST'>
               {% csrf_token %}
-              <button type='submit' class='btn btn-xs btn-link icon'>
+              <button type='submit' class='btn btn-xs btn-link icon delete'>
                 <i class='glyphicon glyphicon-remove'></i>
               </button>
             </form>
@@ -133,8 +144,77 @@
 
 
     });
+    $(".table-row").click(function () {
+    var url = $(this).attr("data");
 
+    window.location.href= url;
+
+    });
+$(".delete").click(function () {
+
+$(".table-row").find("span").fadeOut();
+$(".b-layer").css("z-index","999");
+});
   });
 
   </script>
+  <script>
+    var key = 'events-state-{{ date|date:"Y-m-d" }}';
+    // Default is show
+    var events_shown = !! JSON.parse(window.localStorage[key] || "true");
+
+    $(".patients-datepicker")
+      .datepicker({autoClose: true, todayBtn: true, todayHighlight: true})
+      .on("changeDate", function(event) {
+        $("#patients-calendar-form-appointment").val(event.format("yyyy-mm-dd"));
+        $("#patients-calendar-form").submit();
+      });
+
+      var date = new Date();
+      date.setDate(date.getDate());
+      $('#datepicker').datepicker({
+        startDate: date
+      });
+
+    if (!events_shown) {
+      $("#events-table").hide();
+      $("#hide-events").html("Show Reminders");
+    }
+    $("#events-table").removeClass("hidden");
+
+    $("#hide-events").click(function() {
+      events_shown = ! events_shown;
+      window.localStorage[key] = events_shown;
+      if (events_shown) {
+        $("#events-table").show();
+        $("#hide-events").html("Hide Reminders");
+      } else {
+        $("#events-table").hide();
+        $("#hide-events").html("Show Reminders");
+      }
+
+    });
+  </script>
+    <script>
+      var hidden_persons = JSON.parse(localStorage["hidden_persons"] || "[]");
+      for (var i = 0; i < hidden_persons.length; i++) {
+        $("#appointment-" + hidden_persons[i]).hide();
+      }
+
+      $(".cancel-button").click(function () {
+        var user_id = $(this).data("appointment-id");
+        bootbox.confirm("Are you sure you want to cancel an appointment?", function(confirmed) {
+          if (confirmed) {
+            $(".b-layer").fadeOut();
+            hidden_persons.push(user_id);
+            localStorage["hidden_persons"] = JSON.stringify(hidden_persons);
+            $("#appointment-" + user_id).hide();
+          }else {
+            $(".b-layer").fadeOut();
+          }
+        });
+      });
+
+    </script>
+
 {% endblock %}
