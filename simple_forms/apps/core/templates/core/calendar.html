@@ -45,8 +45,51 @@
           font-size: 12pt;
     }
   }
+  .table-row {
+    cursor: pointer;
+    transition: 0.5s ease;
+    position: relative;
+  }
+.table-row:hover {
+  background-color: #eee;
+}
 
+.patient-options {
+  width: 200px;
+  background-color: #5bc0de;
+  height: 150px;
+  color: white;
+  display: none;
+  margin: auto;
+   position: absolute;
+   top: 0; left: 0; bottom: 0; right: 0;
+z-index: 9999999999999999999999999;
+border-radius: 5px;
+box-shadow: 10px 10px 50px black;
+padding: 10px;
+cursor:default;
+text-align: center;
+}
+.patient-options button {
+  width: 100%;
+  display: block;
+  background-color: white;
+  margin-top: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: #5bc0de;
+  border: 0;
+  border-radius: 5px;
+}
+.patient-options button:hover {
+  background-color: white;
+  color: #5bc0de;
+  list-style-type: none;
+  border-bottom: 0;
+  text-decoration: none;
+}
  </style>
+
     <div class="row page-header">
       <div class="col-md-6">
         <h2 class="page-header--h desktop">
@@ -82,7 +125,7 @@
       <input id="patients-calendar-form-appointment" name="appointment" type="hidden">
     </form>
 
-    <table class="table">
+    <table class="table" >
         <thead>
             <tr>
                 <th>Name</th>
@@ -96,13 +139,21 @@
         </thead>
         <tbody>
             {% for person in persons %}
-            <tr id="appointment-{{ person.id }}">
+            <tr id="appointment-{{ person.id }}" class="table-row">
                 <td>{{ person.name }}</td>
                 <td>{{ person.last_name }}</td>
                 <td>{{ person.treatment_done|linebreaks }}</td>
                 <td>{{ person.treatment_plan|linebreaks }}</td>
                 <td class="text-center">{{ person.time|time:"f A" }}</td>
                 <td>
+
+                  <span class="patient-options">
+{{ person.name }}
+
+<button data-appointment-id="{{ person.id }}"  class="cancel-button cancel-button-b btn btn-xs btn-link">Cancel Appointment</button>
+<button data="{% url 'view' person.id %}?next=calendar" class="view-patient" >View Details</button>
+                  </span>
+
                     <button data-appointment-id="{{ person.id }}" type="button" class="cancel-button btn btn-xs btn-link">
                         <span  class="glyphicon glyphicon-minus"></span>
                     </button>
@@ -213,7 +264,30 @@ $(function () {
 
 
   });
+$(".table-row").click(function () {
 
+$(".b-layer").fadeIn();
+$(this).find("span").show();
+});
+
+$(".b-layer").click(function () {
+
+$(this).fadeOut();
+$(".table-row").find("span").hide();
+
+});
+
+$(".cancel-button-b").click(function () {
+
+  $(".b-layer").css("z-index","999");
+  $(".table-row").find("span").fadeOut();
+});
+$(".view-patient").click(function () {
+var url = $(this).attr("data");
+
+window.location.href= url;
+
+});
 });
 
 </script>
@@ -256,6 +330,7 @@ $(function () {
   });
 </script>
   <script>
+
     var hidden_persons = JSON.parse(localStorage["hidden_persons"] || "[]");
     for (var i = 0; i < hidden_persons.length; i++) {
       $("#appointment-" + hidden_persons[i]).hide();
@@ -265,9 +340,12 @@ $(function () {
       var user_id = $(this).data("appointment-id");
       bootbox.confirm("Are you sure you want to cancel an appointment?", function(confirmed) {
         if (confirmed) {
+          $(".b-layer").fadeOut();
           hidden_persons.push(user_id);
           localStorage["hidden_persons"] = JSON.stringify(hidden_persons);
           $("#appointment-" + user_id).hide();
+        }else {
+          $(".b-layer").fadeOut();
         }
       });
     });
