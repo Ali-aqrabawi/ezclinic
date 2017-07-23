@@ -66,11 +66,19 @@
 			display: none;
 			position: fixed;
 		}
-
+		.b-layer {
+		width: 100%;
+		height: 100vh;
+		position: fixed;
+		background-color: black;
+		opacity: 0.5;
+		z-index: 999999999999999999;
+		display:none;
+		}
   </style>
 </head>
 <body>
-
+ <span class="b-layer"></span>
 <nav class="navbar  navbar-fixed-top" >
     <div class="container-fluid">
 
@@ -203,7 +211,7 @@
               return strTime;
             }
 
-    
+
         });
         </script>
       {% endblock javascript %}
