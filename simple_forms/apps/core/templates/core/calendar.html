@@ -6,14 +6,93 @@
 <style>
   .page-header {
     padding: 1em 0 1em 0;
+    position: relative;
+
   }
   .page-header--h {
-    line-height: 0;
+    line-height: 30px;
+
   }
-</style>
+  @media screen and (min-width:768px) {
+    .mobile {
+      display: none;
+    }
+  }
+  @media screen and (max-width:768px) {
+    .desktop {
+      display: none;
+    }
+    .mobile {
+      margin-bottom: 35px;
+      margin-top: 30px;
+    }
+  }
+  @media screen and (min-width:769px) and (max-width:864px) {
+    .desktop {
+      margin-top: 50px;
+    }
+
+  }
+  @media screen and (max-width:470px) {
+    .btn {
+      width: 100%;
+      margin-bottom: 15px;
+    }
+
+  }
+  @media screen and (max-width:400px) {
+    .mobile {
+          font-size: 12pt;
+    }
+  }
+  .table-row {
+    cursor: pointer;
+    transition: 0.5s ease;
+    position: relative;
+  }
+.table-row:hover {
+  background-color: #eee;
+}
+
+.patient-options {
+  width: 200px;
+  background-color: #5bc0de;
+  height: 150px;
+  color: white;
+  display: none;
+  margin: auto;
+   position: absolute;
+   top: 0; left: 0; bottom: 0; right: 0;
+z-index: 9999999999999999999999999;
+border-radius: 5px;
+box-shadow: 10px 10px 50px black;
+padding: 10px;
+cursor:default;
+text-align: center;
+}
+.patient-options button {
+  width: 100%;
+  display: block;
+  background-color: white;
+  margin-top: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: #5bc0de;
+  border: 0;
+  border-radius: 5px;
+}
+.patient-options button:hover {
+  background-color: white;
+  color: #5bc0de;
+  list-style-type: none;
+  border-bottom: 0;
+  text-decoration: none;
+}
+ </style>
+
     <div class="row page-header">
       <div class="col-md-6">
-        <h2 class="page-header--h">
+        <h2 class="page-header--h desktop">
         {% if today %}
         Today's Appointments
         {% else %}
@@ -24,7 +103,7 @@
       <div class="col-md-6">
         <div class="pull-right">
         <button class="btn btn-info patients-datepicker" >
-          <span class="glyphicon glyphicon-th"></span> {% trans "Check for other day" %}
+          <span class="glyphicon glyphicon-th"></span> {% trans "Check for another date" %}
         </button>
         <a href="{% url 'add_person' %}" class="btn btn-info">
           <span class="glyphicon glyphicon-plus"></span> {% trans  "Add Patient" %}
@@ -35,11 +114,18 @@
       </div>
       </div>
     </div>
+    <h2 class="page-header--h mobile">
+    {% if today %}
+    Today's Appointments
+    {% else %}
+    Appointments for {{ date|date:"F j"}}
+    {% endif %}
+  </h2>
     <form id="patients-calendar-form" action="">
       <input id="patients-calendar-form-appointment" name="appointment" type="hidden">
     </form>
 
-    <table class="table">
+    <table class="table" >
         <thead>
             <tr>
                 <th>Name</th>
@@ -53,18 +139,26 @@
         </thead>
         <tbody>
             {% for person in persons %}
-            <tr id="appointment-{{ person.id }}">
+            <tr id="appointment-{{ person.id }}" class="table-row">
                 <td>{{ person.name }}</td>
                 <td>{{ person.last_name }}</td>
                 <td>{{ person.treatment_done|linebreaks }}</td>
                 <td>{{ person.treatment_plan|linebreaks }}</td>
                 <td class="text-center">{{ person.time|time:"f A" }}</td>
                 <td>
+
+                  <span class="patient-options">
+{{ person.name }}
+
+<button data-appointment-id="{{ person.id }}"  class="cancel-button cancel-button-b btn btn-xs btn-link">Cancel Appointment</button>
+<button data="{% url 'view' person.id %}?next=calendar" class="view-patient" >View Details</button>
+                  </span>
+
                     <button data-appointment-id="{{ person.id }}" type="button" class="cancel-button btn btn-xs btn-link">
                         <span  class="glyphicon glyphicon-minus"></span>
                     </button>
                 </td>
-                <td><a  href="{% url 'view' person.id %}"><i  class="glyphicon glyphicon-list-alt"></i></a></td>
+                <td><a  href="{% url 'view' person.id %}?next=calendar"><i  class="glyphicon glyphicon-list-alt"></i></a></td>
             </tr>
             {% empty %}
             <tr>
@@ -130,7 +224,7 @@
           <div class="form-group">
             <label class="col-sm-2 control-label" for="{{ event_form.date.id_for_label }}">Date</label>
             <div class="col-sm-4">
-              <div class="input-group date" data-provide="datepicker" data-date-autoclose="true" data-date-format="yyyy-mm-dd">
+              <div class="input-group date" id="datepicker" data-provide="datepicker" data-date-autoclose="true" data-date-format="yyyy-mm-dd">
                 {{ event_form.date|add_class:"form-control" }}
                 <div class="input-group-addon">
                   <span class="glyphicon glyphicon-th"></span>
@@ -154,12 +248,55 @@
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<script>
+$(function () {
+
+
+  $(".navbar-toggle").click(function () {
+
+  $(".layer").css("display","block");
+  $('.collapse').collapse("show");
+
+  });
+  $(".layer").click(function () {
+  $(".layer").css("display","none");
+  $('.collapse').collapse("hide");
+
+
+  });
+$(".table-row").click(function () {
+
+$(".b-layer").fadeIn();
+$(this).find("span").show();
+});
+
+$(".b-layer").click(function () {
+
+$(this).fadeOut();
+$(".table-row").find("span").hide();
+
+});
+
+$(".cancel-button-b").click(function () {
+
+  $(".b-layer").css("z-index","999");
+  $(".table-row").find("span").fadeOut();
+});
+$(".view-patient").click(function () {
+var url = $(this).attr("data");
+
+window.location.href= url;
+
+});
+});
+
+</script>
 
 <script>
   var key = 'events-state-{{ date|date:"Y-m-d" }}';
   // Default is show
   var events_shown = !! JSON.parse(window.localStorage[key] || "true");
- 
+
   $(".patients-datepicker")
     .datepicker({autoClose: true, todayBtn: true, todayHighlight: true})
     .on("changeDate", function(event) {
@@ -167,12 +304,18 @@
       $("#patients-calendar-form").submit();
     });
 
+    var date = new Date();
+    date.setDate(date.getDate());
+    $('#datepicker').datepicker({
+      startDate: date
+    });
+
   if (!events_shown) {
     $("#events-table").hide();
     $("#hide-events").html("Show Reminders");
   }
   $("#events-table").removeClass("hidden");
-  
+
   $("#hide-events").click(function() {
     events_shown = ! events_shown;
     window.localStorage[key] = events_shown;
@@ -187,6 +330,7 @@
   });
 </script>
   <script>
+
     var hidden_persons = JSON.parse(localStorage["hidden_persons"] || "[]");
     for (var i = 0; i < hidden_persons.length; i++) {
       $("#appointment-" + hidden_persons[i]).hide();
@@ -196,11 +340,15 @@
       var user_id = $(this).data("appointment-id");
       bootbox.confirm("Are you sure you want to cancel an appointment?", function(confirmed) {
         if (confirmed) {
+          $(".b-layer").fadeOut();
           hidden_persons.push(user_id);
           localStorage["hidden_persons"] = JSON.stringify(hidden_persons);
           $("#appointment-" + user_id).hide();
+        }else {
+          $(".b-layer").fadeOut();
         }
       });
     });
+
   </script>
 {% endblock %}
