@@ -133,8 +133,8 @@ text-align: center;
                 <th class="col-md-3">Treatment done</th>
                 <th class="col-md-3">Treatment plan</th>
                 <th class="col-md-2 text-center">Appointment time</th>
-                <th>Cancel</th>
-                <th>View</th>
+                <!--<th>Cancel</th>-->
+                <!--<th>View</th>-->
             </tr>
         </thead>
         <tbody>
@@ -145,7 +145,7 @@ text-align: center;
                 <td>{{ person.treatment_done|linebreaks }}</td>
                 <td>{{ person.treatment_plan|linebreaks }}</td>
                 <td class="text-center">{{ person.time|time:"f A" }}</td>
-                <td>
+                <td colspan="0">
 
                   <span class="patient-options">
                         {{ person.name }}
@@ -154,11 +154,11 @@ text-align: center;
                         <button data="{% url 'view' person.id %}?next=calendar" class="view-patient" >View Details</button>
                   </span>
 
-                    <button data-appointment-id="{{ person.id }}" type="button" class="cancel-button-b btn btn-xs btn-link">
-                        <span  class="glyphicon glyphicon-minus"></span>
-                    </button>
+                    <!--<button data-appointment-id="{{ person.id }}" type="button" class="cancel-button-b btn btn-xs btn-link">-->
+                        <!--<span  class="glyphicon glyphicon-minus"></span>-->
+                    <!--</button>-->
                 </td>
-                <td><a  href="{% url 'view' person.id %}?next=calendar"><i  class="glyphicon glyphicon-list-alt"></i></a></td>
+                <!--<td><a  href="{% url 'view' person.id %}?next=calendar" id="view-patient"><i  class="glyphicon glyphicon-list-alt"></i></a></td>-->
             </tr>
             {% empty %}
             <tr>
@@ -260,10 +260,10 @@ $(function () {
       $(".layer").css("display","none");
       $('.collapse').collapse("hide");
   });
-    $(".table-row").click(function () {
-
+    $(".table-row").click(function (e) {
         $(".b-layer").fadeIn();
         $(this).find(".patient-options").show();
+
     });
 
     $(".b-layer").click(function () {
@@ -278,6 +278,7 @@ $(function () {
       $(".b-layer").css("z-index","999");
       $(".table-row").find(".patient-options").fadeOut();
     });
+
     $(".view-patient").click(function () {
         var url = $(this).attr("data");
         window.location.href= url;
