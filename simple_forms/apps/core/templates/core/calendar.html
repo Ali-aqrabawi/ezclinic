@@ -263,20 +263,20 @@ $(function () {
     $(".table-row").click(function () {
 
         $(".b-layer").fadeIn();
-        $(this).find("span").show();
+        $(this).find(".patient-options").show();
     });
 
     $(".b-layer").click(function () {
 
         $(this).fadeOut();
-        $(".table-row").find("span").hide();
+        $(".table-row").find(".patient-options").hide();
 
     });
 
     $(".cancel-button-b").click(function () {
 
       $(".b-layer").css("z-index","999");
-      $(".table-row").find("span").fadeOut();
+      $(".table-row").find(".patient-options").fadeOut();
     });
     $(".view-patient").click(function () {
         var url = $(this).attr("data");
