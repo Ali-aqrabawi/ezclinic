@@ -99,6 +99,14 @@ def delete_person(request, person_id):
 
 
 @login_required
+def hide_person(request, person_id):
+    person = get_object_or_404(m.Person, pk=person_id, user=request.user)
+    person.is_archived = True
+    person.save()
+    return JsonResponse({'hide': 'success'}, safe=True)
+
+
+@login_required
 def delete_person_image(request, person_id, image_id):
     if request.method == "GET":
         image = get_object_or_404(m.Picture, pk=image_id)
@@ -257,7 +265,7 @@ def calendar(request):
         return redirect(request.get_full_path())
 
     # Simulate ORDER BY with NULLS LAST
-    persons = list(request.user.person_set.filter(date=date))
+    persons = list(request.user.person_set.filter(date=date, is_archived=False))
     persons.sort(key=lambda p: p.time or datetime.time(23, 59, 59))
     print(persons)
 
