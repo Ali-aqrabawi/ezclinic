@@ -186,7 +186,9 @@ def edit(request, person_id):
 
         if form.is_valid():
           # update main BL
-            form.save()
+            person = form.save(commit=False)
+            person.is_archived = False
+            person.save()
 
             files = request.FILES.getlist('pictures')
             if files:
@@ -377,6 +379,7 @@ class AppointmentView(View):
         if appointment_form.is_valid():
             person.date = appointment_form.cleaned_data["date"]
             person.time = appointment_form.cleaned_data["time"]
+            person.is_archived = False
             person.save()
         return redirect(reverse('view', args=(person.id,)))
 
