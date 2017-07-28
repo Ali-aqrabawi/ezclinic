@@ -34,6 +34,7 @@ urlpatterns = [
         {'template_name': "core/password_reset_complete.html"},
         name='password_reset_complete'),
     url(r'^(?P<person_id>\d+)/delete/$', views.delete_person, name='delete_person'),
+    url(r'^(?P<person_id>\d+)/archive/$', views.hide_person, name='hide_person'),
     url(r'^(?P<person_id>\d+)/image/(?P<image_id>\d+)/delete/$', views.delete_person_image, name='delete_person_image'),
     url(r'^(?P<person_id>\d+)/diagcode/(?P<diagcode_id>\d+)/delete/$', views.delete_person_diagcode, name='delete_person_diagcode'),
     url(r'^(?P<person_id>\d+)/edit/$', views.edit, name='edit'),

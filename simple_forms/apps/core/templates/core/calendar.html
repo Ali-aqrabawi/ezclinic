@@ -133,8 +133,8 @@ text-align: center;
                 <th class="col-md-3">Treatment done</th>
                 <th class="col-md-3">Treatment plan</th>
                 <th class="col-md-2 text-center">Appointment time</th>
-                <th>Cancel</th>
-                <th>View</th>
+                <!--<th>Cancel</th>-->
+                <!--<th>View</th>-->
             </tr>
         </thead>
         <tbody>
@@ -145,20 +145,20 @@ text-align: center;
                 <td>{{ person.treatment_done|linebreaks }}</td>
                 <td>{{ person.treatment_plan|linebreaks }}</td>
                 <td class="text-center">{{ person.time|time:"f A" }}</td>
-                <td>
+                <td style="padding:0;margin: 0;">
 
                   <span class="patient-options">
-{{ person.name }}
+                        {{ person.name }}
 
-<button data-appointment-id="{{ person.id }}"  class="cancel-button cancel-button-b btn btn-xs btn-link">Cancel Appointment</button>
-<button data="{% url 'view' person.id %}?next=calendar" class="view-patient" >View Details</button>
+                        <button data-appointment-id="{{ person.id }}"  class="cancel-button btn btn-xs btn-link">Cancel Appointment</button>
+                        <button data="{% url 'view' person.id %}?next=calendar" class="view-patient" >View Details</button>
                   </span>
 
-                    <button data-appointment-id="{{ person.id }}" type="button" class="cancel-button btn btn-xs btn-link">
-                        <span  class="glyphicon glyphicon-minus"></span>
-                    </button>
+                    <!--<button data-appointment-id="{{ person.id }}" type="button" class="cancel-button-b btn btn-xs btn-link">-->
+                        <!--<span  class="glyphicon glyphicon-minus"></span>-->
+                    <!--</button>-->
                 </td>
-                <td><a  href="{% url 'view' person.id %}?next=calendar"><i  class="glyphicon glyphicon-list-alt"></i></a></td>
+                <!--<td><a  href="{% url 'view' person.id %}?next=calendar" id="view-patient"><i  class="glyphicon glyphicon-list-alt"></i></a></td>-->
             </tr>
             {% empty %}
             <tr>
@@ -250,44 +250,40 @@ text-align: center;
 
 <script>
 $(function () {
-
-
   $(".navbar-toggle").click(function () {
 
-  $(".layer").css("display","block");
-  $('.collapse').collapse("show");
+      $(".layer").css("display","block");
+      $('.collapse').collapse("show");
 
   });
   $(".layer").click(function () {
-  $(".layer").css("display","none");
-  $('.collapse').collapse("hide");
-
-
+      $(".layer").css("display","none");
+      $('.collapse').collapse("hide");
   });
-$(".table-row").click(function () {
+    $(".table-row").click(function (e) {
+        $(".b-layer").fadeIn();
+        $(this).find(".patient-options").show();
 
-$(".b-layer").fadeIn();
-$(this).find("span").show();
-});
+    });
 
-$(".b-layer").click(function () {
+    $(".b-layer").click(function () {
 
-$(this).fadeOut();
-$(".table-row").find("span").hide();
+        $(this).fadeOut();
+        $(".table-row").find(".patient-options").hide();
 
-});
+    });
 
-$(".cancel-button-b").click(function () {
+    $(".cancel-button-b").click(function () {
 
-  $(".b-layer").css("z-index","999");
-  $(".table-row").find("span").fadeOut();
-});
-$(".view-patient").click(function () {
-var url = $(this).attr("data");
+      $(".b-layer").css("z-index","999");
+      $(".table-row").find(".patient-options").fadeOut();
+    });
 
-window.location.href= url;
+    $(".view-patient").click(function () {
+        var url = $(this).attr("data");
+        window.location.href= url;
 
-});
+    });
 });
 
 </script>
@@ -331,23 +327,26 @@ window.location.href= url;
 </script>
   <script>
 
-    var hidden_persons = JSON.parse(localStorage["hidden_persons"] || "[]");
-    for (var i = 0; i < hidden_persons.length; i++) {
-      $("#appointment-" + hidden_persons[i]).hide();
-    }
+//    var hidden_persons = JSON.parse(localStorage["hidden_persons"] || "[]");
+//    for (var i = 0; i < hidden_persons.length; i++) {
+//      $("#appointment-" + hidden_persons[i]).hide();
+//    }
 
     $(".cancel-button").click(function () {
       var user_id = $(this).data("appointment-id");
-      bootbox.confirm("Are you sure you want to cancel an appointment?", function(confirmed) {
-        if (confirmed) {
-          $(".b-layer").fadeOut();
-          hidden_persons.push(user_id);
-          localStorage["hidden_persons"] = JSON.stringify(hidden_persons);
-          $("#appointment-" + user_id).hide();
-        }else {
-          $(".b-layer").fadeOut();
-        }
-      });
+//      bootbox.confirm("Are you sure you want to cancel an appointment?", function(confirmed) {
+          $b_layer = $(".b-layer");
+          var url = '/' + user_id+ '/archive/'
+          $.getJSON(url, function(data){
+              console.log(data.hide);
+              if(data.hide == 'success'){
+                  $("#appointment-" + user_id).hide();
+                  $b_layer.fadeOut();
+              }else{
+                  $b_layer.fadeOut();
+              }
+          });
+//      });
     });
 
   </script>
