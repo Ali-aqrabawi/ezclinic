@@ -130,7 +130,7 @@ text-align: center;
             <tr>
                 <th>Name</th>
                 <th>Lastname</th>
-                <th class="col-md-3">Treatment done</th>
+                
                 <th class="col-md-3">Treatment plan</th>
                 <th class="col-md-2 text-center">Appointment time</th>
                 <!--<th>Cancel</th>-->
@@ -142,7 +142,7 @@ text-align: center;
             <tr id="appointment-{{ person.id }}" class="table-row">
                 <td>{{ person.name }}</td>
                 <td>{{ person.last_name }}</td>
-                <td>{{ person.treatment_done|linebreaks }}</td>
+                
                 <td>{{ person.treatment_plan|linebreaks }}</td>
                 <td class="text-center">{{ person.time|time:"f A" }}</td>
                 <td style="padding:0;margin: 0;">
