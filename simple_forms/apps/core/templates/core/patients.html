@@ -43,9 +43,9 @@ background-color: #eee;
         <th>Lastname</th>
         <th>Chief complain</th>
         <th>Age</th>
-        <th>Mobile</th>
-        <th>Delete</th>
-        <th>View</th>
+        
+        
+        
       </tr>
     </thead>
     <tbody>
@@ -55,16 +55,9 @@ background-color: #eee;
           <td>{{ person.last_name }}</td>
           <td>{{ person.chief_complain }}</td>
           <td>{{ person.age }}</td>
-          <td>{{ person.mobile}}</td>
-          <td>
-            <form class="delete-person" action="{% url 'delete_person' person.id %}" method='POST'>
-              {% csrf_token %}
-              <button type='submit' class='btn btn-xs btn-link icon delete'>
-                <i class='glyphicon glyphicon-remove'></i>
-              </button>
-            </form>
-          </td>
-          <td><a  href="{% url 'view' person.id %}"><i  class="glyphicon glyphicon-list-alt"></i></a></td>
+          
+          
+          
         </tr>
 	  {% empty %}
         <tr>
