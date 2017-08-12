@@ -11,27 +11,34 @@
       <span class="glyphicon glyphicon-plus"></span> {% trans  "Add Pateints" %}
     </a>
   </h2>
-
+<style>
+.table-row {
+  cursor: pointer;
+  transition: 0.5s ease;
+  position: relative;
+}
+.table-row:hover {
+background-color: #eee;
+}
+</style>
   <table class="table">
     <thead>
       <tr>
         <th>Name</th>
         <th>Lastname</th>
-        <th class="col-md-3">Treatment done</th>
-        <th class="col-md-3">Treatment plan</th>
-        <th>Phone</th>
-        <th>View</th>
+        <th>Chief complain</th>
+        <th>Age</th>
       </tr>
     </thead>
     <tbody>
       {% for person in persons %}
-      <tr id="person-{{ person.id }}">
+      <tr id="person-{{ person.id }}" class="table-row" data="{% url 'view' person.id %}">
         <td>{{ person.name }}</td>
         <td>{{ person.last_name }}</td>
-        <td>{{ person.treatment_done|linebreaks }}</td>
-        <td>{{ person.treatment_plan|linebreaks }}</td>
-        <td >{{ person.mobile }}</td>
-        <td><a  href="{% url 'view' person.id %}"><i  class="glyphicon glyphicon-list-alt"></i></a></td>
+        <td>{{ person.chief_complain }}</td>
+        
+        <td >{{ person.age }}</td>
+        
       </tr>
       {% empty %}
       <tr>
@@ -106,6 +113,37 @@
 
                   });
         });
+  </script>
+  <script>
+  $(function () {
+
+
+    $(".navbar-toggle").click(function () {
+
+    $(".layer").css("display","block");
+    $('.collapse').collapse("show");
+
+    });
+    $(".layer").click(function () {
+        $('.collapse').collapse("hide");
+    $(".layer").css("display","none");
+
+
+
+    });
+    $(".table-row").click(function () {
+    var url = $(this).attr("data");
+
+    window.location.href= url;
+
+    });
+$(".delete").click(function () {
+
+$(".table-row").find("span").fadeOut();
+$(".b-layer").css("z-index","999");
+});
+  });
+
   </script>
 
 {% endblock %}
